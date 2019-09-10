@@ -425,9 +425,9 @@ namespace Cyotek.QuickScan
       return image;
     }
 
-    private string GetImageFormat()
+    private Guid GetImageFormat()
     {
-      return ((KeyValueListBoxItem<string>)formatComboBox.SelectedItem).Value;
+      return ((KeyValueListBoxItem<Guid>)formatComboBox.SelectedItem).Value;
     }
 
     private WiaImageIntent GetImageIntent()
@@ -521,11 +521,11 @@ namespace Cyotek.QuickScan
 
     private void LoadFormats()
     {
-      formatComboBox.Items.Add(new KeyValueListBoxItem<string>("Windows bitmap (*.bmp)", WiaFormatId.Bmp));
-      formatComboBox.Items.Add(new KeyValueListBoxItem<string>("Joint Photographic Experts Group (*.jpg)", WiaFormatId.Jpeg));
-      formatComboBox.Items.Add(new KeyValueListBoxItem<string>("Portable Network Graphics (*.png)", WiaFormatId.Png));
-      formatComboBox.Items.Add(new KeyValueListBoxItem<string>("Tagged Image File Format (*.tiff)", WiaFormatId.Tiff));
-      formatComboBox.Items.Add(new KeyValueListBoxItem<string>("Graphics Interchange Format (*.gif)", WiaFormatId.Gif));
+      formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Windows bitmap (*.bmp)", WiaFormatId.Bmp));
+      formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Joint Photographic Experts Group (*.jpg)", WiaFormatId.Jpeg));
+      formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Portable Network Graphics (*.png)", WiaFormatId.Png));
+      formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Tagged Image File Format (*.tiff)", WiaFormatId.Tiff));
+      formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Graphics Interchange Format (*.gif)", WiaFormatId.Gif));
 
       formatComboBox.SelectedIndex = 0;
     }
@@ -629,7 +629,7 @@ namespace Cyotek.QuickScan
 
     private void PreviewButton_Click(object sender, EventArgs e)
     {
-      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, this.GetImageIntent(), WiaImageBias.MaximizeQuality, this.GetImageFormat(), false, true, false));
+      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, this.GetImageIntent(), WiaImageBias.MaximizeQuality, this.GetImageFormat().ToString("B"), false, true, false));
     }
 
     private void PreviewLinkLabel_Click(object sender, EventArgs e)
@@ -643,7 +643,7 @@ namespace Cyotek.QuickScan
 
         using (this.CreateStatusController("Creating preview image..."))
         {
-          format = new Guid(this.GetImageFormat());
+          format = this.GetImageFormat();
           quality = (int)qualityNumericUpDown.Value;
           codec = ImageCodecHelpers.GetImageCodec(format);
           parameters = ImageCodecHelpers.GetEncoderParameters(codec, quality);
@@ -778,10 +778,8 @@ namespace Cyotek.QuickScan
         string extension;
         ImageCodecInfo codecInfo;
         EncoderParameters encoderParameters;
-        Guid format;
-
-        format = new Guid(_settings.Format);
-        codecInfo = ImageCodecHelpers.GetImageCodec(format);
+        
+        codecInfo = ImageCodecHelpers.GetImageCodec(_settings.Format);
         encoderParameters = ImageCodecHelpers.GetEncoderParameters(codecInfo, _settings.Quality);
         extension = ImageCodecHelpers.GetSuggestedExtension(codecInfo);
 
@@ -878,7 +876,7 @@ namespace Cyotek.QuickScan
 
         //PropertiesDialog.ShowPropertiesDialog(item.Properties);
 
-        return dialog.ShowTransfer(item, this.GetImageFormat(), false);
+        return dialog.ShowTransfer(item, this.GetImageFormat().ToString("B"), false);
       });
     }
 
@@ -918,11 +916,11 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private void SetFormat(string format)
+    private void SetFormat(Guid format)
     {
       for (int i = 0; i < formatComboBox.Items.Count; i++)
       {
-        if (formatComboBox.Items[i] is KeyValueListBoxItem<string> item && string.Equals(item.Value, format, StringComparison.OrdinalIgnoreCase))
+        if (formatComboBox.Items[i] is KeyValueListBoxItem<Guid> item && item.Value == format)
         {
           formatComboBox.SelectedIndex = i;
           break;

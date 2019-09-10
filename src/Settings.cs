@@ -25,7 +25,7 @@ namespace Cyotek.QuickScan
 
     private bool _estimateFileSizes;
 
-    private string _format;
+    private Guid _format;
 
     private bool _ignoreUpdates;
 
@@ -94,7 +94,7 @@ namespace Cyotek.QuickScan
       set { this.UpdateValue(ref _estimateFileSizes, value); }
     }
 
-    public string Format
+    public Guid Format
     {
       get { return _format; }
       set { this.UpdateValue(ref _format, value); }
@@ -186,7 +186,7 @@ namespace Cyotek.QuickScan
         this.ReadInt(ref _scanDpi, settings["Dpi"]);
 
         settings = data["Output"];
-        _format = settings["Format"];
+       this.ReadGuid(ref _format , settings["Format"]);
         this.ReadInt(ref _quality, settings["Quality"]);
         _outputFolder = settings["Folder"];
         _baseFileName = settings["FileName"];
@@ -224,7 +224,7 @@ namespace Cyotek.QuickScan
       settings["Dpi"] = _scanDpi.ToString();
 
       settings = data["Output"];
-      settings["Format"] = _format;
+      settings["Format"] = _format.ToString();
       settings["Quality"] = _quality.ToString();
       settings["Folder"] = _outputFolder;
       settings["FileName"] = _baseFileName;
@@ -252,6 +252,13 @@ namespace Cyotek.QuickScan
       if (!string.IsNullOrEmpty(value))
       {
         setting = Convert.ToInt32(value);
+      }
+    }
+    private void ReadGuid(ref Guid setting, string value)
+    {
+      if (!string.IsNullOrEmpty(value))
+      {
+        setting = new Guid(value);
       }
     }
 
