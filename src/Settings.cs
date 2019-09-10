@@ -37,7 +37,7 @@ namespace Cyotek.QuickScan
 
     private int _scanDpi;
 
-    private int _scanIntent;
+    private WiaImageIntent _imageIntent;
 
     private bool _useCounter;
 
@@ -48,7 +48,7 @@ namespace Cyotek.QuickScan
     public Settings()
     {
       _quality = 97;
-      _scanIntent = (int)WiaImageIntent.ColorIntent;
+      _imageIntent = WiaImageIntent.ColorIntent;
       _format = WiaFormatId.Bmp;
       _counter = 1;
       _estimateFileSizes = true;
@@ -130,10 +130,10 @@ namespace Cyotek.QuickScan
       set { this.UpdateValue(ref _scanDpi, value); }
     }
 
-    public int ScanIntent
+    public WiaImageIntent ImageIntent
     {
-      get { return _scanIntent; }
-      set { this.UpdateValue(ref _scanIntent, value); }
+      get { return _imageIntent; }
+      set { this.UpdateValue(ref _imageIntent, value); }
     }
 
     public bool UseCounter
@@ -182,17 +182,35 @@ namespace Cyotek.QuickScan
         this.ReadBool(ref _continuousScan, settings["Continuous"]);
 
         settings = data["Scan"];
-        this.ReadInt(ref _scanIntent, settings["Intent"]);
+        this.ReadEnum<WiaImageIntent>(ref _imageIntent, settings["Intent"]);
         this.ReadInt(ref _scanDpi, settings["Dpi"]);
 
         settings = data["Output"];
-       this.ReadGuid(ref _format , settings["Format"]);
+        this.ReadGuid(ref _format, settings["Format"]);
         this.ReadInt(ref _quality, settings["Quality"]);
         _outputFolder = settings["Folder"];
         _baseFileName = settings["FileName"];
         this.ReadInt(ref _counter, settings["Counter"]);
         this.ReadBool(ref _useCounter, settings["UseCounter"]);
         this.ReadBool(ref _autoSave, settings["AutoSave"]);
+      }
+    }
+
+    public string FormatString
+    {
+      get
+      {
+        // WIA throws a COM exception if the GUID isn't formatted just-so
+        return _format.ToString("B");
+      }
+    }
+
+    private void ReadEnum<T>(ref T setting, string value)
+      where T : struct
+    {
+      if (!string.IsNullOrEmpty(value))
+      {
+        setting = (T)Enum.Parse(typeof(T), value, true);
       }
     }
 
@@ -220,7 +238,7 @@ namespace Cyotek.QuickScan
       settings["Continuous"] = _continuousScan.ToString();
 
       settings = data["Scan"];
-      settings["Intent"] = _scanIntent.ToString();
+      settings["Intent"] = _imageIntent.ToString();
       settings["Dpi"] = _scanDpi.ToString();
 
       settings = data["Output"];

@@ -45,18 +45,12 @@ namespace Cyotek.QuickScan
       }
     }
 
-    protected override void OnLoad(EventArgs e)
-    {
-      base.OnLoad(e);
-
-      this.UpdateUi();
-    }
-
     protected override void OnShown(EventArgs e)
     {
       base.OnShown(e);
 
       this.LoadSettings();
+
       try
       {
         _settings.IgnoreUpdates = true;
@@ -68,7 +62,9 @@ namespace Cyotek.QuickScan
       {
         _settings.IgnoreUpdates = false;
       }
+
       this.ApplySettings();
+      this.UpdateUi();
     }
 
     #endregion Protected Methods
@@ -91,7 +87,7 @@ namespace Cyotek.QuickScan
       devicePromptCheckBox.Checked = _settings.PromptForDevice;
       continuousCheckBox.Checked = _settings.ContinuousScan;
 
-      this.SetIntent(_settings.ScanIntent);
+      this.SetIntent(_settings.ImageIntent);
       this.SetDpi(_settings.ScanDpi);
 
       this.SetFormat(_settings.Format);
@@ -116,7 +112,7 @@ namespace Cyotek.QuickScan
       using (FolderBrowserDialog dialog = new FolderBrowserDialog
       {
         Description = "Select output &folder:",
-        SelectedPath = folderTextBox.Text,
+        SelectedPath = _settings.OutputFolder,
         ShowNewFolderButton = true
       })
       {
@@ -178,7 +174,7 @@ namespace Cyotek.QuickScan
 
       _settings.DeviceId = deviceComboBox.SelectedItem is DeviceListBoxItem device ? device.DeviceId : null;
 
-      if (!devicePromptCheckBox.Checked)
+      if (!_settings.PromptForDevice)
       {
         WIA.Properties properties;
         Property xDpi;
@@ -323,7 +319,7 @@ namespace Cyotek.QuickScan
 
     private void FormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-      _settings.Format = this.GetImageFormat();
+      _settings.Format = formatComboBox.SelectedItem is KeyValueListBoxItem<Guid> item ? item.Value : Guid.Empty;
 
       if (formatComboBox.SelectedIndex != -1 && _image != null)
       {
@@ -340,83 +336,12 @@ namespace Cyotek.QuickScan
 
       if (device != null)
       {
-        CommonDialog dialog;
-
-        dialog = new CommonDialog();
-
         using (this.CreateStatusController("Scanning..."))
         {
+          CommonDialog dialog;
+
+          dialog = new CommonDialog();
           image = getImage(device, dialog);
-        }
-
-        if (image != null)
-        {
-          //string fileName;
-
-          //fileName = Path.GetTempFileName();
-          //File.Delete(fileName);
-
-          //Vector d = image.ARGBData;
-
-          //int w;
-          //int h;
-
-          //w = image.Width;
-          //h = image.Height;
-
-          //loaded = new Bitmap(w, h, PixelFormat.Format32bppArgb);
-
-          //using (FastBitmap fastBitmap = new FastBitmap(loaded))
-          //{
-          //  fastBitmap.Lock();
-
-          //  byte[] data;
-
-          //  data = (byte[])d.get_BinaryData();
-
-          //  for (int i = 0; i < d.Count; i += 4)
-          //  {
-          //    int pixel;
-          //    Color color;
-          //    int x;
-          //    int y;
-
-          //    y = (i / 4) / w;
-          //    x = (i / 4) % w;
-
-          //    pixel = BitConverter.ToInt32(data, i);
-          //    color = Color.FromArgb(pixel);
-
-          //    fastBitmap.SetPixel(x, y, color);
-          //  }
-
-          //for (int i = 0; i < d.Count; i++)
-          //{
-          //  int pixel;
-          //  Color color;
-          //  int x;
-          //  int y;
-
-          //  y = i / w;
-          //  x = i % w;
-
-          //  pixel = (int)d.get_Item(i + 1);
-          //  color = Color.FromArgb(pixel);
-
-          //  fastBitmap.SetPixel(x, y, color);
-          //}
-
-          //fastBitmap.Unlock();
-          //}
-
-          //image.SaveFile(fileName);
-
-          //using (Image temp = Image.FromFile(fileName))
-          //{
-          //  loaded = temp;
-          //}
-
-          //File.Delete(fileName);
         }
       }
       else
@@ -427,21 +352,13 @@ namespace Cyotek.QuickScan
       return image;
     }
 
-    private Guid GetImageFormat()
-    {
-      return ((KeyValueListBoxItem<Guid>)formatComboBox.SelectedItem).Value;
-    }
-
-    private WiaImageIntent GetImageIntent()
-    {
-      return ((KeyValueListBoxItem<WiaImageIntent>)typeComboBox.SelectedItem).Value;
-    }
+    
 
     private Device GetSelectedDevice()
     {
       Device result;
 
-      if (devicePromptCheckBox.Checked)
+      if (_settings.PromptForDevice)
       {
         ICommonDialog dialog;
 
@@ -548,7 +465,7 @@ namespace Cyotek.QuickScan
 
     private void OpenFolderButton_Click(object sender, EventArgs e)
     {
-      ProcessHelpers.OpenFolderInExplorer(folderTextBox.Text);
+      ProcessHelpers.OpenFolderInExplorer(_settings.OutputFolder);
     }
 
     private void PerformDeviceAction(Action<Device> action)
@@ -631,7 +548,7 @@ namespace Cyotek.QuickScan
 
     private void PreviewButton_Click(object sender, EventArgs e)
     {
-      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, this.GetImageIntent(), WiaImageBias.MaximizeQuality, this.GetImageFormat().ToString("B"), false, true, false));
+      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
     }
 
     private void PreviewLinkLabel_Click(object sender, EventArgs e)
@@ -645,8 +562,8 @@ namespace Cyotek.QuickScan
 
         using (this.CreateStatusController("Creating preview image..."))
         {
-          format = this.GetImageFormat();
-          quality = (int)qualityNumericUpDown.Value;
+          format = _settings.Format;
+          quality = _settings.Quality;
           codec = ImageCodecHelpers.GetImageCodec(format);
           parameters = ImageCodecHelpers.GetEncoderParameters(codec, quality);
 
@@ -676,7 +593,7 @@ namespace Cyotek.QuickScan
     {
       _settings.Quality = (int)qualityNumericUpDown.Value;
 
-      if (this.GetImageFormat() == WiaFormatId.Jpeg && _image != null)
+      if (_settings.Format == WiaFormatId.Jpeg && _image != null)
       {
         this.CalculateFileSize();
       }
@@ -723,9 +640,9 @@ namespace Cyotek.QuickScan
 
           this.SetImage(image);
 
-          fileName = autoSaveCheckBox.Checked ? this.SaveImage() : null;
+          fileName = _settings.AutoSave ? this.SaveImage() : null;
 
-          done = !(autoSaveCheckBox.Checked && continuousCheckBox.Checked && !string.IsNullOrEmpty(fileName) && MessageBox.Show("Continue scanning?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
+          done = !(_settings.AutoSave && _settings.ContinuousScan && !string.IsNullOrEmpty(fileName) && MessageBox.Show("Continue scanning?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
         }
         else
         {
@@ -780,7 +697,7 @@ namespace Cyotek.QuickScan
         string extension;
         ImageCodecInfo codecInfo;
         EncoderParameters encoderParameters;
-        
+
         codecInfo = ImageCodecHelpers.GetImageCodec(_settings.Format);
         encoderParameters = ImageCodecHelpers.GetEncoderParameters(codecInfo, _settings.Quality);
         extension = ImageCodecHelpers.GetSuggestedExtension(codecInfo);
@@ -868,7 +785,7 @@ namespace Cyotek.QuickScan
 
         item = device.Items[1];
 
-        item.Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, this.GetImageIntent());
+        item.Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent);
 
         item.Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, (int)dpiNumericUpDown.Value);
         item.Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, (int)dpiNumericUpDown.Value);
@@ -878,7 +795,7 @@ namespace Cyotek.QuickScan
 
         //PropertiesDialog.ShowPropertiesDialog(item.Properties);
 
-        return dialog.ShowTransfer(item, this.GetImageFormat().ToString("B"), false);
+        return dialog.ShowTransfer(item, _settings.FormatString, false);
       });
     }
 
@@ -959,11 +876,11 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private void SetIntent(int scanIntent)
+    private void SetIntent(WiaImageIntent imageIntent)
     {
       for (int i = 0; i < typeComboBox.Items.Count; i++)
       {
-        if (typeComboBox.Items[i] is KeyValueListBoxItem<WiaImageIntent> item && (int)item.Value == scanIntent)
+        if (typeComboBox.Items[i] is KeyValueListBoxItem<WiaImageIntent> item && item.Value == imageIntent)
         {
           typeComboBox.SelectedIndex = i;
           break;
@@ -981,7 +898,7 @@ namespace Cyotek.QuickScan
 
     private void TypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-      _settings.ScanIntent = (int)this.GetImageIntent();
+      _settings.ImageIntent = typeComboBox.SelectedItem is KeyValueListBoxItem<WiaImageIntent> item ? item.Value : WiaImageIntent.UnspecifiedIntent;
     }
 
     private void UpdateUi()
@@ -989,8 +906,8 @@ namespace Cyotek.QuickScan
       bool directDevice;
       bool canScan;
 
-      directDevice = !devicePromptCheckBox.Checked;
-      canScan = devicePromptCheckBox.Checked || deviceComboBox.SelectedIndex != -1;
+      directDevice = !_settings.PromptForDevice;
+      canScan = directDevice || deviceComboBox.SelectedIndex != -1;
 
       deviceComboBox.Enabled = directDevice;
       continuousCheckBox.Enabled = directDevice;
@@ -998,7 +915,7 @@ namespace Cyotek.QuickScan
       scanButton.Enabled = canScan;
       previewButton.Enabled = canScan;
 
-      if (!directDevice && continuousCheckBox.Checked)
+      if (!directDevice && _settings.ContinuousScan)
       {
         continuousCheckBox.Checked = false;
       }
