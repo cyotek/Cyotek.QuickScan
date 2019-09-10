@@ -147,7 +147,7 @@ namespace Cyotek.QuickScan
         else
         {
           fileSizeToolStripStatusLabel.Text = "(Calculating)";
-          fileSizeBackgroundWorker.RunWorkerAsync(Tuple.Create(_image.Copy(), this.GetImageFormat(), (int)qualityNumericUpDown.Value));
+          fileSizeBackgroundWorker.RunWorkerAsync(this.GetImageInfo());
         }
       }
     }
@@ -250,33 +250,35 @@ namespace Cyotek.QuickScan
       _settings.BaseFileName = fileNameTextBox.Text;
     }
 
+    private ImageInfo GetImageInfo()
+    {
+      // fun fact - WIA must be using GDI+, so all the codec GUID's are the same
+
+      return new ImageInfo
+      {
+        Format = _settings.Format,
+        Quality = _settings.Quality,
+        Image = _image
+      };
+    }
+
     private void FileSizeBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
     {
       ImageCodecInfo codec;
       EncoderParameters parameters;
-      Tuple<Bitmap, string, int> data;
-      Bitmap image;
-      Guid format;
-      int quality;
+      ImageInfo data;
 
-      // fun fact - WIA must be using GDI+, so all the codec GUID's are the same
+      data = (ImageInfo)e.Argument;
 
-      data = (Tuple<Bitmap, string, int>)e.Argument;
-      image = data.Item1;
-      format = new Guid(data.Item2);
-      quality = data.Item3;
-
-      codec = ImageCodecHelpers.GetImageCodec(format);
-      parameters = ImageCodecHelpers.GetEncoderParameters(codec, quality);
+      codec = ImageCodecHelpers.GetImageCodec(data.Format);
+      parameters = ImageCodecHelpers.GetEncoderParameters(codec, data.Quality);
 
       using (MemoryStream stream = new MemoryStream())
       {
-        image.Save(stream, codec, parameters);
+        data.Image.Save(stream, codec, parameters);
 
         e.Result = stream.Length;
       }
-
-      image.Dispose();
     }
 
     private void FileSizeBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -411,7 +413,7 @@ namespace Cyotek.QuickScan
 
           //using (Image temp = Image.FromFile(fileName))
           //{
-          //  loaded = temp.Copy();
+          //  loaded = temp;
           //}
 
           //File.Delete(fileName);
@@ -602,7 +604,7 @@ namespace Cyotek.QuickScan
         }
         else
         {
-          newImage = _image.Copy();
+          newImage = _image;
 
           this.SetImage(newImage, false);
         }
@@ -648,7 +650,7 @@ namespace Cyotek.QuickScan
           codec = ImageCodecHelpers.GetImageCodec(format);
           parameters = ImageCodecHelpers.GetEncoderParameters(codec, quality);
 
-          using (Bitmap copy = _image.Copy())
+          using (Bitmap copy = _image)
           {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -805,7 +807,7 @@ namespace Cyotek.QuickScan
 
         using (this.CreateStatusController("Saving image..."))
         {
-          _image.Copy().Save(fileName, codecInfo, encoderParameters);
+          _image.Save(fileName, codecInfo, encoderParameters);
           result = fileName;
         }
 
@@ -937,9 +939,10 @@ namespace Cyotek.QuickScan
 
     private void SetImage(Bitmap image, bool resetZoom)
     {
-      if (_image != null)
+      previewImageBox.Image = null;
+
+      if (_image != null && !object.ReferenceEquals(_image, image))
       {
-        previewImageBox.Image = null;
         _image.Dispose();
         _image = null;
       }

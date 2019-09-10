@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="ImageCodecHelpers.cs" />
     <Compile Include="ImageExtensions.cs" />
+    <Compile Include="ImageInfo.cs" />
     <Compile Include="ImagePreviewWindow.cs">
       <SubType>Form</SubType>
     </Compile>

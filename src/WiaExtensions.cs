@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using WIA;
@@ -25,14 +26,28 @@ namespace Cyotek.QuickScan
 
     public static Bitmap ToBitmap(this ImageFile image)
     {
+      Bitmap result;
       byte[] data;
 
       data = (byte[])image.FileData.get_BinaryData();
 
       using (MemoryStream stream = new MemoryStream(data))
       {
-        return (Bitmap)Image.FromStream(stream);
+        Image scannedImage;
+
+        scannedImage = Image.FromStream(stream);
+
+        result = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
+
+        using (Graphics g = Graphics.FromImage(result))
+        {
+          g.Clear(Color.Transparent);
+          g.PageUnit = GraphicsUnit.Pixel;
+          g.DrawImage(scannedImage, new Rectangle(0, 0, image.Width, image.Height));
+        }
       }
+
+      return result;
     }
 
     public static void SetPropertyMinimum(this WIA.Properties properties, WiaPropertyId id)
