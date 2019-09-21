@@ -1004,6 +1004,16 @@ namespace Cyotek.QuickScan
 
     private void UnitToolStripSplitButton_ButtonClick(object sender, EventArgs e)
     {
+      Unit unit;
+
+      unit = _settings.Unit + 1;
+
+      if (unit > Unit.Centimeter)
+      {
+        unit = Unit.Pixel;
+      }
+
+      this.SetUnit(unit);
     }
 
     private void UpdateSize()
