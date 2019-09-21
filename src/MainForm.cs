@@ -526,7 +526,7 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private void PerformImageAction(Func<Image,Image> action)
+    private void PerformImageAction(Func<Image, Image> action)
     {
       if (_image != null)
       {
@@ -663,14 +663,23 @@ namespace Cyotek.QuickScan
     private void RunScanLoop(Func<Device, CommonDialog, ImageFile> getImage)
     {
       bool done;
+      bool keepSize;
 
       done = false;
+      keepSize = false;
 
       while (!done)
       {
         ImageFile image;
 
-        image = this.GetImage(getImage);
+        if (keepSize)
+        {
+          image = this.GetImage(this.RepeatLastScan);
+        }
+        else
+        {
+          image = this.GetImage(getImage);
+        }
 
         if (image != null)
         {
@@ -680,7 +689,25 @@ namespace Cyotek.QuickScan
 
           fileName = _settings.AutoSave ? this.SaveImage() : null;
 
-          done = !(_settings.AutoSave && _settings.ContinuousScan && !string.IsNullOrEmpty(fileName) && MessageBox.Show("Continue scanning?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
+          if (_settings.AutoSave && _settings.ContinuousScan && !string.IsNullOrEmpty(fileName))
+          {
+            switch (MessageBox.Show("Do you want to continue scanning using the current image size?", Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+              case DialogResult.Yes:
+                keepSize = true;
+                break;
+              case DialogResult.No:
+                keepSize = false;
+                break;
+              default:
+                done = true;
+                break;
+            }
+          }
+          else
+          {
+            done = true;
+          }
         }
         else
         {
@@ -689,6 +716,17 @@ namespace Cyotek.QuickScan
       }
 
       this.CalculateFileSize();
+    }
+
+    private ImageFile RepeatLastScan(Device device, CommonDialog dialog)
+    {
+      Item item;
+
+      item = device.Items[1];
+
+      this.SetDeviceProperties(item.Properties, _image.Width, _image.Height);
+
+      return dialog.ShowTransfer(item, _settings.FormatString, false);
     }
 
     private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -820,21 +858,39 @@ namespace Cyotek.QuickScan
       this.RunScanLoop((device, dialog) =>
       {
         Item item;
-        WiaProperties current;
 
         item = device.Items[1];
-        current = item.Properties;
 
-        current.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
-
-        current.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
-        current.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
-
-        current.SetPropertyMaximum(WiaPropertyId.WIA_IPS_XEXTENT);
-        current.SetPropertyMaximum(WiaPropertyId.WIA_IPS_YEXTENT);
+        this.SetDeviceProperties(item.Properties, -1, -1);
 
         return dialog.ShowTransfer(item, _settings.FormatString, false);
       });
+    }
+
+    private void SetDeviceProperties(WiaProperties deviceProperties, int width, int height)
+    {
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
+
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
+
+      if (width < 0)
+      {
+        deviceProperties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_XEXTENT);
+      }
+      else
+      {
+        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XEXTENT, _image.Width);
+      }
+
+      if (height < 0)
+      {
+        deviceProperties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_YEXTENT);
+      }
+      else
+      {
+        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YEXTENT, _image.Height);
+      }
     }
 
     private void ScanPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
