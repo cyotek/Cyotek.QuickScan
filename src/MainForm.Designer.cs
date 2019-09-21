@@ -69,6 +69,7 @@
       this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
       this.horizontalLayoutToolStripButton = new System.Windows.Forms.ToolStripButton();
+      this.imagePreviewToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       this.pixelGridToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -116,7 +117,14 @@
       this.devicePromptCheckBox = new System.Windows.Forms.CheckBox();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-      this.imagePreviewToolStripButton = new System.Windows.Forms.ToolStripButton();
+      this.unitToolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
+      this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
+      this.pixelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.inchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.centimetersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.statusPixelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.statusInchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.statusCentimetersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -189,7 +197,7 @@
       this.copyToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.Copy;
       this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
       this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-      this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+      this.copyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
       this.copyToolStripMenuItem.Text = "&Copy";
       this.copyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
       // 
@@ -206,6 +214,10 @@
             this.zoomToWindowToolStripMenuItem,
             this.actualSizeToolStripMenuItem,
             this.toolStripMenuItem4,
+            this.pixelsToolStripMenuItem,
+            this.inchesToolStripMenuItem,
+            this.centimetersToolStripMenuItem,
+            this.toolStripMenuItem9,
             this.refreshDeviceListToolStripMenuItem});
       this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
       this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -245,7 +257,7 @@
       // 
       this.horizontalToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.HorizontalSplit;
       this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
-      this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
       this.horizontalToolStripMenuItem.Text = "&Horizontal";
       this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.HorizontalToolStripMenuItem_Click);
       // 
@@ -253,20 +265,20 @@
       // 
       this.verticalToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.VerticalSplit;
       this.verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
-      this.verticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.verticalToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
       this.verticalToolStripMenuItem.Text = "&Vertical";
       this.verticalToolStripMenuItem.Click += new System.EventHandler(this.VerticalToolStripMenuItem_Click);
       // 
       // toolStripMenuItem8
       // 
       this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-      this.toolStripMenuItem8.Size = new System.Drawing.Size(177, 6);
+      this.toolStripMenuItem8.Size = new System.Drawing.Size(144, 6);
       // 
       // showPreviewToolStripMenuItem
       // 
       this.showPreviewToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.ImagePreview;
       this.showPreviewToolStripMenuItem.Name = "showPreviewToolStripMenuItem";
-      this.showPreviewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.showPreviewToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
       this.showPreviewToolStripMenuItem.Text = "Show &Preview";
       this.showPreviewToolStripMenuItem.Click += new System.EventHandler(this.ShowPreviewToolStripMenuItem_Click);
       // 
@@ -474,6 +486,16 @@
       this.horizontalLayoutToolStripButton.Text = "Horizontal Layout";
       this.horizontalLayoutToolStripButton.Click += new System.EventHandler(this.HorizontalLayoutToolStripButton_Click);
       // 
+      // imagePreviewToolStripButton
+      // 
+      this.imagePreviewToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.imagePreviewToolStripButton.Image = global::Cyotek.QuickScan.Properties.Resources.ImagePreview;
+      this.imagePreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.imagePreviewToolStripButton.Name = "imagePreviewToolStripButton";
+      this.imagePreviewToolStripButton.Size = new System.Drawing.Size(23, 22);
+      this.imagePreviewToolStripButton.Text = "Image Preview";
+      this.imagePreviewToolStripButton.Click += new System.EventHandler(this.ShowPreviewToolStripMenuItem_Click);
+      // 
       // toolStripSeparator4
       // 
       this.toolStripSeparator4.Name = "toolStripSeparator4";
@@ -567,6 +589,7 @@
             this.statusToolStripStatusLabel,
             this.fileSizeToolStripStatusLabel,
             this.sizeToolStripStatusLabel,
+            this.unitToolStripSplitButton,
             this.formatToolStripStatusLabel});
       this.statusStrip.Location = new System.Drawing.Point(0, 535);
       this.statusStrip.Name = "statusStrip";
@@ -576,7 +599,7 @@
       // statusToolStripStatusLabel
       // 
       this.statusToolStripStatusLabel.Name = "statusToolStripStatusLabel";
-      this.statusToolStripStatusLabel.Size = new System.Drawing.Size(539, 17);
+      this.statusToolStripStatusLabel.Size = new System.Drawing.Size(473, 17);
       this.statusToolStripStatusLabel.Spring = true;
       this.statusToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
@@ -986,15 +1009,65 @@
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
       // 
-      // imagePreviewToolStripButton
+      // unitToolStripSplitButton
       // 
-      this.imagePreviewToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.imagePreviewToolStripButton.Image = global::Cyotek.QuickScan.Properties.Resources.ImagePreview;
-      this.imagePreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.imagePreviewToolStripButton.Name = "imagePreviewToolStripButton";
-      this.imagePreviewToolStripButton.Size = new System.Drawing.Size(23, 22);
-      this.imagePreviewToolStripButton.Text = "Image Preview";
-      this.imagePreviewToolStripButton.Click += new System.EventHandler(this.ShowPreviewToolStripMenuItem_Click);
+      this.unitToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.unitToolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusPixelsToolStripMenuItem,
+            this.statusInchesToolStripMenuItem,
+            this.statusCentimetersToolStripMenuItem});
+      this.unitToolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.unitToolStripSplitButton.Name = "unitToolStripSplitButton";
+      this.unitToolStripSplitButton.Size = new System.Drawing.Size(35, 20);
+      this.unitToolStripSplitButton.Text = "px";
+      this.unitToolStripSplitButton.ButtonClick += new System.EventHandler(this.UnitToolStripSplitButton_ButtonClick);
+      // 
+      // toolStripMenuItem9
+      // 
+      this.toolStripMenuItem9.Name = "toolStripMenuItem9";
+      this.toolStripMenuItem9.Size = new System.Drawing.Size(205, 6);
+      // 
+      // pixelsToolStripMenuItem
+      // 
+      this.pixelsToolStripMenuItem.Name = "pixelsToolStripMenuItem";
+      this.pixelsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+      this.pixelsToolStripMenuItem.Text = "Pi&xels";
+      this.pixelsToolStripMenuItem.Click += new System.EventHandler(this.PixelsToolStripMenuItem_Click);
+      // 
+      // inchesToolStripMenuItem
+      // 
+      this.inchesToolStripMenuItem.Name = "inchesToolStripMenuItem";
+      this.inchesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+      this.inchesToolStripMenuItem.Text = "I&nches";
+      this.inchesToolStripMenuItem.Click += new System.EventHandler(this.InchesToolStripMenuItem_Click);
+      // 
+      // centimetersToolStripMenuItem
+      // 
+      this.centimetersToolStripMenuItem.Name = "centimetersToolStripMenuItem";
+      this.centimetersToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+      this.centimetersToolStripMenuItem.Text = "&Centimeters";
+      this.centimetersToolStripMenuItem.Click += new System.EventHandler(this.CentimetersToolStripMenuItem_Click);
+      // 
+      // statusPixelsToolStripMenuItem
+      // 
+      this.statusPixelsToolStripMenuItem.Name = "statusPixelsToolStripMenuItem";
+      this.statusPixelsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.statusPixelsToolStripMenuItem.Text = "&Pixels";
+      this.statusPixelsToolStripMenuItem.Click += new System.EventHandler(this.PixelsToolStripMenuItem_Click);
+      // 
+      // statusInchesToolStripMenuItem
+      // 
+      this.statusInchesToolStripMenuItem.Name = "statusInchesToolStripMenuItem";
+      this.statusInchesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.statusInchesToolStripMenuItem.Text = "&Inches";
+      this.statusInchesToolStripMenuItem.Click += new System.EventHandler(this.InchesToolStripMenuItem_Click);
+      // 
+      // statusCentimetersToolStripMenuItem
+      // 
+      this.statusCentimetersToolStripMenuItem.Name = "statusCentimetersToolStripMenuItem";
+      this.statusCentimetersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.statusCentimetersToolStripMenuItem.Text = "&Centimeters";
+      this.statusCentimetersToolStripMenuItem.Click += new System.EventHandler(this.CentimetersToolStripMenuItem_Click);
       // 
       // MainForm
       // 
@@ -1128,6 +1201,14 @@
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
     private System.Windows.Forms.ToolStripMenuItem showPreviewToolStripMenuItem;
     private System.Windows.Forms.ToolStripButton imagePreviewToolStripButton;
+    private System.Windows.Forms.ToolStripMenuItem pixelsToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem inchesToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem centimetersToolStripMenuItem;
+    private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
+    private System.Windows.Forms.ToolStripSplitButton unitToolStripSplitButton;
+    private System.Windows.Forms.ToolStripMenuItem statusPixelsToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem statusInchesToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem statusCentimetersToolStripMenuItem;
   }
 }
 

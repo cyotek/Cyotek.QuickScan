@@ -104,6 +104,7 @@ namespace Cyotek.QuickScan
       previewImageBox.ShowPixelGrid = _settings.ShowPixelGrid;
       this.SetOrientation(_settings.LayoutOrientation);
       this.SetPreview(_settings.ShowPreview);
+      this.SetUnit(_settings.Unit);
     }
 
     private void AutoSaveCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -150,6 +151,11 @@ namespace Cyotek.QuickScan
           fileSizeBackgroundWorker.RunWorkerAsync(this.GetImageInfo());
         }
       }
+    }
+
+    private void CentimetersToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.SetUnit(Unit.Centimeter);
     }
 
     private void ContinuousCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -421,6 +427,11 @@ namespace Cyotek.QuickScan
       this.SetOrientation(Orientation.Horizontal);
     }
 
+    private void InchesToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.SetUnit(Unit.Inch);
+    }
+
     private void LoadDevices()
     {
       IDeviceInfos devices;
@@ -552,6 +563,11 @@ namespace Cyotek.QuickScan
       _settings.ShowPixelGrid = !_settings.ShowPixelGrid;
 
       this.ApplySettings();
+    }
+
+    private void PixelsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.SetUnit(Unit.Pixel);
     }
 
     private void PreviewButton_Click(object sender, EventArgs e)
@@ -890,7 +906,7 @@ namespace Cyotek.QuickScan
 
       previewImageBox.Image = image;
 
-      sizeToolStripStatusLabel.Text = string.Format("{0} x {1}", image.Width, image.Height);
+      this.UpdateSize();
 
       if (resetZoom)
       {
@@ -940,6 +956,35 @@ namespace Cyotek.QuickScan
       }
     }
 
+    private void SetUnit(Unit unit)
+    {
+      _settings.Unit = unit;
+
+      pixelsToolStripMenuItem.Checked = unit == Unit.Pixel;
+      statusPixelsToolStripMenuItem.Checked = unit == Unit.Pixel;
+      inchesToolStripMenuItem.Checked = unit == Unit.Inch;
+      statusInchesToolStripMenuItem.Checked = unit == Unit.Inch;
+      centimetersToolStripMenuItem.Checked = unit == Unit.Centimeter;
+      statusCentimetersToolStripMenuItem.Checked = unit == Unit.Centimeter;
+
+      switch (unit)
+      {
+        case Unit.Pixel:
+          unitToolStripSplitButton.Text = "px";
+          break;
+
+        case Unit.Inch:
+          unitToolStripSplitButton.Text = "in";
+          break;
+
+        case Unit.Centimeter:
+          unitToolStripSplitButton.Text = "cm";
+          break;
+      }
+
+      this.UpdateSize();
+    }
+
     private void ShowPreviewToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SetPreview(!_settings.ShowPreview);
@@ -948,6 +993,48 @@ namespace Cyotek.QuickScan
     private void TypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
       _settings.ImageIntent = typeComboBox.SelectedItem is KeyValueListBoxItem<WiaImageIntent> item ? item.Value : WiaImageIntent.UnspecifiedIntent;
+    }
+
+    private void UnitToolStripSplitButton_ButtonClick(object sender, EventArgs e)
+    {
+    }
+
+    private void UpdateSize()
+    {
+      if (_image != null)
+      {
+        float w;
+        float h;
+
+        switch (_settings.Unit)
+        {
+          case Unit.Pixel:
+            w = _image.Width;
+            h = _image.Height;
+            break;
+
+          case Unit.Inch:
+            w = _image.Width / _image.VerticalResolution;
+            h = _image.Height / _image.HorizontalResolution;
+            break;
+
+          case Unit.Centimeter:
+            w = _image.Width * 2.54F / _image.VerticalResolution;
+            h = _image.Height * 2.54F / _image.HorizontalResolution;
+            break;
+
+          default:
+            w = _image.Width;
+            h = _image.Height;
+            break;
+        }
+
+        sizeToolStripStatusLabel.Text = string.Format("{0:F2} x {1:F2}", w, h);
+      }
+      else
+      {
+        sizeToolStripStatusLabel.Text = "(Unknown)";
+      }
     }
 
     private void UpdateUi()

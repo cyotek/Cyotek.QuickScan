@@ -45,6 +45,8 @@ namespace Cyotek.QuickScan
 
     private bool _showPreview;
 
+    private Unit _unit;
+
     private bool _useCounter;
 
     #endregion Private Fields
@@ -61,6 +63,7 @@ namespace Cyotek.QuickScan
       _showPixelGrid = true;
       _layoutOrientation = Orientation.Vertical;
       _showPreview = true;
+      _unit = Unit.Pixel;
     }
 
     #endregion Public Constructors
@@ -172,6 +175,12 @@ namespace Cyotek.QuickScan
       set { this.UpdateValue(ref _showPreview, value); }
     }
 
+    public Unit Unit
+    {
+      get { return _unit; }
+      set { this.UpdateValue(ref _unit, value); }
+    }
+
     public bool UseCounter
     {
       get { return _useCounter; }
@@ -234,6 +243,7 @@ namespace Cyotek.QuickScan
         this.ReadBool(ref _showPreview, settings["Preview"]);
         this.ReadBool(ref _showPixelGrid, settings["PixelGrid"]);
         this.ReadEnum(ref _layoutOrientation, settings["Orientation"]);
+        this.ReadEnum(ref _unit, settings["Unit"]);
       }
     }
 
@@ -274,6 +284,7 @@ namespace Cyotek.QuickScan
       settings["AutoSave"] = _autoSave.ToString();
 
       settings = data["UI"];
+      settings["Unit"] = _unit.ToString();
       settings["Preview"] = _showPreview.ToString();
       settings["PixelGrid"] = _showPixelGrid.ToString();
       settings["Orientation"] = _layoutOrientation.ToString();
