@@ -839,6 +839,11 @@ namespace Cyotek.QuickScan
     {
       this.PerformDeviceAction(device =>
       {
+        device.Items[1].Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
+
+        device.Items[1].Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
+        device.Items[1].Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
+
         PropertiesDialog.ShowPropertiesDialog(device.Items[1].Properties);
       });
     }
