@@ -19,7 +19,7 @@ namespace Cyotek.QuickScan
 
     private IDeviceManager _deviceManager;
 
-    private Bitmap _image;
+    private Image _image;
 
     private Settings _settings;
 
@@ -526,11 +526,11 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private void PerformImageAction(Func<Bitmap, Bitmap> action)
+    private void PerformImageAction(Func<Image,Image> action)
     {
       if (_image != null)
       {
-        Bitmap newImage;
+        Image newImage;
         Size size;
 
         size = _image.Size;
@@ -605,7 +605,7 @@ namespace Cyotek.QuickScan
           codec = ImageCodecHelpers.GetImageCodec(format);
           parameters = ImageCodecHelpers.GetEncoderParameters(codec, quality);
 
-          using (Bitmap copy = _image)
+          using (Image copy = _image)
           {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -613,7 +613,7 @@ namespace Cyotek.QuickScan
 
               stream.Position = 0;
 
-              using (Bitmap loaded = (Bitmap)Image.FromStream(stream))
+              using (Image loaded = Image.FromStream(stream))
               {
                 ImagePreviewWindow.ShowImagePreview(loaded);
               }
@@ -897,7 +897,7 @@ namespace Cyotek.QuickScan
       this.SetImage(image.ToBitmap(), true);
     }
 
-    private void SetImage(Bitmap image, bool resetZoom)
+    private void SetImage(Image image, bool resetZoom)
     {
       previewImageBox.BeginUpdate();
 
@@ -1090,5 +1090,21 @@ namespace Cyotek.QuickScan
     }
 
     #endregion Private Methods
+
+    private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      Image image;
+
+      image = ClipboardUtilities.GetImage();
+
+      if (image != null)
+      {
+        this.SetImage(image, true);
+      }
+      else
+      {
+        SystemSounds.Beep.Play();
+      }
+    }
   }
 }

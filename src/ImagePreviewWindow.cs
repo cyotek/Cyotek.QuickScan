@@ -7,7 +7,7 @@ namespace Cyotek.QuickScan
   {
     #region Private Fields
 
-    private readonly Bitmap _image;
+    private readonly Image _image;
 
     #endregion Private Fields
 
@@ -18,7 +18,7 @@ namespace Cyotek.QuickScan
       this.InitializeComponent();
     }
 
-    public ImagePreviewWindow(Bitmap image)
+    public ImagePreviewWindow(Image image)
       : this()
     {
       _image = image;
@@ -28,7 +28,7 @@ namespace Cyotek.QuickScan
 
     #region Public Methods
 
-    public static void ShowImagePreview(Bitmap image)
+    public static void ShowImagePreview(Image image)
     {
       using (ImagePreviewWindow window = new ImagePreviewWindow(image))
       {

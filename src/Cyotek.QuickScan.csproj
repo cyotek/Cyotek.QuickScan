@@ -153,6 +153,9 @@
     <Content Include="..\res\image-preview.png">
       <Link>Resources\image-preview.png</Link>
     </Content>
+    <Content Include="..\res\paste.png">
+      <Link>Resources\paste.png</Link>
+    </Content>
     <Content Include="..\res\vertical-split.png">
       <Link>Resources\vertical-split.png</Link>
     </Content>

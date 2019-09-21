@@ -7,6 +7,7 @@
 * [Creating a GroupBox containing an image and a custom display rectangle][3]
 * [Copy an irregular area from a picture to the clipboard in C#][4]
 * [Enabling shell styles for the ListView and TreeView controls in C#][5]
+* [Paste a PNG format image with a transparent background from the clipboard in C#][9]
 
 ## Acknowledgements
 
@@ -21,3 +22,4 @@
 [6]: https://www.cyotek.com/blog/tag/imagebox
 [7]: https://github.com/cyotek/Cyotek.Windows.Forms.ImageBox
 [8]: https://github.com/cyotek/Cyotek.QuickScan
+[9]: http://csharphelper.com/blog/2014/09/paste-a-png-format-image-with-a-transparent-background-from-the-clipboard-in-c/
