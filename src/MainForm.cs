@@ -353,6 +353,7 @@ namespace Cyotek.QuickScan
         Format = _settings.Format,
         Quality = _settings.Quality,
         Image = _image
+        Image = _image.Copy()
       };
     }
 
@@ -875,6 +876,8 @@ namespace Cyotek.QuickScan
 
     private void SetImage(Bitmap image, bool resetZoom)
     {
+      previewImageBox.BeginUpdate();
+
       previewImageBox.Image = null;
 
       if (_image != null && !object.ReferenceEquals(_image, image))
@@ -893,6 +896,8 @@ namespace Cyotek.QuickScan
       {
         previewImageBox.ZoomToFit();
       }
+
+      previewImageBox.EndUpdate();
     }
 
     private void SetIntent(WiaImageIntent imageIntent)
