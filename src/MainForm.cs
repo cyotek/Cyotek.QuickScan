@@ -100,6 +100,10 @@ namespace Cyotek.QuickScan
 
       estimateFileSizesToolStripMenuItem.Checked = _settings.EstimateFileSizes;
       fileSizeToolStripStatusLabel.Visible = _settings.EstimateFileSizes;
+
+      previewImageBox.ShowPixelGrid = _settings.ShowPixelGrid;
+      this.SetOrientation(_settings.LayoutOrientation);
+      this.SetPreview(_settings.ShowPreview);
     }
 
     private void AutoSaveCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -246,18 +250,6 @@ namespace Cyotek.QuickScan
       _settings.BaseFileName = fileNameTextBox.Text;
     }
 
-    private ImageInfo GetImageInfo()
-    {
-      // fun fact - WIA must be using GDI+, so all the codec GUID's are the same
-
-      return new ImageInfo
-      {
-        Format = _settings.Format,
-        Quality = _settings.Quality,
-        Image = _image
-      };
-    }
-
     private void FileSizeBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
     {
       ImageCodecInfo codec;
@@ -352,7 +344,17 @@ namespace Cyotek.QuickScan
       return image;
     }
 
-    
+    private ImageInfo GetImageInfo()
+    {
+      // fun fact - WIA must be using GDI+, so all the codec GUID's are the same
+
+      return new ImageInfo
+      {
+        Format = _settings.Format,
+        Quality = _settings.Quality,
+        Image = _image
+      };
+    }
 
     private Device GetSelectedDevice()
     {
@@ -406,6 +408,16 @@ namespace Cyotek.QuickScan
       }
 
       return deviceInfo;
+    }
+
+    private void HorizontalLayoutToolStripButton_Click(object sender, EventArgs e)
+    {
+      this.SetOrientation(horizontalLayoutToolStripButton.Checked ? Orientation.Vertical : Orientation.Horizontal);
+    }
+
+    private void HorizontalToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.SetOrientation(Orientation.Horizontal);
     }
 
     private void LoadDevices()
@@ -536,19 +548,26 @@ namespace Cyotek.QuickScan
 
     private void PixelGridToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      bool showGrid;
+      _settings.ShowPixelGrid = !_settings.ShowPixelGrid;
 
-      showGrid = !previewImageBox.ShowPixelGrid;
-
-      previewImageBox.ShowPixelGrid = showGrid;
-
-      pixelGridToolStripButton.Checked = showGrid;
-      pixelGridToolStripMenuItem.Checked = showGrid;
+      this.ApplySettings();
     }
 
     private void PreviewButton_Click(object sender, EventArgs e)
     {
       this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
+    }
+
+    private void PreviewImageBox_ShowPixelGridChanged(object sender, EventArgs e)
+    {
+      bool showGrid;
+
+      showGrid = previewImageBox.ShowPixelGrid;
+
+      previewImageBox.ShowPixelGrid = showGrid;
+
+      pixelGridToolStripButton.Checked = showGrid;
+      pixelGridToolStripMenuItem.Checked = showGrid;
     }
 
     private void PreviewLinkLabel_Click(object sender, EventArgs e)
@@ -888,12 +907,37 @@ namespace Cyotek.QuickScan
       }
     }
 
+    private void SetOrientation(Orientation orientation)
+    {
+      _settings.LayoutOrientation = orientation;
+
+      splitContainer.Orientation = orientation;
+
+      horizontalToolStripMenuItem.Checked = orientation == Orientation.Horizontal;
+      horizontalLayoutToolStripButton.Checked = orientation == Orientation.Horizontal;
+      verticalToolStripMenuItem.Checked = orientation == Orientation.Vertical;
+    }
+
+    private void SetPreview(bool show)
+    {
+      _settings.ShowPreview = show;
+
+      showPreviewToolStripMenuItem.Checked = show;
+      imagePreviewToolStripButton.Checked = show;
+      splitContainer.Panel2Collapsed = !show;
+    }
+
     private void SetQuality(int quality)
     {
       if (quality >= qualityNumericUpDown.Minimum && quality <= qualityNumericUpDown.Maximum)
       {
         qualityNumericUpDown.Value = quality;
       }
+    }
+
+    private void ShowPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.SetPreview(!_settings.ShowPreview);
     }
 
     private void TypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -924,6 +968,11 @@ namespace Cyotek.QuickScan
     private void UseCounterCheckBox_CheckedChanged(object sender, EventArgs e)
     {
       _settings.UseCounter = useCounterCheckBox.Checked;
+    }
+
+    private void VerticalToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.SetOrientation(Orientation.Vertical);
     }
 
     private void ZoomToWindowToolStripMenuItem_Click(object sender, EventArgs e)

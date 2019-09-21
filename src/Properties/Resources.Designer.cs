@@ -103,9 +103,29 @@ namespace Cyotek.QuickScan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HorizontalSplit {
+            get {
+                object obj = ResourceManager.GetObject("HorizontalSplit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ImageFormat {
             get {
                 object obj = ResourceManager.GetObject("ImageFormat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImagePreview {
+            get {
+                object obj = ResourceManager.GetObject("ImagePreview", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -146,6 +166,16 @@ namespace Cyotek.QuickScan.Properties {
         internal static System.Drawing.Bitmap Size {
             get {
                 object obj = ResourceManager.GetObject("Size", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VerticalSplit {
+            get {
+                object obj = ResourceManager.GetObject("VerticalSplit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -29,6 +29,10 @@ namespace Cyotek.QuickScan
 
     private bool _ignoreUpdates;
 
+    private WiaImageIntent _imageIntent;
+
+    private Orientation _layoutOrientation;
+
     private string _outputFolder;
 
     private bool _promptForDevice;
@@ -37,7 +41,9 @@ namespace Cyotek.QuickScan
 
     private int _scanDpi;
 
-    private WiaImageIntent _imageIntent;
+    private bool _showPixelGrid;
+
+    private bool _showPreview;
 
     private bool _useCounter;
 
@@ -52,6 +58,9 @@ namespace Cyotek.QuickScan
       _format = WiaFormatId.Bmp;
       _counter = 1;
       _estimateFileSizes = true;
+      _showPixelGrid = true;
+      _layoutOrientation = Orientation.Vertical;
+      _showPreview = true;
     }
 
     #endregion Public Constructors
@@ -100,10 +109,31 @@ namespace Cyotek.QuickScan
       set { this.UpdateValue(ref _format, value); }
     }
 
+    public string FormatString
+    {
+      get
+      {
+        // WIA throws a COM exception if the GUID isn't formatted just-so
+        return _format.ToString("B");
+      }
+    }
+
     public bool IgnoreUpdates
     {
       get { return _ignoreUpdates; }
       set { _ignoreUpdates = value; }
+    }
+
+    public WiaImageIntent ImageIntent
+    {
+      get { return _imageIntent; }
+      set { this.UpdateValue(ref _imageIntent, value); }
+    }
+
+    public Orientation LayoutOrientation
+    {
+      get { return _layoutOrientation; }
+      set { this.UpdateValue(ref _layoutOrientation, value); }
     }
 
     public string OutputFolder
@@ -130,10 +160,16 @@ namespace Cyotek.QuickScan
       set { this.UpdateValue(ref _scanDpi, value); }
     }
 
-    public WiaImageIntent ImageIntent
+    public bool ShowPixelGrid
     {
-      get { return _imageIntent; }
-      set { this.UpdateValue(ref _imageIntent, value); }
+      get { return _showPixelGrid; }
+      set { this.UpdateValue(ref _showPixelGrid, value); }
+    }
+
+    public bool ShowPreview
+    {
+      get { return _showPreview; }
+      set { this.UpdateValue(ref _showPreview, value); }
     }
 
     public bool UseCounter
@@ -182,7 +218,7 @@ namespace Cyotek.QuickScan
         this.ReadBool(ref _continuousScan, settings["Continuous"]);
 
         settings = data["Scan"];
-        this.ReadEnum<WiaImageIntent>(ref _imageIntent, settings["Intent"]);
+        this.ReadEnum(ref _imageIntent, settings["Intent"]);
         this.ReadInt(ref _scanDpi, settings["Dpi"]);
 
         settings = data["Output"];
@@ -193,24 +229,11 @@ namespace Cyotek.QuickScan
         this.ReadInt(ref _counter, settings["Counter"]);
         this.ReadBool(ref _useCounter, settings["UseCounter"]);
         this.ReadBool(ref _autoSave, settings["AutoSave"]);
-      }
-    }
 
-    public string FormatString
-    {
-      get
-      {
-        // WIA throws a COM exception if the GUID isn't formatted just-so
-        return _format.ToString("B");
-      }
-    }
-
-    private void ReadEnum<T>(ref T setting, string value)
-      where T : struct
-    {
-      if (!string.IsNullOrEmpty(value))
-      {
-        setting = (T)Enum.Parse(typeof(T), value, true);
+        settings = data["UI"];
+        this.ReadBool(ref _showPreview, settings["Preview"]);
+        this.ReadBool(ref _showPixelGrid, settings["PixelGrid"]);
+        this.ReadEnum(ref _layoutOrientation, settings["Orientation"]);
       }
     }
 
@@ -250,6 +273,11 @@ namespace Cyotek.QuickScan
       settings["UseCounter"] = _useCounter.ToString();
       settings["AutoSave"] = _autoSave.ToString();
 
+      settings = data["UI"];
+      settings["Preview"] = _showPreview.ToString();
+      settings["PixelGrid"] = _showPixelGrid.ToString();
+      settings["Orientation"] = _layoutOrientation.ToString();
+
       parser.WriteFile(fileName, data, encoding);
     }
 
@@ -265,18 +293,28 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private void ReadInt(ref int setting, string value)
+    private void ReadEnum<T>(ref T setting, string value)
+              where T : struct
     {
       if (!string.IsNullOrEmpty(value))
       {
-        setting = Convert.ToInt32(value);
+        setting = (T)Enum.Parse(typeof(T), value, true);
       }
     }
+
     private void ReadGuid(ref Guid setting, string value)
     {
       if (!string.IsNullOrEmpty(value))
       {
         setting = new Guid(value);
+      }
+    }
+
+    private void ReadInt(ref int setting, string value)
+    {
+      if (!string.IsNullOrEmpty(value))
+      {
+        setting = Convert.ToInt32(value);
       }
     }
 

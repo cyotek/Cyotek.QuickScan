@@ -149,6 +149,12 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\res\image-preview.png">
+      <Link>Resources\image-preview.png</Link>
+    </Content>
+    <Content Include="..\res\vertical-split.png">
+      <Link>Resources\vertical-split.png</Link>
+    </Content>
     <None Include="..\res\image-format.png">
       <Link>Resources\image-format.png</Link>
     </None>
@@ -186,6 +192,9 @@
     <None Include="..\res\file-size.png">
       <Link>Resources\file-size.png</Link>
     </None>
+    <Content Include="..\res\horizonta-split.png">
+      <Link>Resources\horizonta-split.png</Link>
+    </Content>
     <Content Include="..\res\icon.ico">
       <Link>icon.ico</Link>
     </Content>

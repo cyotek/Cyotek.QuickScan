@@ -40,6 +40,12 @@
       this.devicePropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.scanPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+      this.layoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.horizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.verticalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
+      this.showPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
       this.pixelGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
       this.zoomToWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +59,8 @@
       this.rotate90ClockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.rotate90CounterClockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.estimateFileSizesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
       this.saveSettingsOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.saveSettingsNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +68,8 @@
       this.toolStrip = new System.Windows.Forms.ToolStrip();
       this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+      this.horizontalLayoutToolStripButton = new System.Windows.Forms.ToolStripButton();
+      this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       this.pixelGridToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
       this.zoomToWindowToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -75,7 +85,7 @@
       this.sizeToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
       this.formatToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
       this.splitContainer = new System.Windows.Forms.SplitContainer();
-      this.groupBox3 = new Cyotek.Windows.Forms.GroupBox();
+      this.outputSettingsGroupBox = new Cyotek.Windows.Forms.GroupBox();
       this.saveButton = new System.Windows.Forms.Button();
       this.autoSaveCheckBox = new System.Windows.Forms.CheckBox();
       this.useCounterCheckBox = new System.Windows.Forms.CheckBox();
@@ -92,12 +102,12 @@
       this.qualityLabel = new System.Windows.Forms.Label();
       this.formatLabel = new System.Windows.Forms.Label();
       this.formatComboBox = new System.Windows.Forms.ComboBox();
-      this.groupBox2 = new Cyotek.Windows.Forms.GroupBox();
+      this.deviceSettingsGroupBox = new Cyotek.Windows.Forms.GroupBox();
       this.dpiNumericUpDown = new System.Windows.Forms.NumericUpDown();
       this.dpiLabel = new System.Windows.Forms.Label();
       this.typeLabel = new System.Windows.Forms.Label();
       this.typeComboBox = new System.Windows.Forms.ComboBox();
-      this.groupBox1 = new Cyotek.Windows.Forms.GroupBox();
+      this.deviceGroupBox = new Cyotek.Windows.Forms.GroupBox();
       this.continuousCheckBox = new System.Windows.Forms.CheckBox();
       this.scanButton = new System.Windows.Forms.Button();
       this.deviceComboBox = new System.Windows.Forms.ComboBox();
@@ -106,8 +116,7 @@
       this.devicePromptCheckBox = new System.Windows.Forms.CheckBox();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-      this.estimateFileSizesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+      this.imagePreviewToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -115,12 +124,12 @@
       this.splitContainer.Panel1.SuspendLayout();
       this.splitContainer.Panel2.SuspendLayout();
       this.splitContainer.SuspendLayout();
-      this.groupBox3.SuspendLayout();
+      this.outputSettingsGroupBox.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.counterNumericUpDown)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.qualityNumericUpDown)).BeginInit();
-      this.groupBox2.SuspendLayout();
+      this.deviceSettingsGroupBox.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dpiNumericUpDown)).BeginInit();
-      this.groupBox1.SuspendLayout();
+      this.deviceGroupBox.SuspendLayout();
       this.SuspendLayout();
       // 
       // menuStrip
@@ -190,6 +199,8 @@
             this.devicePropertiesToolStripMenuItem,
             this.scanPropertiesToolStripMenuItem,
             this.toolStripMenuItem2,
+            this.layoutToolStripMenuItem,
+            this.toolStripMenuItem7,
             this.pixelGridToolStripMenuItem,
             this.toolStripMenuItem1,
             this.zoomToWindowToolStripMenuItem,
@@ -218,6 +229,51 @@
       // 
       this.toolStripMenuItem2.Name = "toolStripMenuItem2";
       this.toolStripMenuItem2.Size = new System.Drawing.Size(205, 6);
+      // 
+      // layoutToolStripMenuItem
+      // 
+      this.layoutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.horizontalToolStripMenuItem,
+            this.verticalToolStripMenuItem,
+            this.toolStripMenuItem8,
+            this.showPreviewToolStripMenuItem});
+      this.layoutToolStripMenuItem.Name = "layoutToolStripMenuItem";
+      this.layoutToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+      this.layoutToolStripMenuItem.Text = "&Layout";
+      // 
+      // horizontalToolStripMenuItem
+      // 
+      this.horizontalToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.HorizontalSplit;
+      this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
+      this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.horizontalToolStripMenuItem.Text = "&Horizontal";
+      this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.HorizontalToolStripMenuItem_Click);
+      // 
+      // verticalToolStripMenuItem
+      // 
+      this.verticalToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.VerticalSplit;
+      this.verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
+      this.verticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.verticalToolStripMenuItem.Text = "&Vertical";
+      this.verticalToolStripMenuItem.Click += new System.EventHandler(this.VerticalToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem8
+      // 
+      this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+      this.toolStripMenuItem8.Size = new System.Drawing.Size(177, 6);
+      // 
+      // showPreviewToolStripMenuItem
+      // 
+      this.showPreviewToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.ImagePreview;
+      this.showPreviewToolStripMenuItem.Name = "showPreviewToolStripMenuItem";
+      this.showPreviewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.showPreviewToolStripMenuItem.Text = "Show &Preview";
+      this.showPreviewToolStripMenuItem.Click += new System.EventHandler(this.ShowPreviewToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem7
+      // 
+      this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+      this.toolStripMenuItem7.Size = new System.Drawing.Size(205, 6);
       // 
       // pixelGridToolStripMenuItem
       // 
@@ -326,6 +382,20 @@
       this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
       this.optionsToolStripMenuItem.Text = "&Options";
       // 
+      // estimateFileSizesToolStripMenuItem
+      // 
+      this.estimateFileSizesToolStripMenuItem.Checked = true;
+      this.estimateFileSizesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.estimateFileSizesToolStripMenuItem.Name = "estimateFileSizesToolStripMenuItem";
+      this.estimateFileSizesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+      this.estimateFileSizesToolStripMenuItem.Text = "&Estimate File Sizes";
+      this.estimateFileSizesToolStripMenuItem.Click += new System.EventHandler(this.EstimateFileSizesToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem6
+      // 
+      this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+      this.toolStripMenuItem6.Size = new System.Drawing.Size(178, 6);
+      // 
       // saveSettingsOnExitToolStripMenuItem
       // 
       this.saveSettingsOnExitToolStripMenuItem.Checked = true;
@@ -362,6 +432,9 @@
       this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripButton,
             this.toolStripSeparator2,
+            this.horizontalLayoutToolStripButton,
+            this.imagePreviewToolStripButton,
+            this.toolStripSeparator4,
             this.pixelGridToolStripButton,
             this.toolStripSeparator1,
             this.zoomToWindowToolStripButton,
@@ -390,6 +463,21 @@
       // 
       this.toolStripSeparator2.Name = "toolStripSeparator2";
       this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+      // 
+      // horizontalLayoutToolStripButton
+      // 
+      this.horizontalLayoutToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.horizontalLayoutToolStripButton.Image = global::Cyotek.QuickScan.Properties.Resources.HorizontalSplit;
+      this.horizontalLayoutToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.horizontalLayoutToolStripButton.Name = "horizontalLayoutToolStripButton";
+      this.horizontalLayoutToolStripButton.Size = new System.Drawing.Size(23, 22);
+      this.horizontalLayoutToolStripButton.Text = "Horizontal Layout";
+      this.horizontalLayoutToolStripButton.Click += new System.EventHandler(this.HorizontalLayoutToolStripButton_Click);
+      // 
+      // toolStripSeparator4
+      // 
+      this.toolStripSeparator4.Name = "toolStripSeparator4";
+      this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
       // 
       // pixelGridToolStripButton
       // 
@@ -522,9 +610,10 @@
       // 
       // splitContainer.Panel1
       // 
-      this.splitContainer.Panel1.Controls.Add(this.groupBox3);
-      this.splitContainer.Panel1.Controls.Add(this.groupBox2);
-      this.splitContainer.Panel1.Controls.Add(this.groupBox1);
+      this.splitContainer.Panel1.AutoScroll = true;
+      this.splitContainer.Panel1.Controls.Add(this.outputSettingsGroupBox);
+      this.splitContainer.Panel1.Controls.Add(this.deviceSettingsGroupBox);
+      this.splitContainer.Panel1.Controls.Add(this.deviceGroupBox);
       // 
       // splitContainer.Panel2
       // 
@@ -533,32 +622,32 @@
       this.splitContainer.SplitterDistance = 298;
       this.splitContainer.TabIndex = 2;
       // 
-      // groupBox3
+      // outputSettingsGroupBox
       // 
-      this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+      this.outputSettingsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.groupBox3.Controls.Add(this.saveButton);
-      this.groupBox3.Controls.Add(this.autoSaveCheckBox);
-      this.groupBox3.Controls.Add(this.useCounterCheckBox);
-      this.groupBox3.Controls.Add(this.counterNumericUpDown);
-      this.groupBox3.Controls.Add(this.counterLabel);
-      this.groupBox3.Controls.Add(this.fileNameTextBox);
-      this.groupBox3.Controls.Add(this.fileNameLabel);
-      this.groupBox3.Controls.Add(this.openFolderButton);
-      this.groupBox3.Controls.Add(this.browseButton);
-      this.groupBox3.Controls.Add(this.folderTextBox);
-      this.groupBox3.Controls.Add(this.folderLabel);
-      this.groupBox3.Controls.Add(this.previewLinkLabel);
-      this.groupBox3.Controls.Add(this.qualityNumericUpDown);
-      this.groupBox3.Controls.Add(this.qualityLabel);
-      this.groupBox3.Controls.Add(this.formatLabel);
-      this.groupBox3.Controls.Add(this.formatComboBox);
-      this.groupBox3.Location = new System.Drawing.Point(4, 191);
-      this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(292, 275);
-      this.groupBox3.TabIndex = 2;
-      this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Output Settings:";
+      this.outputSettingsGroupBox.Controls.Add(this.saveButton);
+      this.outputSettingsGroupBox.Controls.Add(this.autoSaveCheckBox);
+      this.outputSettingsGroupBox.Controls.Add(this.useCounterCheckBox);
+      this.outputSettingsGroupBox.Controls.Add(this.counterNumericUpDown);
+      this.outputSettingsGroupBox.Controls.Add(this.counterLabel);
+      this.outputSettingsGroupBox.Controls.Add(this.fileNameTextBox);
+      this.outputSettingsGroupBox.Controls.Add(this.fileNameLabel);
+      this.outputSettingsGroupBox.Controls.Add(this.openFolderButton);
+      this.outputSettingsGroupBox.Controls.Add(this.browseButton);
+      this.outputSettingsGroupBox.Controls.Add(this.folderTextBox);
+      this.outputSettingsGroupBox.Controls.Add(this.folderLabel);
+      this.outputSettingsGroupBox.Controls.Add(this.previewLinkLabel);
+      this.outputSettingsGroupBox.Controls.Add(this.qualityNumericUpDown);
+      this.outputSettingsGroupBox.Controls.Add(this.qualityLabel);
+      this.outputSettingsGroupBox.Controls.Add(this.formatLabel);
+      this.outputSettingsGroupBox.Controls.Add(this.formatComboBox);
+      this.outputSettingsGroupBox.Location = new System.Drawing.Point(4, 191);
+      this.outputSettingsGroupBox.Name = "outputSettingsGroupBox";
+      this.outputSettingsGroupBox.Size = new System.Drawing.Size(292, 254);
+      this.outputSettingsGroupBox.TabIndex = 2;
+      this.outputSettingsGroupBox.TabStop = false;
+      this.outputSettingsGroupBox.Text = "Output Settings:";
       // 
       // saveButton
       // 
@@ -732,28 +821,30 @@
       // 
       // formatComboBox
       // 
+      this.formatComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.formatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.formatComboBox.FormattingEnabled = true;
       this.formatComboBox.Location = new System.Drawing.Point(60, 19);
       this.formatComboBox.Name = "formatComboBox";
-      this.formatComboBox.Size = new System.Drawing.Size(194, 21);
+      this.formatComboBox.Size = new System.Drawing.Size(231, 21);
       this.formatComboBox.TabIndex = 1;
       this.formatComboBox.SelectedIndexChanged += new System.EventHandler(this.FormatComboBox_SelectedIndexChanged);
       // 
-      // groupBox2
+      // deviceSettingsGroupBox
       // 
-      this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+      this.deviceSettingsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.groupBox2.Controls.Add(this.dpiNumericUpDown);
-      this.groupBox2.Controls.Add(this.dpiLabel);
-      this.groupBox2.Controls.Add(this.typeLabel);
-      this.groupBox2.Controls.Add(this.typeComboBox);
-      this.groupBox2.Location = new System.Drawing.Point(4, 109);
-      this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(292, 76);
-      this.groupBox2.TabIndex = 1;
-      this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Scan Settings:";
+      this.deviceSettingsGroupBox.Controls.Add(this.dpiNumericUpDown);
+      this.deviceSettingsGroupBox.Controls.Add(this.dpiLabel);
+      this.deviceSettingsGroupBox.Controls.Add(this.typeLabel);
+      this.deviceSettingsGroupBox.Controls.Add(this.typeComboBox);
+      this.deviceSettingsGroupBox.Location = new System.Drawing.Point(4, 109);
+      this.deviceSettingsGroupBox.Name = "deviceSettingsGroupBox";
+      this.deviceSettingsGroupBox.Size = new System.Drawing.Size(292, 76);
+      this.deviceSettingsGroupBox.TabIndex = 1;
+      this.deviceSettingsGroupBox.TabStop = false;
+      this.deviceSettingsGroupBox.Text = "Scan Settings:";
       // 
       // dpiNumericUpDown
       // 
@@ -796,22 +887,22 @@
       this.typeComboBox.TabIndex = 1;
       this.typeComboBox.SelectedIndexChanged += new System.EventHandler(this.TypeComboBox_SelectedIndexChanged);
       // 
-      // groupBox1
+      // deviceGroupBox
       // 
-      this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+      this.deviceGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.groupBox1.Controls.Add(this.continuousCheckBox);
-      this.groupBox1.Controls.Add(this.scanButton);
-      this.groupBox1.Controls.Add(this.deviceComboBox);
-      this.groupBox1.Controls.Add(this.previewButton);
-      this.groupBox1.Controls.Add(this.devicePropertiesButton);
-      this.groupBox1.Controls.Add(this.devicePromptCheckBox);
-      this.groupBox1.Location = new System.Drawing.Point(4, 3);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(291, 100);
-      this.groupBox1.TabIndex = 0;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Device:";
+      this.deviceGroupBox.Controls.Add(this.continuousCheckBox);
+      this.deviceGroupBox.Controls.Add(this.scanButton);
+      this.deviceGroupBox.Controls.Add(this.deviceComboBox);
+      this.deviceGroupBox.Controls.Add(this.previewButton);
+      this.deviceGroupBox.Controls.Add(this.devicePropertiesButton);
+      this.deviceGroupBox.Controls.Add(this.devicePromptCheckBox);
+      this.deviceGroupBox.Location = new System.Drawing.Point(4, 3);
+      this.deviceGroupBox.Name = "deviceGroupBox";
+      this.deviceGroupBox.Size = new System.Drawing.Size(291, 100);
+      this.deviceGroupBox.TabIndex = 0;
+      this.deviceGroupBox.TabStop = false;
+      this.deviceGroupBox.Text = "Device:";
       // 
       // continuousCheckBox
       // 
@@ -886,6 +977,7 @@
       this.previewImageBox.ShowPixelGrid = true;
       this.previewImageBox.Size = new System.Drawing.Size(498, 486);
       this.previewImageBox.TabIndex = 0;
+      this.previewImageBox.ShowPixelGridChanged += new System.EventHandler(this.PreviewImageBox_ShowPixelGridChanged);
       // 
       // fileSizeBackgroundWorker
       // 
@@ -893,19 +985,15 @@
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
       // 
-      // estimateFileSizesToolStripMenuItem
+      // imagePreviewToolStripButton
       // 
-      this.estimateFileSizesToolStripMenuItem.Checked = true;
-      this.estimateFileSizesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.estimateFileSizesToolStripMenuItem.Name = "estimateFileSizesToolStripMenuItem";
-      this.estimateFileSizesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-      this.estimateFileSizesToolStripMenuItem.Text = "&Estimate File Sizes";
-      this.estimateFileSizesToolStripMenuItem.Click += new System.EventHandler(this.EstimateFileSizesToolStripMenuItem_Click);
-      // 
-      // toolStripMenuItem6
-      // 
-      this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-      this.toolStripMenuItem6.Size = new System.Drawing.Size(178, 6);
+      this.imagePreviewToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.imagePreviewToolStripButton.Image = global::Cyotek.QuickScan.Properties.Resources.ImagePreview;
+      this.imagePreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.imagePreviewToolStripButton.Name = "imagePreviewToolStripButton";
+      this.imagePreviewToolStripButton.Size = new System.Drawing.Size(23, 22);
+      this.imagePreviewToolStripButton.Text = "Image Preview";
+      this.imagePreviewToolStripButton.Click += new System.EventHandler(this.ShowPreviewToolStripMenuItem_Click);
       // 
       // MainForm
       // 
@@ -935,15 +1023,15 @@
       this.splitContainer.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
       this.splitContainer.ResumeLayout(false);
-      this.groupBox3.ResumeLayout(false);
-      this.groupBox3.PerformLayout();
+      this.outputSettingsGroupBox.ResumeLayout(false);
+      this.outputSettingsGroupBox.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.counterNumericUpDown)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.qualityNumericUpDown)).EndInit();
-      this.groupBox2.ResumeLayout(false);
-      this.groupBox2.PerformLayout();
+      this.deviceSettingsGroupBox.ResumeLayout(false);
+      this.deviceSettingsGroupBox.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dpiNumericUpDown)).EndInit();
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
+      this.deviceGroupBox.ResumeLayout(false);
+      this.deviceGroupBox.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -970,8 +1058,8 @@
     private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem devicePropertiesToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem scanPropertiesToolStripMenuItem;
-    private Windows.Forms.GroupBox groupBox1;
-    private Windows.Forms.GroupBox groupBox2;
+    private Windows.Forms.GroupBox deviceGroupBox;
+    private Windows.Forms.GroupBox deviceSettingsGroupBox;
     private System.Windows.Forms.ComboBox typeComboBox;
     private System.Windows.Forms.Label typeLabel;
     private System.Windows.Forms.ToolStripStatusLabel statusToolStripStatusLabel;
@@ -990,7 +1078,7 @@
     private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
     private System.Windows.Forms.ToolStripButton copyToolStripButton;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-    private Windows.Forms.GroupBox groupBox3;
+    private Windows.Forms.GroupBox outputSettingsGroupBox;
     private System.Windows.Forms.NumericUpDown qualityNumericUpDown;
     private System.Windows.Forms.Label qualityLabel;
     private System.Windows.Forms.Label formatLabel;
@@ -1030,6 +1118,15 @@
     private System.Windows.Forms.Button saveButton;
     private System.Windows.Forms.ToolStripMenuItem estimateFileSizesToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+    private System.Windows.Forms.ToolStripMenuItem layoutToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem horizontalToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem verticalToolStripMenuItem;
+    private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+    private System.Windows.Forms.ToolStripButton horizontalLayoutToolStripButton;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+    private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
+    private System.Windows.Forms.ToolStripMenuItem showPreviewToolStripMenuItem;
+    private System.Windows.Forms.ToolStripButton imagePreviewToolStripButton;
   }
 }
 
