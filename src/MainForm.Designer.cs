@@ -972,6 +972,7 @@
       // previewImageBox
       // 
       this.previewImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.previewImageBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
       this.previewImageBox.Location = new System.Drawing.Point(0, 0);
       this.previewImageBox.Name = "previewImageBox";
       this.previewImageBox.ShowPixelGrid = true;
