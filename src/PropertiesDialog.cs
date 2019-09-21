@@ -80,28 +80,7 @@ namespace Cyotek.QuickScan
           property = _properties[i + 1];
           type = (WiaPropertyType)property.Type;
 
-          if (property.IsVector)
-          {
-            value = ((Vector)property.get_Value()).ToSeparatedString();
-          }
-          else
-          {
-            switch (type)
-            {
-              case WiaPropertyType.ClassIDPropertyType:
-              case WiaPropertyType.StringPropertyType: // string
-                value = (string)property.get_Value();
-                break;
-
-              case WiaPropertyType.LongPropertyType:
-                value = ((int)property.get_Value()).ToString();
-                break;
-
-              default:
-                value = property.get_Value().ToString();
-                break;
-            }
-          }
+          value = property.GetValueString();
 
           item = new ListViewItem();
 

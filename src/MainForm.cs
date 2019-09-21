@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WIA;
 using CommonDialog = WIA.CommonDialog;
+using WiaProperties = WIA.Properties;
 
 namespace Cyotek.QuickScan
 {
@@ -186,7 +187,7 @@ namespace Cyotek.QuickScan
 
       if (!_settings.PromptForDevice)
       {
-        WIA.Properties properties;
+        WiaProperties properties;
         Property xDpi;
         Property yDpi;
         int min;
@@ -340,6 +341,8 @@ namespace Cyotek.QuickScan
 
           dialog = new CommonDialog();
           image = getImage(device, dialog);
+
+          device.Items[1].Properties.Dump();
         }
       }
       else
@@ -358,7 +361,6 @@ namespace Cyotek.QuickScan
       {
         Format = _settings.Format,
         Quality = _settings.Quality,
-        Image = _image
         Image = _image.Copy()
       };
     }
@@ -818,18 +820,18 @@ namespace Cyotek.QuickScan
       this.RunScanLoop((device, dialog) =>
       {
         Item item;
+        WiaProperties current;
 
         item = device.Items[1];
+        current = item.Properties;
 
-        item.Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent);
+        current.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
 
-        item.Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, (int)dpiNumericUpDown.Value);
-        item.Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, (int)dpiNumericUpDown.Value);
+        current.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
+        current.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
 
-        item.Properties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_XEXTENT);
-        item.Properties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_YEXTENT);
-
-        //PropertiesDialog.ShowPropertiesDialog(item.Properties);
+        current.SetPropertyMaximum(WiaPropertyId.WIA_IPS_XEXTENT);
+        current.SetPropertyMaximum(WiaPropertyId.WIA_IPS_YEXTENT);
 
         return dialog.ShowTransfer(item, _settings.FormatString, false);
       });
