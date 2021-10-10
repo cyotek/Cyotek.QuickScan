@@ -6,8 +6,8 @@
 
 For the past few years, and in a somewhat adhoc fashion, I've
 been attempting to catalog the piles of DVDs, music CD's, books,
-managed and all sorts of other clutter I have. In addition to
-record pertinent details in a database, I've either been
+magazines and all sorts of other clutter I have. In addition to
+recording pertinent details in a database, I've either been
 scanning the front and back of media such as as books or DVDs
 (where they fit in a scanner) and taking digital photographs of
 everything else.
@@ -22,7 +22,8 @@ confirmation prompt to perform a new scan. Images are
 automatically saved to a single folder for me to file later.
 This has turned out to be quite a massive time-saver - even if
 each item I'm scanning is of a different size, I don't need to
-keep request to acquire an image and then saving it when done.
+keep performing the entire flow to acquire a new image and then
+save it.
 
 ## Quick Start
 
