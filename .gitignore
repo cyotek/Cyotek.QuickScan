@@ -2,6 +2,7 @@ obj/
 bin/
 .vs/
 packages/
+dist/
 
 *.suo
 *.user
