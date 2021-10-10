@@ -197,8 +197,24 @@ namespace Cyotek.QuickScan
         xDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_XRES);
         yDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_YRES);
 
-        min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
-        max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
+        try
+        {
+          min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
+        }
+        catch (COMException)
+        {
+          min = 150;
+        }
+
+        try
+        {
+          max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
+        }
+        catch (COMException)
+        {
+          max = 4800;
+        }
+
 
         dpiNumericUpDown.Minimum = min;
         dpiNumericUpDown.Maximum = max;
