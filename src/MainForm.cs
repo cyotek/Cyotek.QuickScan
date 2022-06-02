@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Media;
 using System.Runtime.InteropServices;
@@ -80,6 +82,18 @@ namespace Cyotek.QuickScan
     private void ActualSizeToolStripMenuItem_Click(object sender, EventArgs e)
     {
       previewImageBox.ActualSize();
+    }
+
+    private void AddMetadata(Image image)
+    {
+      Dictionary<string, string> fields;
+
+      fields = this.GetMergeFields();
+
+      foreach (KeyValuePair<PropertyTag, Tuple<PropertyTagType, string>> pair in _settings.Metadata)
+      {
+        image.SetPropertyItem(pair.Key, pair.Value.Item1, pair.Value.Item2.MailMerge(fields, '{', '}'));
+      }
     }
 
     private void ApplySettings()
@@ -214,7 +228,6 @@ namespace Cyotek.QuickScan
         {
           max = 4800;
         }
-
 
         dpiNumericUpDown.Minimum = min;
         dpiNumericUpDown.Maximum = max;
@@ -381,6 +394,31 @@ namespace Cyotek.QuickScan
       };
     }
 
+    private Dictionary<string, string> GetMergeFields()
+    {
+      Dictionary<string, string> fields;
+
+      fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+      {
+        { "now", DateTime.UtcNow.ToString("s") },
+        { "year", DateTime.UtcNow.Year.ToString(CultureInfo.InvariantCulture) },
+        { "appname", Application.ProductName },
+        { "appversion", Application.ProductVersion },
+      };
+
+      // TODO: This will be wrong if multiple devices are present and the user
+      // choses a different one from the dialog versus this selection
+      this.PerformDeviceAction(device =>
+      {
+        foreach (Property property in device.Properties)
+        {
+          fields.Add("#" + property.Name, property.GetValueString());
+        }
+      });
+
+      return fields;
+    }
+
     private Device GetSelectedDevice()
     {
       Device result;
@@ -508,6 +546,22 @@ namespace Cyotek.QuickScan
     private void OpenFolderButton_Click(object sender, EventArgs e)
     {
       ProcessHelpers.OpenFolderInExplorer(_settings.OutputFolder);
+    }
+
+    private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      Image image;
+
+      image = ClipboardUtilities.GetImage();
+
+      if (image != null)
+      {
+        this.SetImage(image, true);
+      }
+      else
+      {
+        SystemSounds.Beep.Play();
+      }
     }
 
     private void PerformDeviceAction(Action<Device> action)
@@ -658,6 +712,17 @@ namespace Cyotek.QuickScan
       this.LoadDevices();
     }
 
+    private ImageFile RepeatLastScan(Device device, CommonDialog dialog)
+    {
+      Item item;
+
+      item = device.Items[1];
+
+      this.SetDeviceProperties(item.Properties, _image.Width, _image.Height);
+
+      return dialog.ShowTransfer(item, _settings.FormatString, false);
+    }
+
     private void Rotate90ClockwiseToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.PerformImageAction(i =>
@@ -703,7 +768,9 @@ namespace Cyotek.QuickScan
 
           this.SetImage(image);
 
-          fileName = _settings.AutoSave ? this.SaveImage() : null;
+          fileName = _settings.AutoSave
+            ? this.SaveImage()
+            : null;
 
           if (_settings.AutoSave && _settings.ContinuousScan && !string.IsNullOrEmpty(fileName))
           {
@@ -712,9 +779,11 @@ namespace Cyotek.QuickScan
               case DialogResult.Yes:
                 keepSize = true;
                 break;
+
               case DialogResult.No:
                 keepSize = false;
                 break;
+
               default:
                 done = true;
                 break;
@@ -732,17 +801,6 @@ namespace Cyotek.QuickScan
       }
 
       this.CalculateFileSize();
-    }
-
-    private ImageFile RepeatLastScan(Device device, CommonDialog dialog)
-    {
-      Item item;
-
-      item = device.Items[1];
-
-      this.SetDeviceProperties(item.Properties, _image.Width, _image.Height);
-
-      return dialog.ShowTransfer(item, _settings.FormatString, false);
     }
 
     private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -816,6 +874,11 @@ namespace Cyotek.QuickScan
 
         using (this.CreateStatusController("Saving image..."))
         {
+          if (_settings.AddMetadata)
+          {
+            this.AddMetadata(_image);
+          }
+
           _image.Save(fileName, codecInfo, encoderParameters);
           result = fileName;
         }
@@ -883,32 +946,6 @@ namespace Cyotek.QuickScan
       });
     }
 
-    private void SetDeviceProperties(WiaProperties deviceProperties, int width, int height)
-    {
-      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
-
-      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
-      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
-
-      if (width < 0)
-      {
-        deviceProperties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_XEXTENT);
-      }
-      else
-      {
-        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XEXTENT, _image.Width);
-      }
-
-      if (height < 0)
-      {
-        deviceProperties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_YEXTENT);
-      }
-      else
-      {
-        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YEXTENT, _image.Height);
-      }
-    }
-
     private void ScanPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.PerformDeviceAction(device =>
@@ -939,6 +976,32 @@ namespace Cyotek.QuickScan
           deviceComboBox.SelectedIndex = i;
           break;
         }
+      }
+    }
+
+    private void SetDeviceProperties(WiaProperties deviceProperties, int width, int height)
+    {
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
+
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
+
+      if (width < 0)
+      {
+        deviceProperties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_XEXTENT);
+      }
+      else
+      {
+        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XEXTENT, _image.Width);
+      }
+
+      if (height < 0)
+      {
+        deviceProperties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_YEXTENT);
+      }
+      else
+      {
+        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YEXTENT, _image.Height);
       }
     }
 
@@ -1162,21 +1225,5 @@ namespace Cyotek.QuickScan
     }
 
     #endregion Private Methods
-
-    private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-      Image image;
-
-      image = ClipboardUtilities.GetImage();
-
-      if (image != null)
-      {
-        this.SetImage(image, true);
-      }
-      else
-      {
-        SystemSounds.Beep.Play();
-      }
-    }
   }
 }

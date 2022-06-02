@@ -13,6 +13,10 @@ namespace Cyotek.QuickScan
   {
     #region Private Fields
 
+    private static Encoding _encoding = new UTF8Encoding(false);
+
+    private bool _addMetadata;
+
     private bool _autoSave;
 
     private string _baseFileName;
@@ -32,6 +36,8 @@ namespace Cyotek.QuickScan
     private WiaImageIntent _imageIntent;
 
     private Orientation _layoutOrientation;
+
+    private IDictionary<PropertyTag, Tuple<PropertyTagType, string>> _metadata;
 
     private string _outputFolder;
 
@@ -64,11 +70,18 @@ namespace Cyotek.QuickScan
       _layoutOrientation = Orientation.Vertical;
       _showPreview = true;
       _unit = Unit.Pixel;
+      _metadata = new Dictionary<PropertyTag, Tuple<PropertyTagType, string>>();
     }
 
     #endregion Public Constructors
 
     #region Public Properties
+
+    public bool AddMetadata
+    {
+      get => _addMetadata;
+      set => this.UpdateValue(ref _addMetadata, value);
+    }
 
     public bool AutoSave
     {
@@ -138,6 +151,8 @@ namespace Cyotek.QuickScan
       get { return _layoutOrientation; }
       set { this.UpdateValue(ref _layoutOrientation, value); }
     }
+
+    public IDictionary<PropertyTag, Tuple<PropertyTagType, string>> Metadata => _metadata;
 
     public string OutputFolder
     {
@@ -216,7 +231,7 @@ namespace Cyotek.QuickScan
         KeyDataCollection settings;
 
         parser = new FileIniDataParser();
-        data = parser.ReadFile(fileName, new UTF8Encoding(false));
+        data = parser.ReadFile(fileName, _encoding);
 
         settings = data["Settings"];
         this.ReadBool(ref _estimateFileSizes, settings["EstimateFileSizes"]);
@@ -238,12 +253,15 @@ namespace Cyotek.QuickScan
         this.ReadInt(ref _counter, settings["Counter"]);
         this.ReadBool(ref _useCounter, settings["UseCounter"]);
         this.ReadBool(ref _autoSave, settings["AutoSave"]);
+        this.ReadBool(ref _addMetadata, settings["AddMetaData"]);
 
         settings = data["UI"];
         this.ReadBool(ref _showPreview, settings["Preview"]);
         this.ReadBool(ref _showPixelGrid, settings["PixelGrid"]);
         this.ReadEnum(ref _layoutOrientation, settings["Orientation"]);
         this.ReadEnum(ref _unit, settings["Unit"]);
+
+        this.LoadMetadata(data);
       }
     }
 
@@ -253,14 +271,13 @@ namespace Cyotek.QuickScan
       IniData data;
       KeyDataCollection settings;
       string fileName;
-      Encoding encoding;
-
-      encoding = new UTF8Encoding(false);
 
       fileName = this.IniFileName;
 
       parser = new FileIniDataParser();
-      data = File.Exists(fileName) ? parser.ReadFile(fileName, encoding) : new IniData(); // library is using ASCII by default and doesn't handle missing files
+      data = File.Exists(fileName)
+        ? parser.ReadFile(fileName, _encoding)
+        : new IniData();
 
       settings = data["Settings"];
       settings["EstimateFileSizes"] = _estimateFileSizes.ToString();
@@ -289,12 +306,39 @@ namespace Cyotek.QuickScan
       settings["PixelGrid"] = _showPixelGrid.ToString();
       settings["Orientation"] = _layoutOrientation.ToString();
 
-      parser.WriteFile(fileName, data, encoding);
+      parser.WriteFile(fileName, data, _encoding);
     }
 
     #endregion Public Methods
 
     #region Private Methods
+
+    private void LoadMetadata(IniData data)
+    {
+      KeyDataCollection settings;
+
+      _metadata.Clear();
+
+      settings = data["Metadata"];
+
+      foreach (KeyData setting in settings)
+      {
+        if (!string.IsNullOrEmpty(setting.KeyName) && !string.IsNullOrEmpty(setting.Value))
+        {
+          int typePos;
+          PropertyTag tag;
+          PropertyTagType type;
+          string value;
+
+          typePos = setting.Value.IndexOf(',');
+          tag = (PropertyTag)Enum.Parse(typeof(PropertyTag), setting.KeyName, true);
+          type = (PropertyTagType)Enum.Parse(typeof(PropertyTagType), setting.Value.Substring(0, typePos), true);
+          value = setting.Value.Substring(typePos + 1);
+
+          _metadata.Add(tag, Tuple.Create(type, value));
+        }
+      }
+    }
 
     private void ReadBool(ref bool setting, string value)
     {
