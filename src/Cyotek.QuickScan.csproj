@@ -43,12 +43,13 @@
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net48\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
-    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
-      <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    <Reference Include="Cyotek.Data.Ini, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ba939853a4e7c259, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cyotek.Data.Ini.1.0.0-alpha.2\lib\net48\Cyotek.Data.Ini.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>

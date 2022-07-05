@@ -1,9 +1,7 @@
-﻿using IniParser;
-using IniParser.Model;
+﻿using Cyotek.Data.Ini;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using WIA;
 
@@ -12,8 +10,6 @@ namespace Cyotek.QuickScan
   internal class Settings
   {
     #region Private Fields
-
-    private static Encoding _encoding = new UTF8Encoding(false);
 
     private bool _addMetadata;
 
@@ -226,26 +222,24 @@ namespace Cyotek.QuickScan
 
       if (File.Exists(fileName))
       {
-        FileIniDataParser parser;
-        IniData data;
-        KeyDataCollection settings;
+        IniDocument data;
+        IniSectionToken settings;
 
-        parser = new FileIniDataParser();
-        data = parser.ReadFile(fileName, _encoding);
+        data = new IniDocument(fileName);
 
-        settings = data["Settings"];
+        settings = (IniSectionToken)data.CreateSection("Settings");
         this.ReadBool(ref _estimateFileSizes, settings["EstimateFileSizes"]);
 
-        settings = data["Device"];
-        _deviceId = settings["DeviceId"];
+        settings = (IniSectionToken)data.CreateSection("Device");
+        _deviceId = settings.GetValue("DeviceId");
         this.ReadBool(ref _promptForDevice, settings["Prompt"]);
         this.ReadBool(ref _continuousScan, settings["Continuous"]);
 
-        settings = data["Scan"];
+        settings = (IniSectionToken)data.CreateSection("Scan");
         this.ReadEnum(ref _imageIntent, settings["Intent"]);
         this.ReadInt(ref _scanDpi, settings["Dpi"]);
 
-        settings = data["Output"];
+        settings = (IniSectionToken)data.CreateSection("Output");
         this.ReadGuid(ref _format, settings["Format"]);
         this.ReadInt(ref _quality, settings["Quality"]);
         _outputFolder = settings["Folder"];
@@ -255,7 +249,7 @@ namespace Cyotek.QuickScan
         this.ReadBool(ref _autoSave, settings["AutoSave"]);
         this.ReadBool(ref _addMetadata, settings["AddMetaData"]);
 
-        settings = data["UI"];
+        settings = (IniSectionToken)data.CreateSection("UI");
         this.ReadBool(ref _showPreview, settings["Preview"]);
         this.ReadBool(ref _showPixelGrid, settings["PixelGrid"]);
         this.ReadEnum(ref _layoutOrientation, settings["Orientation"]);
@@ -267,31 +261,27 @@ namespace Cyotek.QuickScan
 
     public void Save()
     {
-      FileIniDataParser parser;
-      IniData data;
-      KeyDataCollection settings;
+      IniDocument data;
+      IniSectionToken settings;
       string fileName;
 
       fileName = this.IniFileName;
 
-      parser = new FileIniDataParser();
-      data = File.Exists(fileName)
-        ? parser.ReadFile(fileName, _encoding)
-        : new IniData();
+      data = new IniDocument(fileName);
 
-      settings = data["Settings"];
+      settings = (IniSectionToken)data.CreateSection("Settings");
       settings["EstimateFileSizes"] = _estimateFileSizes.ToString();
 
-      settings = data["Device"];
+      settings = (IniSectionToken)data.CreateSection("Device");
       settings["DeviceId"] = _deviceId;
       settings["Prompt"] = _promptForDevice.ToString();
       settings["Continuous"] = _continuousScan.ToString();
 
-      settings = data["Scan"];
+      settings = (IniSectionToken)data.CreateSection("Scan");
       settings["Intent"] = _imageIntent.ToString();
       settings["Dpi"] = _scanDpi.ToString();
 
-      settings = data["Output"];
+      settings = (IniSectionToken)data.CreateSection("Output");
       settings["Format"] = _format.ToString();
       settings["Quality"] = _quality.ToString();
       settings["Folder"] = _outputFolder;
@@ -300,30 +290,30 @@ namespace Cyotek.QuickScan
       settings["UseCounter"] = _useCounter.ToString();
       settings["AutoSave"] = _autoSave.ToString();
 
-      settings = data["UI"];
+      settings = (IniSectionToken)data.CreateSection("UI");
       settings["Unit"] = _unit.ToString();
       settings["Preview"] = _showPreview.ToString();
       settings["PixelGrid"] = _showPixelGrid.ToString();
       settings["Orientation"] = _layoutOrientation.ToString();
 
-      parser.WriteFile(fileName, data, _encoding);
+      data.Save();
     }
 
     #endregion Public Methods
 
     #region Private Methods
 
-    private void LoadMetadata(IniData data)
+    private void LoadMetadata(IniDocument data)
     {
-      KeyDataCollection settings;
+      IniSectionToken settings;
 
       _metadata.Clear();
 
-      settings = data["Metadata"];
+      settings = (IniSectionToken)data.CreateSection("Metadata");
 
-      foreach (KeyData setting in settings)
+      foreach (IniToken token in settings.ChildTokens)
       {
-        if (!string.IsNullOrEmpty(setting.KeyName) && !string.IsNullOrEmpty(setting.Value))
+        if (token is IniValueToken setting && !string.IsNullOrEmpty(setting.Name) && !string.IsNullOrEmpty(setting.Value))
         {
           int typePos;
           PropertyTag tag;
@@ -331,7 +321,7 @@ namespace Cyotek.QuickScan
           string value;
 
           typePos = setting.Value.IndexOf(',');
-          tag = (PropertyTag)Enum.Parse(typeof(PropertyTag), setting.KeyName, true);
+          tag = (PropertyTag)Enum.Parse(typeof(PropertyTag), setting.Name, true);
           type = (PropertyTagType)Enum.Parse(typeof(PropertyTagType), setting.Value.Substring(0, typePos), true);
           value = setting.Value.Substring(typePos + 1);
 
