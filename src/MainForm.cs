@@ -23,6 +23,8 @@ namespace Cyotek.QuickScan
 
     private Image _image;
 
+    private ImageFile _imageFile;
+
     private Settings _settings;
 
     #endregion Private Fields
@@ -912,7 +914,15 @@ namespace Cyotek.QuickScan
             this.AddMetadata(_image);
           }
 
-          _image.Save(fileName, codecInfo, encoderParameters);
+          try
+          {
+            _image.Save(fileName, codecInfo, encoderParameters);
+          }
+          catch (ExternalException ex)
+          {
+            fileName = this.SaveImageDirect(fileName);
+          }
+
           result = fileName;
         }
 
@@ -948,6 +958,28 @@ namespace Cyotek.QuickScan
 
         return null;
       });
+    }
+
+    private string SaveImageDirect(string fileName)
+    {
+      fileName = Path.ChangeExtension(fileName, _imageFile.FileExtension);
+
+      try
+      {
+        if (File.Exists(fileName))
+        {
+          File.Delete(fileName);
+        }
+
+        _imageFile.SaveFile(fileName);
+
+        UiHelpers.ShowWarning(string.Format("Failed to save image in requested format. Image saved to '{0}' without customisation.", fileName));
+      }
+      catch (Exception ex)
+      {
+        UiHelpers.ShowError("Failed to save image.", ex);
+      }
+      return fileName;
     }
 
     private void SaveSettings()
@@ -1066,6 +1098,8 @@ namespace Cyotek.QuickScan
 
     private void SetImage(ImageFile image)
     {
+      _imageFile = image;
+
       formatToolStripStatusLabel.Text = image.FileExtension;
 
       this.SetImage(image.ToBitmap(), true);
