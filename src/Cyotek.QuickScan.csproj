@@ -109,6 +109,7 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="UiHelpers.cs" />
     <Compile Include="Unit.cs" />
+    <Compile Include="WiaError.cs" />
     <Compile Include="WiaExtensions.cs" />
     <Compile Include="WiaFormatId.cs" />
     <Compile Include="WiaPropertyId.cs" />

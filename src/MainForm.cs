@@ -213,41 +213,50 @@ namespace Cyotek.QuickScan
     {
       this.UpdateUi();
 
-      _settings.DeviceId = deviceComboBox.SelectedItem is DeviceListBoxItem device ? device.DeviceId : null;
+      _settings.DeviceId = deviceComboBox.SelectedItem is DeviceListBoxItem deviceInfo
+        ? deviceInfo.DeviceId
+        : null;
 
       if (!_settings.PromptForDevice)
       {
-        WiaProperties properties;
-        Property xDpi;
-        Property yDpi;
-        int min;
-        int max;
+        Device device;
 
-        properties = this.GetSelectedDevice().Items[1].Properties;
-        xDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_XRES);
-        yDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_YRES);
+        device = this.GetSelectedDevice();
 
-        try
+        if (device != null)
         {
-          min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
-        }
-        catch (COMException)
-        {
-          min = 150;
-        }
+          WiaProperties properties;
+          Property xDpi;
+          Property yDpi;
+          int min;
+          int max;
 
-        try
-        {
-          max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
-        }
-        catch (COMException)
-        {
-          max = 4800;
-        }
+          properties = device.Items[1].Properties;
+          xDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_XRES);
+          yDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_YRES);
 
-        dpiNumericUpDown.Minimum = min;
-        dpiNumericUpDown.Maximum = max;
-        dpiNumericUpDown.Value = max;
+          try
+          {
+            min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
+          }
+          catch (COMException)
+          {
+            min = 150;
+          }
+
+          try
+          {
+            max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
+          }
+          catch (COMException)
+          {
+            max = 4800;
+          }
+
+          dpiNumericUpDown.Minimum = min;
+          dpiNumericUpDown.Maximum = max;
+          dpiNumericUpDown.Value = max;
+        }
       }
     }
 
@@ -462,7 +471,15 @@ namespace Cyotek.QuickScan
 
         if (deviceInfo != null)
         {
-          result = deviceInfo.Connect();
+          try
+          {
+            result = deviceInfo.Connect();
+          }
+          catch (COMException ex) when (ex.HResult == (int)WiaError.WIA_ERROR_OFFLINE)
+          {
+            result = null;
+            MessageBox.Show("Unable to connect to device; it may be offline.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          }
         }
         else
         {
