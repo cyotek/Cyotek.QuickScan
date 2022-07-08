@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using WIA;
 using WiaProperties = WIA.Properties;
 
@@ -128,6 +130,22 @@ namespace Cyotek.QuickScan
       property.let_Value(value);
     }
 
+    public static void SetPropertyValue(this WiaProperties properties, WiaPropertyId id, int value)
+    {
+      Property property;
+
+      property = properties[((int)id).ToString()];
+
+      if (value >= property.SubTypeMin && value <= property.SubTypeMax)
+      {
+        property.let_Value(value);
+      }
+      else
+      {
+        UiHelpers.ShowWarning(string.Format("Unable to set property {0}, value {3} must be between {1} and {2}.", id, property.SubTypeMin, property.SubTypeMax, value));
+      }
+    }
+
     public static Bitmap ToBitmap(this ImageFile image)
     {
       Bitmap result;
@@ -141,15 +159,23 @@ namespace Cyotek.QuickScan
 
         scannedImage = Image.FromStream(stream);
 
-        result = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
-
-        //result.SetResolution((float)image.HorizontalResolution, (float)image.VerticalResolution);
-
-        using (Graphics g = Graphics.FromImage(result))
+        try
         {
-          g.Clear(Color.Transparent);
-          g.PageUnit = GraphicsUnit.Pixel;
-          g.DrawImage(scannedImage, new Rectangle(0, 0, image.Width, image.Height));
+          result = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
+
+          //result.SetResolution((float)image.HorizontalResolution, (float)image.VerticalResolution);
+
+          using (Graphics g = Graphics.FromImage(result))
+          {
+            g.Clear(Color.Transparent);
+            g.PageUnit = GraphicsUnit.Pixel;
+            g.DrawImage(scannedImage, new Rectangle(0, 0, image.Width, image.Height));
+          }
+        }
+        catch (COMException ex)
+        {
+          // most likely because the image is too large; so don't create a copy
+          result = (Bitmap)scannedImage;
         }
       }
 

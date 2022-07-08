@@ -950,12 +950,13 @@ namespace Cyotek.QuickScan
     {
       this.PerformDeviceAction(device =>
       {
-        device.Items[1].Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
+        WiaProperties properties;
 
-        device.Items[1].Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
-        device.Items[1].Properties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
+        properties = device.Items[1].Properties;
 
-        PropertiesDialog.ShowPropertiesDialog(device.Items[1].Properties);
+        this.SetDeviceProperties(properties, -1, -1);
+
+        PropertiesDialog.ShowPropertiesDialog(properties);
       });
     }
 
@@ -981,6 +982,11 @@ namespace Cyotek.QuickScan
 
     private void SetDeviceProperties(WiaProperties deviceProperties, int width, int height)
     {
+      if (_settings.ScanDpi <= 0)
+      {
+        _settings.ScanDpi = (int)dpiNumericUpDown.Value;
+      }
+
       deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_CUR_INTENT, _settings.ImageIntent); // set this first as it resets a bunch of other properties
 
       deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
