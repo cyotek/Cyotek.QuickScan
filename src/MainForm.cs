@@ -480,7 +480,7 @@ namespace Cyotek.QuickScan
           catch (COMException ex) when (ex.HResult == (int)WiaError.WIA_ERROR_OFFLINE)
           {
             result = null;
-            MessageBox.Show("Unable to connect to device; it may be offline.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            UiHelpers.ShowError("Unable to connect to device; it may be offline.");
           }
         }
         else
@@ -728,7 +728,7 @@ namespace Cyotek.QuickScan
       }
       else
       {
-        MessageBox.Show("Please scan an image first.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        UiHelpers.ShowWarning("Please scan an image first.");
       }
     }
 
@@ -1002,12 +1002,23 @@ namespace Cyotek.QuickScan
       this.RunScanLoop((device, dialog) =>
       {
         Item item;
+        ImageFile image;
 
         item = device.Items[1];
 
         this.SetDeviceProperties(item.Properties, -1, -1);
 
-        return dialog.ShowTransfer(item, _settings.FormatString, false);
+        try
+        {
+          image = dialog.ShowTransfer(item, _settings.FormatString, false);
+        }
+        catch (Exception ex)
+        {
+          UiHelpers.ShowError("Failed to scan image.", ex);
+          image = null;
+        }
+
+        return image;
       });
     }
 
