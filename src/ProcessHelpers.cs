@@ -13,11 +13,11 @@ namespace Cyotek.QuickScan
     {
       if (string.IsNullOrEmpty(folderName))
       {
-        MessageBox.Show("Folder not specified.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowWarning("Folder not specified.");
       }
       else if (!Directory.Exists(folderName))
       {
-        MessageBox.Show(string.Format("Folder '{0}' does not exist.", folderName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowWarning(string.Format("Folder '{0}' does not exist.", folderName));
       }
       else
       {
@@ -57,7 +57,7 @@ namespace Cyotek.QuickScan
       catch (Exception ex)
       {
         result = false;
-        MessageBox.Show(string.Format("Failed to open {0}. {1}", processName, ex.GetBaseException().Message), "Open", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowError(string.Format("Failed to open {0}.", processName), ex);
       }
 
       return result;

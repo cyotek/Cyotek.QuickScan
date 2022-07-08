@@ -576,7 +576,7 @@ namespace Cyotek.QuickScan
       }
       else
       {
-        MessageBox.Show("No device selected.", "Device Properties", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowWarning("No device selected.");
       }
     }
 
@@ -592,7 +592,7 @@ namespace Cyotek.QuickScan
       }
       else
       {
-        MessageBox.Show("No device selected.", "Device Properties", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowWarning("No device selected.");
       }
     }
 
@@ -830,15 +830,15 @@ namespace Cyotek.QuickScan
 
       if (_image == null)
       {
-        MessageBox.Show("Please scan an image first.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowWarning("Please scan an image first.");
       }
       else if (string.IsNullOrEmpty(path))
       {
-        MessageBox.Show("Output folder not specified.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowWarning("Output folder not specified.");
       }
       else if (!Directory.Exists(path))
       {
-        MessageBox.Show(string.Format("Output folder '{0}' not found.", path), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        UiHelpers.ShowWarning(string.Format("Output folder '{0}' not found.", path));
       }
       else
       {
@@ -908,7 +908,7 @@ namespace Cyotek.QuickScan
             }
             catch (Exception ex)
             {
-              MessageBox.Show(string.Format("Failed to save file. {0}", ex.GetBaseException().Message), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+              UiHelpers.ShowError("Failed to save file.", ex);
             }
           }
         }
