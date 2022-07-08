@@ -162,8 +162,24 @@ namespace Cyotek.QuickScan
         }
         else
         {
+          ImageInfo imageInfo;
+
           fileSizeToolStripStatusLabel.Text = "(Calculating)";
-          fileSizeBackgroundWorker.RunWorkerAsync(this.GetImageInfo());
+
+          try
+          {
+            imageInfo = this.GetImageInfo();
+          }
+          catch (Exception ex)
+          {
+            fileSizeToolStripStatusLabel.Text = "(Failed)";
+            imageInfo = null;
+          }
+
+          if (imageInfo != null)
+          {
+            fileSizeBackgroundWorker.RunWorkerAsync(imageInfo);
+          }
         }
       }
     }
