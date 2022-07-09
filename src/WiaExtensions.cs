@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 using WIA;
 using WiaProperties = WIA.Properties;
 
@@ -103,6 +102,20 @@ namespace Cyotek.QuickScan
       return value;
     }
 
+    public static void SaveFileEx(this ImageFile imageFile, string fileName)
+    {
+      try
+      {
+        FileUtilities.DeleteFile(fileName);
+
+        imageFile.SaveFile(fileName);
+      }
+      catch (Exception ex)
+      {
+        UiHelpers.ShowError("Failed to save image.", ex);
+      }
+    }
+
     public static void SetPropertyMaximum(this WiaProperties properties, WiaPropertyId id)
     {
       Property property;
@@ -172,7 +185,7 @@ namespace Cyotek.QuickScan
             g.DrawImage(scannedImage, new Rectangle(0, 0, image.Width, image.Height));
           }
         }
-        catch (COMException ex)
+        catch (COMException)
         {
           // most likely because the image is too large; so don't create a copy
           result = (Bitmap)scannedImage;

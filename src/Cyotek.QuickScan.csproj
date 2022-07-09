@@ -66,6 +66,7 @@
     <Compile Include="ClipboardUtilities.cs" />
     <Compile Include="ControlExtensions.cs" />
     <Compile Include="DeviceListBoxItem.cs" />
+    <Compile Include="FileUtilities.cs" />
     <Compile Include="GroupBox.cs">
       <SubType>Component</SubType>
     </Compile>

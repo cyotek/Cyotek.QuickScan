@@ -29,6 +29,8 @@ namespace Cyotek.QuickScan
 
     private Settings _settings;
 
+    private string _tempFileName;
+
     #endregion Private Fields
 
     #region Public Constructors
@@ -50,22 +52,6 @@ namespace Cyotek.QuickScan
       {
         this.CleanUp();
         this.SaveSettings();
-      }
-    }
-
-    private void CleanUp()
-    {
-      previewImageBox.Image = null;
-
-      if (_image != null)
-      {
-        _image.Dispose();
-        _image = null;
-      }
-
-      if (!string.IsNullOrEmpty(_tempFileName) && File.Exists(_tempFileName))
-      {
-        File.Delete(_tempFileName);
       }
     }
 
@@ -204,7 +190,7 @@ namespace Cyotek.QuickScan
           {
             imageInfo = this.GetImageInfo();
           }
-          catch (Exception ex)
+          catch
           {
             fileSizeToolStripStatusLabel.Text = "(Failed)";
             imageInfo = null;
@@ -221,6 +207,19 @@ namespace Cyotek.QuickScan
     private void CentimetersToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SetUnit(Unit.Centimeter);
+    }
+
+    private void CleanUp()
+    {
+      previewImageBox.Image = null;
+
+      if (_image != null)
+      {
+        _image.Dispose();
+        _image = null;
+      }
+
+      FileUtilities.DeleteFile(_tempFileName);
     }
 
     private void ContinuousCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -963,7 +962,7 @@ namespace Cyotek.QuickScan
           {
             _image.Save(fileName, codecInfo, encoderParameters);
           }
-          catch (ExternalException ex)
+          catch
           {
             fileName = this.SaveImageDirect(fileName);
           }
@@ -1011,12 +1010,7 @@ namespace Cyotek.QuickScan
 
       try
       {
-        if (File.Exists(fileName))
-        {
-          File.Delete(fileName);
-        }
-
-        _imageFile.SaveFile(fileName);
+        _imageFile.SaveFileEx(fileName);
 
         UiHelpers.ShowWarning(string.Format("Failed to save image in requested format. Image saved to '{0}' without customisation.", fileName));
       }
@@ -1169,17 +1163,10 @@ namespace Cyotek.QuickScan
         _tempFileName = Path.GetTempFileName();
       }
 
-      if (File.Exists(_tempFileName))
-      {
-        File.Delete(_tempFileName);
-      }
-
-      image.SaveFile(_tempFileName);
+      image.SaveFileEx(_tempFileName);
 
       this.SetImage(Image.FromFile(_tempFileName), true);
     }
-
-    private string _tempFileName;
 
     private void SetImage(Image image, bool resetZoom)
     {
