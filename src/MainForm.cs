@@ -1187,7 +1187,13 @@ namespace Cyotek.QuickScan
 
       formatToolStripStatusLabel.Text = image.FileExtension;
 
-      //this.SetImage(image.ToBitmap(), true);
+      previewImageBox.Image = null;
+
+      if (_image != null)
+      {
+        _image.Dispose();
+        _image = null;
+      }
 
       if (string.IsNullOrEmpty(_tempFileName))
       {
