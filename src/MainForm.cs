@@ -150,7 +150,7 @@ namespace Cyotek.QuickScan
     {
       _acceptSplitterChanges = false;
 
-      Settings.ApplyWindowPosition(this, _settings.WindowPosition);
+      UiHelpers.ApplyWindowPosition(this, _settings.WindowPosition);
       this.SetSplitterSize(splitContainer, _settings.OptionsSplitterSize);
 
       _acceptSplitterChanges = true;
@@ -1068,7 +1068,7 @@ namespace Cyotek.QuickScan
 
     private void SaveSettings()
     {
-      _settings.WindowPosition = Settings.GetWindowPosition(this);
+      _settings.WindowPosition = UiHelpers.GetWindowPosition(this);
       _settings.Save();
     }
 

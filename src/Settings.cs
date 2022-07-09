@@ -23,8 +23,6 @@ namespace Cyotek.QuickScan
   {
     #region Private Fields
 
-    private static readonly char[] _separators = { ',' };
-
     private bool _addMetadata;
 
     private bool _autoSave;
@@ -243,53 +241,6 @@ namespace Cyotek.QuickScan
     #endregion Private Properties
 
     #region Public Methods
-
-    public static void ApplyWindowPosition(Form form, string position)
-    {
-      if (!string.IsNullOrWhiteSpace(position))
-      {
-        string[] parts;
-
-        parts = position.Split(_separators);
-
-        if (parts.Length >= 4)
-        {
-          if (int.TryParse(parts[0], out int x)
-              && int.TryParse(parts[1], out int y)
-              && int.TryParse(parts[2], out int w)
-              && int.TryParse(parts[3], out int h)
-              && int.TryParse(parts[4], out int state)
-          )
-          {
-            try
-            {
-              form.SetBounds(x, y, w, h);
-
-              if (state == 0 || state == 2)
-              {
-                form.WindowState = (FormWindowState)state;
-              }
-            }
-            catch
-            {
-              // don't care
-            }
-          }
-        }
-      }
-    }
-
-    public static string GetWindowPosition(Form form)
-    {
-      // TODO: This will return wrong values for maximimzed windows, need to dig
-      // out the interop code from Cyotek.Win32
-      return string.Format("{0}, {1}, {2}, {3}, {4}",
-        form.Left.ToString(CultureInfo.InvariantCulture),
-        form.Top.ToString(CultureInfo.InvariantCulture),
-        form.Width.ToString(CultureInfo.InvariantCulture),
-        form.Height.ToString(CultureInfo.InvariantCulture),
-        ((int)form.WindowState).ToString(CultureInfo.InvariantCulture));
-    }
 
     public void Load()
     {
