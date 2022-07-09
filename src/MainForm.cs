@@ -822,50 +822,57 @@ namespace Cyotek.QuickScan
 
     private void RunScanLoop(Func<Device, CommonDialog, ImageFile> getImage)
     {
-      bool done;
-      bool keepSize;
-
-      done = false;
-      keepSize = false;
-
-      while (!done)
+      if (this.ValidateOutputOptions(true))
       {
-        ImageFile image;
+        bool done;
+        bool keepSize;
 
-        if (keepSize)
+        done = false;
+        keepSize = false;
+
+        while (!done)
         {
-          image = this.GetImage(this.RepeatLastScan);
-        }
-        else
-        {
-          image = this.GetImage(getImage);
-        }
+          ImageFile image;
 
-        if (image != null)
-        {
-          string fileName;
-
-          this.SetImage(image);
-
-          fileName = _settings.AutoSave
-            ? this.SaveImage()
-            : null;
-
-          if (_settings.AutoSave && _settings.ContinuousScan && !string.IsNullOrEmpty(fileName))
+          if (keepSize)
           {
-            switch (MessageBox.Show("Do you want to continue scanning using the current image size?", Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            image = this.GetImage(this.RepeatLastScan);
+          }
+          else
+          {
+            image = this.GetImage(getImage);
+          }
+
+          if (image != null)
+          {
+            string fileName;
+
+            this.SetImage(image);
+
+            fileName = _settings.AutoSave
+              ? this.SaveImage()
+              : null;
+
+            if (_settings.AutoSave && _settings.ContinuousScan && !string.IsNullOrEmpty(fileName))
             {
-              case DialogResult.Yes:
-                keepSize = true;
-                break;
+              switch (MessageBox.Show("Do you want to continue scanning using the current image size?", Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+              {
+                case DialogResult.Yes:
+                  keepSize = true;
+                  break;
 
-              case DialogResult.No:
-                keepSize = false;
-                break;
+                case DialogResult.No:
+                  keepSize = false;
+                  break;
 
-              default:
-                done = true;
-                break;
+                default:
+                  done = true;
+                  break;
+              }
+            }
+            else
+            {
+              done = true;
             }
           }
           else
@@ -873,13 +880,9 @@ namespace Cyotek.QuickScan
             done = true;
           }
         }
-        else
-        {
-          done = true;
-        }
-      }
 
-      this.CalculateFileSize();
+        this.CalculateFileSize();
+      }
     }
 
     private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -907,19 +910,7 @@ namespace Cyotek.QuickScan
       path = _settings.OutputFolder;
       result = null;
 
-      if (_image == null)
-      {
-        UiHelpers.ShowWarning("Please scan an image first.");
-      }
-      else if (string.IsNullOrEmpty(path))
-      {
-        UiHelpers.ShowWarning("Output folder not specified.");
-      }
-      else if (!Directory.Exists(path))
-      {
-        UiHelpers.ShowWarning(string.Format("Output folder '{0}' not found.", path));
-      }
-      else
+      if (this.ValidateOutputOptions(false))
       {
         string baseName;
         string fileName;
@@ -1364,6 +1355,41 @@ namespace Cyotek.QuickScan
     private void UseCounterCheckBox_CheckedChanged(object sender, EventArgs e)
     {
       _settings.UseCounter = useCounterCheckBox.Checked;
+    }
+
+    private bool ValidateOutputOptions(bool isPreScan)
+    {
+      bool result;
+      string path;
+
+      result = false;
+      path = _settings.OutputFolder;
+
+      if (!isPreScan && _image == null)
+      {
+        UiHelpers.ShowWarning("Please scan an image first.");
+      }
+      else if (_settings.AutoSave || !isPreScan)
+      {
+        if (string.IsNullOrEmpty(path))
+        {
+          UiHelpers.ShowWarning("Output folder not specified.");
+        }
+        else if (!Directory.Exists(path))
+        {
+          UiHelpers.ShowWarning(string.Format("Output folder '{0}' not found.", path));
+        }
+        else
+        {
+          result = true;
+        }
+      }
+      else
+      {
+        result = true;
+      }
+
+      return result;
     }
 
     private void VerticalToolStripMenuItem_Click(object sender, EventArgs e)
