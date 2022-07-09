@@ -87,27 +87,34 @@ namespace Cyotek.QuickScan
     {
       string value;
 
-      if (property.IsVector)
+      try
       {
-        value = ((Vector)property.get_Value()).ToSeparatedString();
-      }
-      else
-      {
-        switch ((WiaPropertyType)property.Type)
+        if (property.IsVector)
         {
-          case WiaPropertyType.ClassIDPropertyType:
-          case WiaPropertyType.StringPropertyType: // string
-            value = (string)property.get_Value();
-            break;
-
-          case WiaPropertyType.LongPropertyType:
-            value = ((int)property.get_Value()).ToString();
-            break;
-
-          default:
-            value = property.get_Value().ToString();
-            break;
+          value = ((Vector)property.get_Value()).ToSeparatedString();
         }
+        else
+        {
+          switch ((WiaPropertyType)property.Type)
+          {
+            case WiaPropertyType.ClassIDPropertyType:
+            case WiaPropertyType.StringPropertyType: // string
+              value = (string)property.get_Value();
+              break;
+
+            case WiaPropertyType.LongPropertyType:
+              value = ((int)property.get_Value()).ToString();
+              break;
+
+            default:
+              value = property.get_Value().ToString();
+              break;
+          }
+        }
+      }
+      catch
+      {
+        value = null;
       }
 
       return value;
