@@ -691,6 +691,7 @@ namespace Cyotek.QuickScan
 
         if (newImage != null)
         {
+          this.CalculateFileSize();
           this.SetImage(newImage, false);
         }
         else if (_image.Size == size)
@@ -703,8 +704,6 @@ namespace Cyotek.QuickScan
 
           this.SetImage(newImage, false);
         }
-
-        this.CalculateFileSize();
       }
       else
       {
@@ -921,7 +920,10 @@ namespace Cyotek.QuickScan
           }
         }
 
-        this.CalculateFileSize();
+        if (!_settings.AutoSave)
+        {
+          this.CalculateFileSize();
+        }
       }
     }
 
