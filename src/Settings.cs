@@ -41,6 +41,8 @@ namespace Cyotek.QuickScan
 
     private int _quality;
 
+    private bool _saveSettingsOnExit;
+
     private int _scanDpi;
 
     private bool _showPixelGrid;
@@ -67,6 +69,7 @@ namespace Cyotek.QuickScan
       _showPreview = true;
       _unit = Unit.Pixel;
       _metadata = new Dictionary<PropertyTag, Tuple<PropertyTagType, string>>();
+      _saveSettingsOnExit = true;
     }
 
     #endregion Public Constructors
@@ -163,6 +166,12 @@ namespace Cyotek.QuickScan
       set => this.UpdateValue(ref _quality, value);
     }
 
+    public bool SaveSettingsOnExit
+    {
+      get => _saveSettingsOnExit;
+      set => this.UpdateValue(ref _saveSettingsOnExit, value);
+    }
+
     public int ScanDpi
     {
       get => _scanDpi;
@@ -220,6 +229,7 @@ namespace Cyotek.QuickScan
 
         settings = (IniSectionToken)data.CreateSection("Settings");
         this.ReadBool(ref _estimateFileSizes, settings["EstimateFileSizes"]);
+        this.ReadBool(ref _saveSettingsOnExit, settings[nameof(this.SaveSettingsOnExit)]);
 
         settings = (IniSectionToken)data.CreateSection("Device");
         _deviceId = settings.GetValue("DeviceId");
@@ -250,21 +260,6 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private string GetLoadFileName()
-    {
-      string fileName;
-
-      fileName = this.IniFileName;
-      
-      if (!File.Exists(fileName))
-      {
-        // custom file doesn't exist, check for a default
-        fileName = this.DefaultIniFileName;
-      }
-
-      return fileName;
-    }
-
     public void Save()
     {
       IniDocument data;
@@ -274,6 +269,7 @@ namespace Cyotek.QuickScan
 
       settings = (IniSectionToken)data.CreateSection("Settings");
       settings["EstimateFileSizes"] = _estimateFileSizes.ToString();
+      settings[nameof(this.SaveSettingsOnExit)] = _saveSettingsOnExit.ToString();
 
       settings = (IniSectionToken)data.CreateSection("Device");
       settings["DeviceId"] = _deviceId;
@@ -305,6 +301,21 @@ namespace Cyotek.QuickScan
     #endregion Public Methods
 
     #region Private Methods
+
+    private string GetLoadFileName()
+    {
+      string fileName;
+
+      fileName = this.IniFileName;
+
+      if (!File.Exists(fileName))
+      {
+        // custom file doesn't exist, check for a default
+        fileName = this.DefaultIniFileName;
+      }
+
+      return fileName;
+    }
 
     private void LoadMetadata(IniDocument data)
     {

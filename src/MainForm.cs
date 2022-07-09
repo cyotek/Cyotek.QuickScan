@@ -44,7 +44,7 @@ namespace Cyotek.QuickScan
     {
       base.OnFormClosing(e);
 
-      if (!e.Cancel && saveSettingsOnExitToolStripMenuItem.Checked)
+      if (!e.Cancel && _settings.SaveSettingsOnExit)
       {
         this.SaveSettings();
       }
@@ -122,6 +122,8 @@ namespace Cyotek.QuickScan
       this.SetOrientation(_settings.LayoutOrientation);
       this.SetPreview(_settings.ShowPreview);
       this.SetUnit(_settings.Unit);
+
+      saveSettingsOnExitToolStripMenuItem.Checked = _settings.SaveSettingsOnExit;
     }
 
     private void AutoSaveCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -994,7 +996,9 @@ namespace Cyotek.QuickScan
 
     private void SaveSettingsOnExitToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      saveSettingsOnExitToolStripMenuItem.Checked = !saveSettingsOnExitToolStripMenuItem.Checked;
+      _settings.SaveSettingsOnExit = !_settings.SaveSettingsOnExit;
+
+      saveSettingsOnExitToolStripMenuItem.Checked = _settings.SaveSettingsOnExit;
     }
 
     private void ScanButton_Click(object sender, EventArgs e)
