@@ -436,7 +436,7 @@ namespace Cyotek.QuickScan
       };
 
       // TODO: This will be wrong if multiple devices are present and the user
-      // choses a different one from the dialog versus this selection
+      // chooses a different one from the dialog versus this selection
       this.PerformDeviceAction(device =>
       {
         foreach (Property property in device.Properties)
@@ -583,6 +583,19 @@ namespace Cyotek.QuickScan
     private void OpenFolderButton_Click(object sender, EventArgs e)
     {
       ProcessHelpers.OpenFolderInExplorer(_settings.OutputFolder);
+    }
+
+    private void OutputSettingsGroupBox_Resize(object sender, EventArgs e)
+    {
+      // HACK: For reasons I am currently unable to determine, the Format ComboBox
+      // goes wild in its positioning since the DpiAwareness setting was added to
+      // App.config. Even if I try to manually position it, it gets worse and worse
+      // with its behaviour. However, if I change the Anchor so it is the default,
+      // instead of also including Right, it positions correctly - and so I need to
+      // update the width manually. Why doesn't this happen with the TextBox controls
+      // that also have Left|Top|Right as the anchor? For that matter, why doesn't
+      // it happen to the Device ComboBox?
+      formatComboBox.Width = folderTextBox.Width;
     }
 
     private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -981,6 +994,7 @@ namespace Cyotek.QuickScan
       {
         UiHelpers.ShowError("Failed to save image.", ex);
       }
+
       return fileName;
     }
 
