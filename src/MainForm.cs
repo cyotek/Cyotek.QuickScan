@@ -48,7 +48,24 @@ namespace Cyotek.QuickScan
 
       if (!e.Cancel && _settings.SaveSettingsOnExit)
       {
+        this.CleanUp();
         this.SaveSettings();
+      }
+    }
+
+    private void CleanUp()
+    {
+      previewImageBox.Image = null;
+
+      if (_image != null)
+      {
+        _image.Dispose();
+        _image = null;
+      }
+
+      if (!string.IsNullOrEmpty(_tempFileName) && File.Exists(_tempFileName))
+      {
+        File.Delete(_tempFileName);
       }
     }
 
@@ -1145,8 +1162,24 @@ namespace Cyotek.QuickScan
 
       formatToolStripStatusLabel.Text = image.FileExtension;
 
-      this.SetImage(image.ToBitmap(), true);
+      //this.SetImage(image.ToBitmap(), true);
+
+      if (string.IsNullOrEmpty(_tempFileName))
+      {
+        _tempFileName = Path.GetTempFileName();
+      }
+
+      if (File.Exists(_tempFileName))
+      {
+        File.Delete(_tempFileName);
+      }
+
+      image.SaveFile(_tempFileName);
+
+      this.SetImage(Image.FromFile(_tempFileName), true);
     }
+
+    private string _tempFileName;
 
     private void SetImage(Image image, bool resetZoom)
     {
