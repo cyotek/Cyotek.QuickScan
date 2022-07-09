@@ -81,134 +81,125 @@ namespace Cyotek.QuickScan
 
     public bool AutoSave
     {
-      get { return _autoSave; }
-      set { this.UpdateValue(ref _autoSave, value); }
+      get => _autoSave;
+      set => this.UpdateValue(ref _autoSave, value);
     }
 
     public string BaseFileName
     {
-      get { return _baseFileName; }
-      set { this.UpdateValue(ref _baseFileName, value); }
+      get => _baseFileName;
+      set => this.UpdateValue(ref _baseFileName, value);
     }
 
     public bool ContinuousScan
     {
-      get { return _continuousScan; }
-      set { this.UpdateValue(ref _continuousScan, value); }
+      get => _continuousScan;
+      set => this.UpdateValue(ref _continuousScan, value);
     }
 
     public int Counter
     {
-      get { return _counter; }
-      set { this.UpdateValue(ref _counter, value); }
+      get => _counter;
+      set => this.UpdateValue(ref _counter, value);
     }
 
     public string DeviceId
     {
-      get { return _deviceId; }
-      set { this.UpdateValue(ref _deviceId, value); }
+      get => _deviceId;
+      set => this.UpdateValue(ref _deviceId, value);
     }
 
     public bool EstimateFileSizes
     {
-      get { return _estimateFileSizes; }
-      set { this.UpdateValue(ref _estimateFileSizes, value); }
+      get => _estimateFileSizes;
+      set => this.UpdateValue(ref _estimateFileSizes, value);
     }
 
     public Guid Format
     {
-      get { return _format; }
-      set { this.UpdateValue(ref _format, value); }
+      get => _format;
+      set => this.UpdateValue(ref _format, value);
     }
 
-    public string FormatString
-    {
-      get
-      {
-        // WIA throws a COM exception if the GUID isn't formatted just-so
-        return _format.ToString("B");
-      }
-    }
+    public string FormatString =>
+      // WIA throws a COM exception if the GUID isn't formatted just-so
+      _format.ToString("B");
 
     public bool IgnoreUpdates
     {
-      get { return _ignoreUpdates; }
-      set { _ignoreUpdates = value; }
+      get => _ignoreUpdates;
+      set => _ignoreUpdates = value;
     }
 
     public WiaImageIntent ImageIntent
     {
-      get { return _imageIntent; }
-      set { this.UpdateValue(ref _imageIntent, value); }
+      get => _imageIntent;
+      set => this.UpdateValue(ref _imageIntent, value);
     }
 
     public Orientation LayoutOrientation
     {
-      get { return _layoutOrientation; }
-      set { this.UpdateValue(ref _layoutOrientation, value); }
+      get => _layoutOrientation;
+      set => this.UpdateValue(ref _layoutOrientation, value);
     }
 
     public IDictionary<PropertyTag, Tuple<PropertyTagType, string>> Metadata => _metadata;
 
     public string OutputFolder
     {
-      get { return _outputFolder; }
-      set { this.UpdateValue(ref _outputFolder, value); }
+      get => _outputFolder;
+      set => this.UpdateValue(ref _outputFolder, value);
     }
 
     public bool PromptForDevice
     {
-      get { return _promptForDevice; }
-      set { this.UpdateValue(ref _promptForDevice, value); }
+      get => _promptForDevice;
+      set => this.UpdateValue(ref _promptForDevice, value);
     }
 
     public int Quality
     {
-      get { return _quality; }
-      set { this.UpdateValue(ref _quality, value); }
+      get => _quality;
+      set => this.UpdateValue(ref _quality, value);
     }
 
     public int ScanDpi
     {
-      get { return _scanDpi; }
-      set { this.UpdateValue(ref _scanDpi, value); }
+      get => _scanDpi;
+      set => this.UpdateValue(ref _scanDpi, value);
     }
 
     public bool ShowPixelGrid
     {
-      get { return _showPixelGrid; }
-      set { this.UpdateValue(ref _showPixelGrid, value); }
+      get => _showPixelGrid;
+      set => this.UpdateValue(ref _showPixelGrid, value);
     }
 
     public bool ShowPreview
     {
-      get { return _showPreview; }
-      set { this.UpdateValue(ref _showPreview, value); }
+      get => _showPreview;
+      set => this.UpdateValue(ref _showPreview, value);
     }
 
     public Unit Unit
     {
-      get { return _unit; }
-      set { this.UpdateValue(ref _unit, value); }
+      get => _unit;
+      set => this.UpdateValue(ref _unit, value);
     }
 
     public bool UseCounter
     {
-      get { return _useCounter; }
-      set { this.UpdateValue(ref _useCounter, value); }
+      get => _useCounter;
+      set => this.UpdateValue(ref _useCounter, value);
     }
 
     #endregion Public Properties
 
     #region Private Properties
 
-    private string IniFileName
-    {
-      get
-      {
-        return Path.ChangeExtension(Application.ExecutablePath, "ini");
-      }
-    }
+    private string DefaultIniFileName => Path.ChangeExtension(Application.ExecutablePath, "default.ini");
+
+    private string IniFileName => Path.ChangeExtension(Application.ExecutablePath, "ini");
 
     #endregion Private Properties
 
@@ -218,7 +209,7 @@ namespace Cyotek.QuickScan
     {
       string fileName;
 
-      fileName = this.IniFileName;
+      fileName = this.GetLoadFileName();
 
       if (File.Exists(fileName))
       {
@@ -259,15 +250,27 @@ namespace Cyotek.QuickScan
       }
     }
 
+    private string GetLoadFileName()
+    {
+      string fileName;
+
+      fileName = this.IniFileName;
+      
+      if (!File.Exists(fileName))
+      {
+        // custom file doesn't exist, check for a default
+        fileName = this.DefaultIniFileName;
+      }
+
+      return fileName;
+    }
+
     public void Save()
     {
       IniDocument data;
       IniSectionToken settings;
-      string fileName;
 
-      fileName = this.IniFileName;
-
-      data = new IniDocument(fileName);
+      data = new IniDocument(this.GetLoadFileName());
 
       settings = (IniSectionToken)data.CreateSection("Settings");
       settings["EstimateFileSizes"] = _estimateFileSizes.ToString();
@@ -296,7 +299,7 @@ namespace Cyotek.QuickScan
       settings["PixelGrid"] = _showPixelGrid.ToString();
       settings["Orientation"] = _layoutOrientation.ToString();
 
-      data.Save();
+      data.Save(this.IniFileName);
     }
 
     #endregion Public Methods
