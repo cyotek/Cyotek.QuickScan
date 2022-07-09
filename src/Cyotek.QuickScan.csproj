@@ -40,11 +40,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cyotek.Data.Ini, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ba939853a4e7c259, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cyotek.Data.Ini.1.0.0-alpha.3\lib\net48\Cyotek.Data.Ini.dll</HintPath>
+    </Reference>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net48\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
-    </Reference>
-    <Reference Include="Cyotek.Data.Ini, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ba939853a4e7c259, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cyotek.Data.Ini.1.0.0-alpha.2\lib\net48\Cyotek.Data.Ini.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
