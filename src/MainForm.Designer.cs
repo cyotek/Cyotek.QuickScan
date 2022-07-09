@@ -127,6 +127,8 @@
       this.devicePromptCheckBox = new System.Windows.Forms.CheckBox();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+      this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.restartWIAServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -150,6 +152,7 @@
             this.viewToolStripMenuItem,
             this.imageToolStripMenuItem,
             this.optionsToolStripMenuItem,
+            this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem});
       this.menuStrip.Location = new System.Drawing.Point(0, 0);
       this.menuStrip.Name = "menuStrip";
@@ -1081,6 +1084,21 @@
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
       // 
+      // toolsToolStripMenuItem
+      // 
+      this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.restartWIAServiceToolStripMenuItem});
+      this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+      this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+      this.toolsToolStripMenuItem.Text = "&Tools";
+      // 
+      // restartWIAServiceToolStripMenuItem
+      // 
+      this.restartWIAServiceToolStripMenuItem.Name = "restartWIAServiceToolStripMenuItem";
+      this.restartWIAServiceToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+      this.restartWIAServiceToolStripMenuItem.Text = "&Restart WIA Service...";
+      this.restartWIAServiceToolStripMenuItem.Click += new System.EventHandler(this.RestartWIAServiceToolStripMenuItem_Click);
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1223,6 +1241,8 @@
     private System.Windows.Forms.ToolStripMenuItem statusCentimetersToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
     private System.Windows.Forms.ToolStripButton pasteToolStripButton;
+    private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem restartWIAServiceToolStripMenuItem;
   }
 }
 

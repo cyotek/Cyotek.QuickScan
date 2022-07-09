@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cyotek.Tools.DuplicateFileFinder;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -60,6 +61,8 @@ namespace Cyotek.QuickScan
       base.OnLoad(e);
 
       this.LoadSettings();
+
+      this.PrepareElevationItems();
 
       try
       {
@@ -721,6 +724,25 @@ namespace Cyotek.QuickScan
       this.SetUnit(Unit.Pixel);
     }
 
+    private void PrepareElevationItems()
+    {
+      if (!ElevationHelper.IsElevated)
+      {
+        NativeMethods.SHSTOCKICONINFO info;
+
+        info = new NativeMethods.SHSTOCKICONINFO
+        {
+          cbSize = Marshal.SizeOf<NativeMethods.SHSTOCKICONINFO>()
+        };
+
+        NativeMethods.SHGetStockIconInfo(NativeMethods.SIID_SHIELD, NativeMethods.SHGSI_ICON | NativeMethods.SHGSI_SMALLICON, ref info);
+
+        restartWIAServiceToolStripMenuItem.Image = Icon.FromHandle(info.hIcon).ToBitmap();
+
+        NativeMethods.DestroyIcon(info.hIcon);
+      }
+    }
+
     private void PreviewButton_Click(object sender, EventArgs e)
     {
       this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
@@ -800,6 +822,24 @@ namespace Cyotek.QuickScan
       this.SetDeviceProperties(item.Properties, _image.Width, _image.Height);
 
       return dialog.ShowTransfer(item, _settings.FormatString, false);
+    }
+
+    private void RestartWIAServiceToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      if (ElevationHelper.IsElevated)
+      {
+        if (MessageBox.Show("Are you sure you want to restart the WIA service?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        {
+          using (this.CreateStatusController("Restarting WIA service..."))
+          {
+            ServiceUtilities.RestartService(ServiceUtilities.WiaServiceName, ServiceUtilities.DefaultTimeOut);
+          }
+        }
+      }
+      else if (MessageBox.Show("This action requires elevation. Restart as administrator?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+      {
+        ElevationHelper.Elevate();
+      }
     }
 
     private void Rotate90ClockwiseToolStripMenuItem_Click(object sender, EventArgs e)
