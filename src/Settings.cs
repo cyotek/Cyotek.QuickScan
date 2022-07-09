@@ -1,6 +1,7 @@
 ﻿using Cyotek.Data.Ini;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using WIA;
@@ -10,6 +11,8 @@ namespace Cyotek.QuickScan
   internal class Settings
   {
     #region Private Fields
+
+    private static readonly char[] _separators = { ',' };
 
     private bool _addMetadata;
 
@@ -35,6 +38,8 @@ namespace Cyotek.QuickScan
 
     private IDictionary<PropertyTag, Tuple<PropertyTagType, string>> _metadata;
 
+    private int _optionsSplitterSize;
+
     private string _outputFolder;
 
     private bool _promptForDevice;
@@ -52,6 +57,8 @@ namespace Cyotek.QuickScan
     private Unit _unit;
 
     private bool _useCounter;
+
+    private string _windowPosition;
 
     #endregion Private Fields
 
@@ -148,6 +155,12 @@ namespace Cyotek.QuickScan
 
     public IDictionary<PropertyTag, Tuple<PropertyTagType, string>> Metadata => _metadata;
 
+    public int OptionsSplitterSize
+    {
+      get => _optionsSplitterSize;
+      set => this.UpdateValue(ref _optionsSplitterSize, value);
+    }
+
     public string OutputFolder
     {
       get => _outputFolder;
@@ -202,6 +215,12 @@ namespace Cyotek.QuickScan
       set => this.UpdateValue(ref _useCounter, value);
     }
 
+    public string WindowPosition
+    {
+      get => _windowPosition;
+      set => this.UpdateValue(ref _windowPosition, value);
+    }
+
     #endregion Public Properties
 
     #region Private Properties
@@ -213,6 +232,53 @@ namespace Cyotek.QuickScan
     #endregion Private Properties
 
     #region Public Methods
+
+    public static void ApplyWindowPosition(Form form, string position)
+    {
+      if (!string.IsNullOrWhiteSpace(position))
+      {
+        string[] parts;
+
+        parts = position.Split(_separators);
+
+        if (parts.Length >= 4)
+        {
+          if (int.TryParse(parts[0], out int x)
+              && int.TryParse(parts[1], out int y)
+              && int.TryParse(parts[2], out int w)
+              && int.TryParse(parts[3], out int h)
+              && int.TryParse(parts[4], out int state)
+          )
+          {
+            try
+            {
+              form.SetBounds(x, y, w, h);
+
+              if (state == 0 || state == 2)
+              {
+                form.WindowState = (FormWindowState)state;
+              }
+            }
+            catch
+            {
+              // don't care
+            }
+          }
+        }
+      }
+    }
+
+    public static string GetWindowPosition(Form form)
+    {
+      // TODO: This will return wrong values for maximimzed windows, need to dig
+      // out the interop code from Cyotek.Win32
+      return string.Format("{0}, {1}, {2}, {3}, {4}",
+        form.Left.ToString(CultureInfo.InvariantCulture),
+        form.Top.ToString(CultureInfo.InvariantCulture),
+        form.Width.ToString(CultureInfo.InvariantCulture),
+        form.Height.ToString(CultureInfo.InvariantCulture),
+        ((int)form.WindowState).ToString(CultureInfo.InvariantCulture));
+    }
 
     public void Load()
     {
@@ -255,6 +321,8 @@ namespace Cyotek.QuickScan
         this.ReadBool(ref _showPixelGrid, settings["PixelGrid"]);
         this.ReadEnum(ref _layoutOrientation, settings["Orientation"]);
         this.ReadEnum(ref _unit, settings["Unit"]);
+        this.ReadInt(ref _optionsSplitterSize, settings[nameof(this.OptionsSplitterSize)]);
+        _windowPosition = settings[nameof(this.WindowPosition)];
 
         this.LoadMetadata(data);
       }
@@ -268,32 +336,34 @@ namespace Cyotek.QuickScan
       data = new IniDocument(this.GetLoadFileName());
 
       settings = (IniSectionToken)data.CreateSection("Settings");
-      settings["EstimateFileSizes"] = _estimateFileSizes.ToString();
-      settings[nameof(this.SaveSettingsOnExit)] = _saveSettingsOnExit.ToString();
+      settings["EstimateFileSizes"] = _estimateFileSizes.ToString(CultureInfo.InvariantCulture);
+      settings[nameof(this.SaveSettingsOnExit)] = _saveSettingsOnExit.ToString(CultureInfo.InvariantCulture);
 
       settings = (IniSectionToken)data.CreateSection("Device");
       settings["DeviceId"] = _deviceId;
-      settings["Prompt"] = _promptForDevice.ToString();
-      settings["Continuous"] = _continuousScan.ToString();
+      settings["Prompt"] = _promptForDevice.ToString(CultureInfo.InvariantCulture);
+      settings["Continuous"] = _continuousScan.ToString(CultureInfo.InvariantCulture);
 
       settings = (IniSectionToken)data.CreateSection("Scan");
       settings["Intent"] = _imageIntent.ToString();
-      settings["Dpi"] = _scanDpi.ToString();
+      settings["Dpi"] = _scanDpi.ToString(CultureInfo.InvariantCulture);
 
       settings = (IniSectionToken)data.CreateSection("Output");
       settings["Format"] = _format.ToString();
-      settings["Quality"] = _quality.ToString();
+      settings["Quality"] = _quality.ToString(CultureInfo.InvariantCulture);
       settings["Folder"] = _outputFolder;
       settings["FileName"] = _baseFileName;
-      settings["Counter"] = _counter.ToString();
-      settings["UseCounter"] = _useCounter.ToString();
-      settings["AutoSave"] = _autoSave.ToString();
+      settings["Counter"] = _counter.ToString(CultureInfo.InvariantCulture);
+      settings["UseCounter"] = _useCounter.ToString(CultureInfo.InvariantCulture);
+      settings["AutoSave"] = _autoSave.ToString(CultureInfo.InvariantCulture);
 
       settings = (IniSectionToken)data.CreateSection("UI");
       settings["Unit"] = _unit.ToString();
-      settings["Preview"] = _showPreview.ToString();
-      settings["PixelGrid"] = _showPixelGrid.ToString();
+      settings["Preview"] = _showPreview.ToString(CultureInfo.InvariantCulture);
+      settings["PixelGrid"] = _showPixelGrid.ToString(CultureInfo.InvariantCulture);
       settings["Orientation"] = _layoutOrientation.ToString();
+      settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
+      settings[nameof(this.WindowPosition)] = _windowPosition;
 
       data.Save(this.IniFileName);
     }

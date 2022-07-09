@@ -716,6 +716,7 @@
       this.splitContainer.Size = new System.Drawing.Size(800, 486);
       this.splitContainer.SplitterDistance = 298;
       this.splitContainer.TabIndex = 2;
+      this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.SplitContainer_SplitterMoved);
       // 
       // outputSettingsGroupBox
       // 

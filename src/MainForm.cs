@@ -19,6 +19,8 @@ namespace Cyotek.QuickScan
   {
     #region Private Fields
 
+    private bool _acceptSplitterChanges;
+
     private IDeviceManager _deviceManager;
 
     private Image _image;
@@ -50,9 +52,9 @@ namespace Cyotek.QuickScan
       }
     }
 
-    protected override void OnShown(EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
-      base.OnShown(e);
+      base.OnLoad(e);
 
       this.LoadSettings();
 
@@ -68,6 +70,7 @@ namespace Cyotek.QuickScan
         _settings.IgnoreUpdates = false;
       }
 
+      this.ApplyWindowSettings();
       this.ApplySettings();
       this.UpdateUi();
     }
@@ -124,6 +127,16 @@ namespace Cyotek.QuickScan
       this.SetUnit(_settings.Unit);
 
       saveSettingsOnExitToolStripMenuItem.Checked = _settings.SaveSettingsOnExit;
+    }
+
+    private void ApplyWindowSettings()
+    {
+      _acceptSplitterChanges = false;
+
+      Settings.ApplyWindowPosition(this, _settings.WindowPosition);
+      this.SetSplitterSize(splitContainer, _settings.OptionsSplitterSize);
+
+      _acceptSplitterChanges = true;
     }
 
     private void AutoSaveCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1000,6 +1013,7 @@ namespace Cyotek.QuickScan
 
     private void SaveSettings()
     {
+      _settings.WindowPosition = Settings.GetWindowPosition(this);
       _settings.Save();
     }
 
@@ -1200,6 +1214,14 @@ namespace Cyotek.QuickScan
       }
     }
 
+    private void SetSplitterSize(SplitContainer container, int size)
+    {
+      if (size > 0 && ((container.Orientation == Orientation.Vertical && size < container.ClientSize.Width) || (container.Orientation == Orientation.Horizontal && size < container.ClientSize.Height)))
+      {
+        container.SplitterDistance = size;
+      }
+    }
+
     private void SetUnit(Unit unit)
     {
       _settings.Unit = unit;
@@ -1232,6 +1254,14 @@ namespace Cyotek.QuickScan
     private void ShowPreviewToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SetPreview(!_settings.ShowPreview);
+    }
+
+    private void SplitContainer_SplitterMoved(object sender, SplitterEventArgs e)
+    {
+      if (_settings != null && _acceptSplitterChanges)
+      {
+        _settings.OptionsSplitterSize = splitContainer.SplitterDistance;
+      }
     }
 
     private void TypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
