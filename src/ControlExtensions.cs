@@ -1,16 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+// Cyotek Quick Scan
+// https://github.com/cyotek/Cyotek.QuickScan
+
+// Copyright © 2019-2022 Cyotek Ltd.
+
+// This work is licensed under the MIT License.
+// See LICENSE.TXT for the full text
+
+// Found this code useful?
+// https://www.cyotek.com/contribute
 
 namespace Cyotek.QuickScan
 {
   internal static class ControlExtensions
   {
+    #region Public Methods
+
     [DebuggerStepThrough]
     public static bool IsDesignTime(this Control target)
     {
@@ -41,5 +49,7 @@ namespace Cyotek.QuickScan
 
       return result;
     }
+
+    #endregion Public Methods
   }
 }

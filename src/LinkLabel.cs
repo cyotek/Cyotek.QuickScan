@@ -79,8 +79,8 @@ namespace Cyotek.Windows.Forms
     [Category("Property Changed")]
     public event EventHandler TextAlignChanged
     {
-      add { this.Events.AddHandler(_eventTextAlignChanged, value); }
-      remove { this.Events.RemoveHandler(_eventTextAlignChanged, value); }
+      add => this.Events.AddHandler(_eventTextAlignChanged, value);
+      remove => this.Events.RemoveHandler(_eventTextAlignChanged, value);
     }
 
     #endregion
@@ -91,38 +91,38 @@ namespace Cyotek.Windows.Forms
     [Browsable(true)]
     public override bool AutoSize
     {
-      get { return base.AutoSize; }
-      set { base.AutoSize = value; }
+      get => base.AutoSize;
+      set => base.AutoSize = value;
     }
 
     [DefaultValue(typeof(Color), "HotTrack")]
     public override Color ForeColor
     {
-      get { return base.ForeColor; }
-      set { base.ForeColor = value; }
+      get => base.ForeColor;
+      set => base.ForeColor = value;
     }
 
     [DefaultValue(typeof(Color), "HotTrack")]
     [Category("Appearance")]
     public Color HoverColor
     {
-      get { return _hoverColor; }
-      set { _hoverColor = value; }
+      get => _hoverColor;
+      set => _hoverColor = value;
     }
 
     [DefaultValue(true)]
     [Category("Appearance")]
     public bool HoverUnderline
     {
-      get { return _hoverUnderline; }
-      set { _hoverUnderline = value; }
+      get => _hoverUnderline;
+      set => _hoverUnderline = value;
     }
 
     [DefaultValue(null)]
     [Category("Appearance")]
     public Image Image
     {
-      get { return _image; }
+      get => _image;
       set
       {
         _image = value;
@@ -136,7 +136,7 @@ namespace Cyotek.Windows.Forms
     [Category("Appearance")]
     public int ImageRightPad
     {
-      get { return _imageRightPad; }
+      get => _imageRightPad;
       set
       {
         _imageRightPad = value;
@@ -150,15 +150,15 @@ namespace Cyotek.Windows.Forms
     [Category("Appearance")]
     public Color RegularColor
     {
-      get { return _regularColor; }
-      set { _regularColor = value; }
+      get => _regularColor;
+      set => _regularColor = value;
     }
 
     [Category("Appearance")]
     [DefaultValue(typeof(HorizontalAlignment), "Left")]
     public virtual HorizontalAlignment TextAlign
     {
-      get { return _textAlign; }
+      get => _textAlign;
       set
       {
         if (_textAlign != value)
@@ -174,8 +174,8 @@ namespace Cyotek.Windows.Forms
     [Category("Appearance")]
     public bool UseSystemColor
     {
-      get { return _useSystemColor; }
-      set { _useSystemColor = value; }
+      get => _useSystemColor;
+      set => _useSystemColor = value;
     }
 
     #endregion
@@ -472,8 +472,8 @@ namespace Cyotek.Windows.Forms
     [DefaultValue(typeof(DialogResult), "None")]
     public DialogResult DialogResult
     {
-      get { return _dialogResult; }
-      set { _dialogResult = value; }
+      get => _dialogResult;
+      set => _dialogResult = value;
     }
 
     #endregion

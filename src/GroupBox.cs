@@ -106,7 +106,7 @@ namespace Cyotek.Windows.Forms
     [DefaultValue("")]
     public override string Text
     {
-      get { return base.Text; }
+      get => base.Text;
       set
       {
         base.Text = value;
@@ -224,7 +224,7 @@ namespace Cyotek.Windows.Forms
     [DefaultValue(typeof(Border3DSide), "Top")]
     public Border3DSide Borders
     {
-      get { return _borders; }
+      get => _borders;
       set
       {
         _borders = value;
@@ -236,7 +236,7 @@ namespace Cyotek.Windows.Forms
     [DefaultValue(typeof(Color), "HotTrack")]
     public Color HeaderForeColor
     {
-      get { return _headerForeColor; }
+      get => _headerForeColor;
       set
       {
         _headerForeColor = value;
@@ -253,7 +253,7 @@ namespace Cyotek.Windows.Forms
     [DefaultValue(typeof(Size), "0, 6")]
     public Size IconMargin
     {
-      get { return _iconMargin; }
+      get => _iconMargin;
       set
       {
         _iconMargin = value;
@@ -270,7 +270,7 @@ namespace Cyotek.Windows.Forms
     [DefaultValue(typeof(Image), "")]
     public Image Image
     {
-      get { return _image; }
+      get => _image;
       set
       {
         _image = value;
@@ -287,7 +287,7 @@ namespace Cyotek.Windows.Forms
     [DefaultValue(typeof(Color), "ButtonHighlight")]
     public Color LineColorBottom
     {
-      get { return _lineColorBottom; }
+      get => _lineColorBottom;
       set
       {
         _lineColorBottom = value;
@@ -305,7 +305,7 @@ namespace Cyotek.Windows.Forms
     [DefaultValue(typeof(Color), "ButtonShadow")]
     public Color LineColorTop
     {
-      get { return _lineColorTop; }
+      get => _lineColorTop;
       set
       {
         _lineColorTop = value;
@@ -318,7 +318,7 @@ namespace Cyotek.Windows.Forms
     [Category("Appearance")]
     public bool ShowBorders
     {
-      get { return _showBorders; }
+      get => _showBorders;
       set
       {
         _showBorders = value;

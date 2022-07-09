@@ -1,5 +1,16 @@
 ﻿using WIA;
 
+// Cyotek Quick Scan
+// https://github.com/cyotek/Cyotek.QuickScan
+
+// Copyright © 2019-2022 Cyotek Ltd.
+
+// This work is licensed under the MIT License.
+// See LICENSE.TXT for the full text
+
+// Found this code useful?
+// https://www.cyotek.com/contribute
+
 namespace Cyotek.QuickScan
 {
   internal sealed class DeviceListBoxItem
@@ -26,14 +37,14 @@ namespace Cyotek.QuickScan
 
     public string DeviceId
     {
-      get { return _deviceId; }
-      set { _deviceId = value; }
+      get => _deviceId;
+      set => _deviceId = value;
     }
 
     public string Name
     {
-      get { return _name; }
-      set { _name = value; }
+      get => _name;
+      set => _name = value;
     }
 
     #endregion Public Properties

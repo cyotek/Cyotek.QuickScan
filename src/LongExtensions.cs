@@ -1,11 +1,21 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
+
+// Cyotek Quick Scan
+// https://github.com/cyotek/Cyotek.QuickScan
+
+// Copyright © 2019-2022 Cyotek Ltd.
+
+// This work is licensed under the MIT License.
+// See LICENSE.TXT for the full text
+
+// Found this code useful?
+// https://www.cyotek.com/contribute
 
 namespace Cyotek
 {
   internal static class LongExtensions
   {
-    #region Constants
+    #region Private Fields
 
     private const long _gigabyte = 1024 * _megabyte;
 
@@ -17,9 +27,9 @@ namespace Cyotek
 
     private const long _terabyte = 1024 * _gigabyte;
 
-    #endregion
+    #endregion Private Fields
 
-    #region Static Methods
+    #region Public Methods
 
     public static string ToFileSizeString(this long fileSize)
     {
@@ -70,6 +80,6 @@ namespace Cyotek
       return result;
     }
 
-    #endregion
+    #endregion Public Methods
   }
 }

@@ -42,10 +42,7 @@ namespace Cyotek.QuickScan
 
     #region Properties
 
-    protected TabControl TabControl
-    {
-      get { return docsTabControl; }
-    }
+    protected TabControl TabControl => docsTabControl;
 
     #endregion
 
