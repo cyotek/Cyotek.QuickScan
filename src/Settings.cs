@@ -283,6 +283,8 @@ namespace Cyotek.QuickScan
         this.ReadBool(ref _showPixelGrid, settings["PixelGrid"]);
         this.ReadEnum(ref _layoutOrientation, settings["Orientation"]);
         this.ReadEnum(ref _unit, settings["Unit"]);
+
+        settings = this.CreateMachineSection(data, "UI");
         this.ReadInt(ref _optionsSplitterSize, settings[nameof(this.OptionsSplitterSize)]);
         _windowPosition = settings[nameof(this.WindowPosition)];
 
@@ -324,6 +326,8 @@ namespace Cyotek.QuickScan
       settings["Preview"] = _showPreview.ToString(CultureInfo.InvariantCulture);
       settings["PixelGrid"] = _showPixelGrid.ToString(CultureInfo.InvariantCulture);
       settings["Orientation"] = _layoutOrientation.ToString();
+
+      settings = this.CreateMachineSection(data, "UI");
       settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
       settings[nameof(this.WindowPosition)] = _windowPosition;
 
@@ -347,6 +351,13 @@ namespace Cyotek.QuickScan
       }
 
       return fileName;
+    }
+
+    private IniSectionToken CreateMachineSection(IniDocument document, string name)
+    {
+      name = Environment.MachineName + "-" + name;
+
+      return (IniSectionToken)document.CreateSection(name);
     }
 
     private void LoadMetadata(IniDocument data)
