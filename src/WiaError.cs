@@ -13,6 +13,8 @@ namespace Cyotek.QuickScan
 {
   internal enum WiaError
   {
-    WIA_ERROR_OFFLINE = -2145320955 // 0x80210005
+    WIA_ERROR_OFFLINE = -2145320955, // 0x80210005
+
+    E_FAIL = -2147467259 // 0x80004005
   }
 }

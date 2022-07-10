@@ -525,10 +525,15 @@ namespace Cyotek.QuickScan
           {
             result = deviceInfo.Connect();
           }
-          catch (COMException ex) when (ex.HResult == (int)WiaError.WIA_ERROR_OFFLINE)
+          catch (COMException ex) when (ex.HResult == (int)WiaError.WIA_ERROR_OFFLINE || ex.HResult == (int)WiaError.E_FAIL)
           {
             result = null;
             UiHelpers.ShowError("Unable to connect to device; it may be offline.");
+          }
+          catch (Exception ex)
+          {
+            result = null;
+            UiHelpers.ShowError("Unable to connect to device.", ex);
           }
         }
         else
