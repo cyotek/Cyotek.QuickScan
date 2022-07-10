@@ -41,6 +41,8 @@ namespace Cyotek.QuickScan
 
     private Settings _settings;
 
+    private SoundPlayer _soundPlayer;
+
     private string _tempFileName;
 
     #endregion Private Fields
@@ -137,6 +139,7 @@ namespace Cyotek.QuickScan
 
       estimateFileSizesToolStripMenuItem.Checked = _settings.EstimateFileSizes;
       fileSizeToolStripStatusLabel.Visible = _settings.EstimateFileSizes;
+      playSoundsToolStripMenuItem.CheckOnClick = _settings.PlaySounds;
 
       previewImageBox.ShowPixelGrid = _settings.ShowPixelGrid;
       this.SetOrientation(_settings.LayoutOrientation);
@@ -734,6 +737,41 @@ namespace Cyotek.QuickScan
       this.SetUnit(Unit.Pixel);
     }
 
+    private void PlaySound(string fileName)
+    {
+      if (_settings.PlaySounds && !string.IsNullOrWhiteSpace(fileName))
+      {
+        fileName = Path.Combine(Application.StartupPath, fileName);
+
+        if (File.Exists(fileName))
+        {
+          try
+          {
+            if (_soundPlayer == null)
+            {
+              _soundPlayer = new SoundPlayer();
+            }
+
+            _soundPlayer.SoundLocation = fileName;
+            _soundPlayer.Play();
+          }
+          catch
+          {
+            // don't care
+          }
+        }
+      }
+    }
+
+    private void PlaySoundsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      playSoundsToolStripMenuItem.Checked = !playSoundsToolStripMenuItem.Checked;
+
+      _settings.PlaySounds = playSoundsToolStripMenuItem.Checked;
+
+      this.ApplySettings();
+    }
+
     private void PrepareElevationItems()
     {
       if (!ElevationHelper.IsElevated)
@@ -905,6 +943,8 @@ namespace Cyotek.QuickScan
 
             if (_settings.AutoSave && _settings.ContinuousScan && !string.IsNullOrEmpty(fileName))
             {
+              this.PlaySound(_settings.NextScanSound);
+
               switch (MessageBox.Show("Do you want to continue scanning using the current image size?", Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
               {
                 case DialogResult.Yes:

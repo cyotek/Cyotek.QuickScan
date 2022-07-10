@@ -68,6 +68,8 @@
       this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
       this.saveSettingsOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.saveSettingsNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.restartWIAServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStrip = new System.Windows.Forms.ToolStrip();
@@ -127,8 +129,8 @@
       this.devicePromptCheckBox = new System.Windows.Forms.CheckBox();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-      this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.restartWIAServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
+      this.playSoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -429,6 +431,8 @@
       this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.estimateFileSizesToolStripMenuItem,
             this.toolStripMenuItem6,
+            this.playSoundsToolStripMenuItem,
+            this.toolStripMenuItem10,
             this.saveSettingsOnExitToolStripMenuItem,
             this.saveSettingsNowToolStripMenuItem});
       this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
@@ -464,6 +468,21 @@
       this.saveSettingsNowToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
       this.saveSettingsNowToolStripMenuItem.Text = "Save Settings &Now";
       this.saveSettingsNowToolStripMenuItem.Click += new System.EventHandler(this.SaveSettingsNowToolStripMenuItem_Click);
+      // 
+      // toolsToolStripMenuItem
+      // 
+      this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.restartWIAServiceToolStripMenuItem});
+      this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+      this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+      this.toolsToolStripMenuItem.Text = "&Tools";
+      // 
+      // restartWIAServiceToolStripMenuItem
+      // 
+      this.restartWIAServiceToolStripMenuItem.Name = "restartWIAServiceToolStripMenuItem";
+      this.restartWIAServiceToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+      this.restartWIAServiceToolStripMenuItem.Text = "&Restart WIA Service...";
+      this.restartWIAServiceToolStripMenuItem.Click += new System.EventHandler(this.RestartWIAServiceToolStripMenuItem_Click);
       // 
       // helpToolStripMenuItem
       // 
@@ -1084,20 +1103,17 @@
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
       // 
-      // toolsToolStripMenuItem
+      // toolStripMenuItem10
       // 
-      this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.restartWIAServiceToolStripMenuItem});
-      this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-      this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
-      this.toolsToolStripMenuItem.Text = "&Tools";
+      this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+      this.toolStripMenuItem10.Size = new System.Drawing.Size(179, 6);
       // 
-      // restartWIAServiceToolStripMenuItem
+      // playSoundsToolStripMenuItem
       // 
-      this.restartWIAServiceToolStripMenuItem.Name = "restartWIAServiceToolStripMenuItem";
-      this.restartWIAServiceToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-      this.restartWIAServiceToolStripMenuItem.Text = "&Restart WIA Service...";
-      this.restartWIAServiceToolStripMenuItem.Click += new System.EventHandler(this.RestartWIAServiceToolStripMenuItem_Click);
+      this.playSoundsToolStripMenuItem.Name = "playSoundsToolStripMenuItem";
+      this.playSoundsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+      this.playSoundsToolStripMenuItem.Text = "&Play Sounds";
+      this.playSoundsToolStripMenuItem.Click += new System.EventHandler(this.PlaySoundsToolStripMenuItem_Click);
       // 
       // MainForm
       // 
@@ -1243,6 +1259,8 @@
     private System.Windows.Forms.ToolStripButton pasteToolStripButton;
     private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem restartWIAServiceToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem playSoundsToolStripMenuItem;
+    private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
   }
 }
 

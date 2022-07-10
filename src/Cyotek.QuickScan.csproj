@@ -164,6 +164,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\res\gmae.wav">
+      <Link>sounds\gmae.wav</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="..\res\image-preview.png">
       <Link>Resources\image-preview.png</Link>
     </Content>
@@ -217,5 +221,6 @@
       <Link>icon.ico</Link>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

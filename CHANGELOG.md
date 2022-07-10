@@ -18,6 +18,10 @@
   images, if supported by the chosen output format. This feature
   is not currently configurable via the UI, see the comments in
   the default ini file for details
+* Added an option to play a sound at the prompt for continuing a
+  chain scan. The choice of sound is configurable too, but is
+  not currently configurable via the UI, see the comments in the
+  default ini file for details
 
 ### Changed
 

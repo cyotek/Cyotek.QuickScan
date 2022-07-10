@@ -117,6 +117,7 @@ some time, donations are welcome.
 
 * Scanner icon derived from [Computer Hardware Cute Style vol 2][1]
 * Some toolbar graphics use [Fugue Icons][2]
+* The chime sound licensed as CC0 is by [Brandon Morris][chime]
 
 ## License
 
@@ -143,6 +144,7 @@ for the full text.
 [9]: http://csharphelper.com/blog/2014/09/paste-a-png-format-image-with-a-transparent-background-from-the-clipboard-in-c/
 [scanblog]: https://www.cyotek.com/blog/canoscan-lide-100-windows-10-compatibility
 [wiablog]: https://www.cyotek.com/blog/an-introduction-to-using-windows-image-acquisition-wia-via-csharp
+[chime]: https://opengameart.org/content/completion-sound
 
 [screenshot]: res/screenshot.png
 

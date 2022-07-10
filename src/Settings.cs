@@ -23,6 +23,8 @@ namespace Cyotek.QuickScan
   {
     #region Private Fields
 
+    private const string _defaultNextScanSound = "sounds\\gmae.wav";
+
     private bool _addMetadata;
 
     private bool _autoSave;
@@ -47,9 +49,13 @@ namespace Cyotek.QuickScan
 
     private IDictionary<PropertyTag, Tuple<PropertyTagType, string>> _metadata;
 
+    private string _nextScanSound;
+
     private int _optionsSplitterSize;
 
     private string _outputFolder;
+
+    private bool _playSounds;
 
     private bool _promptForDevice;
 
@@ -86,6 +92,7 @@ namespace Cyotek.QuickScan
       _unit = Unit.Pixel;
       _metadata = new Dictionary<PropertyTag, Tuple<PropertyTagType, string>>();
       _saveSettingsOnExit = true;
+      _nextScanSound = _defaultNextScanSound;
     }
 
     #endregion Public Constructors
@@ -164,6 +171,12 @@ namespace Cyotek.QuickScan
 
     public IDictionary<PropertyTag, Tuple<PropertyTagType, string>> Metadata => _metadata;
 
+    public string NextScanSound
+    {
+      get => _nextScanSound;
+      set => this.UpdateValue(ref _nextScanSound, value);
+    }
+
     public int OptionsSplitterSize
     {
       get => _optionsSplitterSize;
@@ -174,6 +187,12 @@ namespace Cyotek.QuickScan
     {
       get => _outputFolder;
       set => this.UpdateValue(ref _outputFolder, value);
+    }
+
+    public bool PlaySounds
+    {
+      get => _playSounds;
+      set => this.UpdateValue(ref _playSounds, value);
     }
 
     public bool PromptForDevice
@@ -288,6 +307,10 @@ namespace Cyotek.QuickScan
         this.ReadInt(ref _optionsSplitterSize, settings[nameof(this.OptionsSplitterSize)]);
         _windowPosition = settings[nameof(this.WindowPosition)];
 
+        settings = (IniSectionToken)data.CreateSection("Sounds");
+        this.ReadBool(ref _playSounds, settings[nameof(this.PlaySounds)]);
+        _nextScanSound = settings.GetValue(nameof(this.NextScanSound), _defaultNextScanSound);
+
         this.LoadMetadata(data);
       }
     }
@@ -331,12 +354,22 @@ namespace Cyotek.QuickScan
       settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
       settings[nameof(this.WindowPosition)] = _windowPosition;
 
+      settings = (IniSectionToken)data.CreateSection("Sounds");
+      settings[nameof(this.PlaySounds)] = _playSounds.ToString();
+
       data.Save(this.IniFileName);
     }
 
     #endregion Public Methods
 
     #region Private Methods
+
+    private IniSectionToken CreateMachineSection(IniDocument document, string name)
+    {
+      name = Environment.MachineName + "-" + name;
+
+      return (IniSectionToken)document.CreateSection(name);
+    }
 
     private string GetLoadFileName()
     {
@@ -351,13 +384,6 @@ namespace Cyotek.QuickScan
       }
 
       return fileName;
-    }
-
-    private IniSectionToken CreateMachineSection(IniDocument document, string name)
-    {
-      name = Environment.MachineName + "-" + name;
-
-      return (IniSectionToken)document.CreateSection(name);
     }
 
     private void LoadMetadata(IniDocument data)
