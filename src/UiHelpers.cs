@@ -72,6 +72,14 @@ namespace Cyotek.QuickScan
         ((int)form.WindowState).ToString(CultureInfo.InvariantCulture));
     }
 
+    public static void SetSplitterSize(SplitContainer container, int size)
+    {
+      if (size > 0 && ((container.Orientation == Orientation.Vertical && size < container.ClientSize.Width) || (container.Orientation == Orientation.Horizontal && size < container.ClientSize.Height)))
+      {
+        container.SplitterDistance = size;
+      }
+    }
+
     public static void ShowError(string message)
     {
       MessageBox.Show(message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);

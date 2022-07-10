@@ -151,7 +151,7 @@ namespace Cyotek.QuickScan
       _acceptSplitterChanges = false;
 
       UiHelpers.ApplyWindowPosition(this, _settings.WindowPosition);
-      this.SetSplitterSize(splitContainer, _settings.OptionsSplitterSize);
+      UiHelpers.SetSplitterSize(splitContainer, _settings.OptionsSplitterSize);
 
       _acceptSplitterChanges = true;
     }
@@ -1281,14 +1281,6 @@ namespace Cyotek.QuickScan
       if (quality >= qualityNumericUpDown.Minimum && quality <= qualityNumericUpDown.Maximum)
       {
         qualityNumericUpDown.Value = quality;
-      }
-    }
-
-    private void SetSplitterSize(SplitContainer container, int size)
-    {
-      if (size > 0 && ((container.Orientation == Orientation.Vertical && size < container.ClientSize.Width) || (container.Orientation == Orientation.Horizontal && size < container.ClientSize.Height)))
-      {
-        container.SplitterDistance = size;
       }
     }
 
