@@ -1410,22 +1410,13 @@ namespace Cyotek.QuickScan
 
     private void UpdateUi()
     {
-      bool directDevice;
       bool canScan;
 
-      directDevice = !_settings.PromptForDevice;
-      canScan = directDevice || deviceComboBox.SelectedIndex != -1;
+      canScan = deviceComboBox.SelectedIndex != -1;
 
-      deviceComboBox.Enabled = directDevice;
-      continuousCheckBox.Enabled = directDevice;
-      devicePropertiesButton.Enabled = directDevice && canScan;
+      devicePropertiesButton.Enabled = canScan;
       scanToolStripButton.Enabled = canScan;
       scanToolStripMenuItem.Enabled = canScan;
-
-      if (!directDevice && _settings.ContinuousScan)
-      {
-        continuousCheckBox.Checked = false;
-      }
     }
 
     private void UseCounterCheckBox_CheckedChanged(object sender, EventArgs e)

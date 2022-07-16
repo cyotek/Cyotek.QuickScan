@@ -25,6 +25,7 @@
 
 ### Changed
 
+* Simplified control panel and menus
 * Sometimes trying to save an image fails, typically when doing
   large high DPI scans. When this happens, the raw WIA image is
   saved instead with no conversion or customisation. This is

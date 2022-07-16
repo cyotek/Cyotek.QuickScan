@@ -107,6 +107,7 @@
       this.formatToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
       this.splitContainer = new System.Windows.Forms.SplitContainer();
       this.outputSettingsGroupBox = new Cyotek.Windows.Forms.GroupBox();
+      this.continuousCheckBox = new System.Windows.Forms.CheckBox();
       this.showImagePreviewButton = new System.Windows.Forms.Button();
       this.autoSaveCheckBox = new System.Windows.Forms.CheckBox();
       this.useCounterCheckBox = new System.Windows.Forms.CheckBox();
@@ -128,7 +129,6 @@
       this.typeLabel = new System.Windows.Forms.Label();
       this.typeComboBox = new System.Windows.Forms.ComboBox();
       this.deviceGroupBox = new Cyotek.Windows.Forms.GroupBox();
-      this.continuousCheckBox = new System.Windows.Forms.CheckBox();
       this.deviceComboBox = new System.Windows.Forms.ComboBox();
       this.devicePropertiesButton = new System.Windows.Forms.Button();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
@@ -801,6 +801,7 @@
       // 
       this.outputSettingsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.outputSettingsGroupBox.Controls.Add(this.continuousCheckBox);
       this.outputSettingsGroupBox.Controls.Add(this.showImagePreviewButton);
       this.outputSettingsGroupBox.Controls.Add(this.autoSaveCheckBox);
       this.outputSettingsGroupBox.Controls.Add(this.useCounterCheckBox);
@@ -816,12 +817,23 @@
       this.outputSettingsGroupBox.Controls.Add(this.qualityLabel);
       this.outputSettingsGroupBox.Controls.Add(this.formatLabel);
       this.outputSettingsGroupBox.Controls.Add(this.formatComboBox);
-      this.outputSettingsGroupBox.Location = new System.Drawing.Point(3, 164);
+      this.outputSettingsGroupBox.Location = new System.Drawing.Point(3, 142);
       this.outputSettingsGroupBox.Name = "outputSettingsGroupBox";
-      this.outputSettingsGroupBox.Size = new System.Drawing.Size(292, 254);
+      this.outputSettingsGroupBox.Size = new System.Drawing.Size(292, 228);
       this.outputSettingsGroupBox.TabIndex = 2;
       this.outputSettingsGroupBox.TabStop = false;
       this.outputSettingsGroupBox.Text = "Output Settings:";
+      // 
+      // continuousCheckBox
+      // 
+      this.continuousCheckBox.AutoSize = true;
+      this.continuousCheckBox.Location = new System.Drawing.Point(21, 200);
+      this.continuousCheckBox.Name = "continuousCheckBox";
+      this.continuousCheckBox.Size = new System.Drawing.Size(79, 17);
+      this.continuousCheckBox.TabIndex = 15;
+      this.continuousCheckBox.Text = "&Continuous";
+      this.continuousCheckBox.UseVisualStyleBackColor = true;
+      this.continuousCheckBox.CheckedChanged += new System.EventHandler(this.ContinuousCheckBox_CheckedChanged);
       // 
       // showImagePreviewButton
       // 
@@ -898,6 +910,7 @@
       this.fileNameTextBox.Name = "fileNameTextBox";
       this.fileNameTextBox.Size = new System.Drawing.Size(225, 20);
       this.fileNameTextBox.TabIndex = 10;
+      this.toolTip.SetToolTip(this.fileNameTextBox, "Leave blank to auto generate");
       this.fileNameTextBox.TextChanged += new System.EventHandler(this.FileNameTextBox_TextChanged);
       // 
       // fileNameLabel
@@ -1008,7 +1021,7 @@
       this.deviceSettingsGroupBox.Controls.Add(this.dpiLabel);
       this.deviceSettingsGroupBox.Controls.Add(this.typeLabel);
       this.deviceSettingsGroupBox.Controls.Add(this.typeComboBox);
-      this.deviceSettingsGroupBox.Location = new System.Drawing.Point(3, 82);
+      this.deviceSettingsGroupBox.Location = new System.Drawing.Point(3, 60);
       this.deviceSettingsGroupBox.Name = "deviceSettingsGroupBox";
       this.deviceSettingsGroupBox.Size = new System.Drawing.Size(292, 76);
       this.deviceSettingsGroupBox.TabIndex = 1;
@@ -1060,26 +1073,14 @@
       // 
       this.deviceGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.deviceGroupBox.Controls.Add(this.continuousCheckBox);
       this.deviceGroupBox.Controls.Add(this.deviceComboBox);
       this.deviceGroupBox.Controls.Add(this.devicePropertiesButton);
       this.deviceGroupBox.Location = new System.Drawing.Point(3, 3);
       this.deviceGroupBox.Name = "deviceGroupBox";
-      this.deviceGroupBox.Size = new System.Drawing.Size(292, 73);
+      this.deviceGroupBox.Size = new System.Drawing.Size(292, 51);
       this.deviceGroupBox.TabIndex = 0;
       this.deviceGroupBox.TabStop = false;
       this.deviceGroupBox.Text = "Device:";
-      // 
-      // continuousCheckBox
-      // 
-      this.continuousCheckBox.AutoSize = true;
-      this.continuousCheckBox.Location = new System.Drawing.Point(6, 46);
-      this.continuousCheckBox.Name = "continuousCheckBox";
-      this.continuousCheckBox.Size = new System.Drawing.Size(79, 17);
-      this.continuousCheckBox.TabIndex = 5;
-      this.continuousCheckBox.Text = "&Continuous";
-      this.continuousCheckBox.UseVisualStyleBackColor = true;
-      this.continuousCheckBox.CheckedChanged += new System.EventHandler(this.ContinuousCheckBox_CheckedChanged);
       // 
       // deviceComboBox
       // 
@@ -1157,7 +1158,6 @@
       this.deviceSettingsGroupBox.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dpiNumericUpDown)).EndInit();
       this.deviceGroupBox.ResumeLayout(false);
-      this.deviceGroupBox.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
