@@ -136,44 +136,73 @@ namespace Cyotek.QuickScan
 
     public static void SetPropertyMaximum(this WiaProperties properties, WiaPropertyId id)
     {
-      Property property;
+      try
+      {
+        Property property;
 
-      property = properties[((int)id).ToString()];
+        property = properties[((int)id).ToString()];
 
-      property.let_Value(property.SubTypeMax);
+        property.let_Value(property.SubTypeMax);
+      }
+      catch (Exception ex)
+      {
+        UiHelpers.ShowError(string.Format("Failed to update property {0}.", id), ex);
+      }
+
     }
 
     public static void SetPropertyMinimum(this WiaProperties properties, WiaPropertyId id)
     {
-      Property property;
+      try
+      {
+        Property property;
 
-      property = properties[((int)id).ToString()];
+        property = properties[((int)id).ToString()];
 
-      property.let_Value(property.SubTypeMin);
+        property.let_Value(property.SubTypeMin);
+      }
+      catch (Exception ex)
+      {
+        UiHelpers.ShowError(string.Format("Failed to update property {0}.", id), ex);
+      }
     }
 
     public static void SetPropertyValue<T>(this WiaProperties properties, WiaPropertyId id, T value)
     {
-      Property property;
+      try
+      {
+        Property property;
 
-      property = properties[((int)id).ToString()];
+        property = properties[((int)id).ToString()];
 
-      property.let_Value(value);
+        property.let_Value(value);
+      }
+      catch (Exception ex)
+      {
+        UiHelpers.ShowError(string.Format("Failed to update property {0}.", id), ex);
+      }
     }
 
     public static void SetPropertyValue(this WiaProperties properties, WiaPropertyId id, int value)
     {
-      Property property;
-
-      property = properties[((int)id).ToString()];
-
-      if (value >= property.SubTypeMin && value <= property.SubTypeMax)
+      try
       {
-        property.let_Value(value);
+        Property property;
+
+        property = properties[((int)id).ToString()];
+
+        if (value >= property.SubTypeMin && value <= property.SubTypeMax)
+        {
+          property.let_Value(value);
+        }
+        else
+        {
+          UiHelpers.ShowWarning(string.Format("Unable to set property {0}, value {3} must be between {1} and {2}.", id, property.SubTypeMin, property.SubTypeMax, value));
+        }
       }
-      else
+      catch (Exception ex)
       {
-        UiHelpers.ShowWarning(string.Format("Unable to set property {0}, value {3} must be between {1} and {2}.", id, property.SubTypeMin, property.SubTypeMax, value));
+        UiHelpers.ShowError(string.Format("Failed to update property {0}.", id), ex);
       }
     }
 
