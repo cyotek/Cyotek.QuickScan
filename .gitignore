@@ -6,3 +6,4 @@ dist/
 
 *.suo
 *.user
+/deploy.cmd
