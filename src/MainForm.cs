@@ -526,7 +526,10 @@ namespace Cyotek.QuickScan
         {
           try
           {
-            result = deviceInfo.Connect();
+            using (this.CreateStatusController("Connecting to device..."))
+            {
+              result = deviceInfo.Connect();
+            }
           }
           catch (COMException ex) when (ex.HResult == (int)WiaError.WIA_ERROR_OFFLINE || ex.HResult == (int)WiaError.E_FAIL)
           {
