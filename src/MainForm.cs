@@ -128,7 +128,6 @@ namespace Cyotek.QuickScan
     private void ApplySettings()
     {
       this.SetDevice(_settings.DeviceId);
-      devicePromptCheckBox.Checked = _settings.PromptForDevice;
       continuousCheckBox.Checked = _settings.ContinuousScan;
 
       this.SetIntent(_settings.ImageIntent);
@@ -318,13 +317,6 @@ namespace Cyotek.QuickScan
       dpiNumericUpDown.Minimum = min;
       dpiNumericUpDown.Maximum = max;
       dpiNumericUpDown.Value = max;
-    }
-
-    private void DevicePromptCheckBox_CheckedChanged(object sender, EventArgs e)
-    {
-      _settings.PromptForDevice = devicePromptCheckBox.Checked;
-
-      this.UpdateUi();
     }
 
     private void DevicePropertiesButton_Click(object sender, EventArgs e)
@@ -647,19 +639,6 @@ namespace Cyotek.QuickScan
       ProcessHelpers.OpenFolderInExplorer(_settings.OutputFolder);
     }
 
-    private void OutputSettingsGroupBox_Resize(object sender, EventArgs e)
-    {
-      // HACK: For reasons I am currently unable to determine, the Format ComboBox
-      // goes wild in its positioning since the DpiAwareness setting was added to
-      // App.config. Even if I try to manually position it, it gets worse and worse
-      // with its behaviour. However, if I change the Anchor so it is the default,
-      // instead of also including Right, it positions correctly - and so I need to
-      // update the width manually. Why doesn't this happen with the TextBox controls
-      // that also have Left|Top|Right as the anchor? For that matter, why doesn't
-      // it happen to the Device ComboBox?
-      formatComboBox.Width = folderTextBox.Width;
-    }
-
     private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
     {
       Image image;
@@ -809,7 +788,6 @@ namespace Cyotek.QuickScan
 
     private void PreviewButton_Click(object sender, EventArgs e)
     {
-      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
     }
 
     private void PreviewImageBox_ShowPixelGridChanged(object sender, EventArgs e)
@@ -826,15 +804,20 @@ namespace Cyotek.QuickScan
 
     private void PreviewLinkLabel_Click(object sender, EventArgs e)
     {
+      this.ShowImagePreview();
+    }
+
+    private void ShowImagePreview()
+    {
       if (_image != null)
       {
-        ImageCodecInfo codec;
-        EncoderParameters parameters;
-        Guid format;
-        int quality;
-
         using (this.CreateStatusController("Creating preview image..."))
         {
+          Guid format;
+          int quality;
+          ImageCodecInfo codec;
+          EncoderParameters parameters;
+
           format = _settings.Format;
           quality = _settings.Quality;
           codec = ImageCodecHelpers.GetImageCodec(format);
@@ -992,18 +975,6 @@ namespace Cyotek.QuickScan
     private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SaveImageAs();
-    }
-
-    private void SaveButton_Click(object sender, EventArgs e)
-    {
-      string fileName;
-
-      fileName = this.SaveImage();
-
-      if (!string.IsNullOrEmpty(fileName))
-      {
-        MessageBox.Show(string.Format("File saved to {0}.", fileName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-      }
     }
 
     private string SaveImage()
@@ -1445,8 +1416,8 @@ namespace Cyotek.QuickScan
       deviceComboBox.Enabled = directDevice;
       continuousCheckBox.Enabled = directDevice;
       devicePropertiesButton.Enabled = directDevice && canScan;
-      scanButton.Enabled = canScan;
-      previewButton.Enabled = canScan;
+      scanToolStripButton.Enabled = canScan;
+      scanToolStripMenuItem.Enabled = canScan;
 
       if (!directDevice && _settings.ContinuousScan)
       {
@@ -1505,5 +1476,27 @@ namespace Cyotek.QuickScan
     }
 
     #endregion Private Methods
+
+    private void ShowImagePreviewButton_Click(object sender, EventArgs e)
+    {
+      this.ShowImagePreview();
+    }
+
+    private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      string fileName;
+
+      fileName = this.SaveImage();
+
+      if (!string.IsNullOrEmpty(fileName))
+      {
+        MessageBox.Show(string.Format("File saved to {0}.", fileName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+      }
+    }
+
+    private void ScanToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
+    }
   }
 }

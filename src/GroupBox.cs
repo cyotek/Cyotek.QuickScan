@@ -185,7 +185,7 @@ namespace Cyotek.Windows.Forms
       }
 
       // header text
-      TextRenderer.DrawText(e.Graphics, this.Text, this.Font, textBounds, this.HeaderForeColor, flags);
+      TextRenderer.DrawText(e.Graphics, this.Text, this.Font, textBounds, this.ForeColor, flags);
 
       // draw the image
       if ((_image != null))

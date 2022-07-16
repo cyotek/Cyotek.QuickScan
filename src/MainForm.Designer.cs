@@ -28,9 +28,13 @@
     /// </summary>
     private void InitializeComponent()
     {
+      this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
       this.menuStrip = new System.Windows.Forms.MenuStrip();
       this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.scanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
+      this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
       this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,9 +42,6 @@
       this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.devicePropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.scanPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
       this.layoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.horizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.verticalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,13 +67,20 @@
       this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.estimateFileSizesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+      this.playSoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
       this.saveSettingsOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.saveSettingsNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.devicePropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.scanPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
       this.restartWIAServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStrip = new System.Windows.Forms.ToolStrip();
+      this.scanToolStripButton = new System.Windows.Forms.ToolStripButton();
+      this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
       this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.pasteToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -99,7 +107,7 @@
       this.formatToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
       this.splitContainer = new System.Windows.Forms.SplitContainer();
       this.outputSettingsGroupBox = new Cyotek.Windows.Forms.GroupBox();
-      this.saveButton = new System.Windows.Forms.Button();
+      this.showImagePreviewButton = new System.Windows.Forms.Button();
       this.autoSaveCheckBox = new System.Windows.Forms.CheckBox();
       this.useCounterCheckBox = new System.Windows.Forms.CheckBox();
       this.counterNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -110,7 +118,6 @@
       this.browseButton = new System.Windows.Forms.Button();
       this.folderTextBox = new System.Windows.Forms.TextBox();
       this.folderLabel = new System.Windows.Forms.Label();
-      this.previewLinkLabel = new Cyotek.Windows.Forms.LinkLabel();
       this.qualityNumericUpDown = new System.Windows.Forms.NumericUpDown();
       this.qualityLabel = new System.Windows.Forms.Label();
       this.formatLabel = new System.Windows.Forms.Label();
@@ -122,15 +129,11 @@
       this.typeComboBox = new System.Windows.Forms.ComboBox();
       this.deviceGroupBox = new Cyotek.Windows.Forms.GroupBox();
       this.continuousCheckBox = new System.Windows.Forms.CheckBox();
-      this.scanButton = new System.Windows.Forms.Button();
       this.deviceComboBox = new System.Windows.Forms.ComboBox();
-      this.previewButton = new System.Windows.Forms.Button();
       this.devicePropertiesButton = new System.Windows.Forms.Button();
-      this.devicePromptCheckBox = new System.Windows.Forms.CheckBox();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-      this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
-      this.playSoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolTip = new System.Windows.Forms.ToolTip(this.components);
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -164,6 +167,9 @@
       // fileToolStripMenuItem
       // 
       this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scanToolStripMenuItem,
+            this.toolStripMenuItem11,
+            this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.toolStripMenuItem5,
             this.exitToolStripMenuItem});
@@ -171,23 +177,46 @@
       this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
       this.fileToolStripMenuItem.Text = "&File";
       // 
+      // scanToolStripMenuItem
+      // 
+      this.scanToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.Scan;
+      this.scanToolStripMenuItem.Name = "scanToolStripMenuItem";
+      this.scanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+      this.scanToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+      this.scanToolStripMenuItem.Text = "S&can...";
+      this.scanToolStripMenuItem.Click += new System.EventHandler(this.ScanToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem11
+      // 
+      this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+      this.toolStripMenuItem11.Size = new System.Drawing.Size(135, 6);
+      // 
+      // saveToolStripMenuItem
+      // 
+      this.saveToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.SaveFile;
+      this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+      this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+      this.saveToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+      this.saveToolStripMenuItem.Text = "&Save";
+      this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
+      // 
       // saveAsToolStripMenuItem
       // 
       this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-      this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+      this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
       this.saveAsToolStripMenuItem.Text = "Save &As...";
       this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
       // 
       // toolStripMenuItem5
       // 
       this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-      this.toolStripMenuItem5.Size = new System.Drawing.Size(132, 6);
+      this.toolStripMenuItem5.Size = new System.Drawing.Size(135, 6);
       // 
       // exitToolStripMenuItem
       // 
       this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
       this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-      this.exitToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+      this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
       this.exitToolStripMenuItem.Text = "E&xit";
       this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
       // 
@@ -221,9 +250,6 @@
       // viewToolStripMenuItem
       // 
       this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.devicePropertiesToolStripMenuItem,
-            this.scanPropertiesToolStripMenuItem,
-            this.toolStripMenuItem2,
             this.layoutToolStripMenuItem,
             this.toolStripMenuItem7,
             this.pixelGridToolStripMenuItem,
@@ -239,25 +265,6 @@
       this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
       this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
       this.viewToolStripMenuItem.Text = "&View";
-      // 
-      // devicePropertiesToolStripMenuItem
-      // 
-      this.devicePropertiesToolStripMenuItem.Name = "devicePropertiesToolStripMenuItem";
-      this.devicePropertiesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-      this.devicePropertiesToolStripMenuItem.Text = "Device Propert&ies...";
-      this.devicePropertiesToolStripMenuItem.Click += new System.EventHandler(this.DevicePropertiesToolStripMenuItem_Click);
-      // 
-      // scanPropertiesToolStripMenuItem
-      // 
-      this.scanPropertiesToolStripMenuItem.Name = "scanPropertiesToolStripMenuItem";
-      this.scanPropertiesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-      this.scanPropertiesToolStripMenuItem.Text = "&Scan Properties...";
-      this.scanPropertiesToolStripMenuItem.Click += new System.EventHandler(this.ScanPropertiesToolStripMenuItem_Click);
-      // 
-      // toolStripMenuItem2
-      // 
-      this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-      this.toolStripMenuItem2.Size = new System.Drawing.Size(205, 6);
       // 
       // layoutToolStripMenuItem
       // 
@@ -453,6 +460,18 @@
       this.toolStripMenuItem6.Name = "toolStripMenuItem6";
       this.toolStripMenuItem6.Size = new System.Drawing.Size(179, 6);
       // 
+      // playSoundsToolStripMenuItem
+      // 
+      this.playSoundsToolStripMenuItem.Name = "playSoundsToolStripMenuItem";
+      this.playSoundsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+      this.playSoundsToolStripMenuItem.Text = "&Play Sounds";
+      this.playSoundsToolStripMenuItem.Click += new System.EventHandler(this.PlaySoundsToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem10
+      // 
+      this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+      this.toolStripMenuItem10.Size = new System.Drawing.Size(179, 6);
+      // 
       // saveSettingsOnExitToolStripMenuItem
       // 
       this.saveSettingsOnExitToolStripMenuItem.Checked = true;
@@ -472,10 +491,32 @@
       // toolsToolStripMenuItem
       // 
       this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.devicePropertiesToolStripMenuItem,
+            this.scanPropertiesToolStripMenuItem,
+            this.toolStripMenuItem2,
             this.restartWIAServiceToolStripMenuItem});
       this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
       this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
       this.toolsToolStripMenuItem.Text = "&Tools";
+      // 
+      // devicePropertiesToolStripMenuItem
+      // 
+      this.devicePropertiesToolStripMenuItem.Name = "devicePropertiesToolStripMenuItem";
+      this.devicePropertiesToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+      this.devicePropertiesToolStripMenuItem.Text = "Device Propert&ies...";
+      this.devicePropertiesToolStripMenuItem.Click += new System.EventHandler(this.DevicePropertiesToolStripMenuItem_Click);
+      // 
+      // scanPropertiesToolStripMenuItem
+      // 
+      this.scanPropertiesToolStripMenuItem.Name = "scanPropertiesToolStripMenuItem";
+      this.scanPropertiesToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+      this.scanPropertiesToolStripMenuItem.Text = "&Scan Properties...";
+      this.scanPropertiesToolStripMenuItem.Click += new System.EventHandler(this.ScanPropertiesToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem2
+      // 
+      this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+      this.toolStripMenuItem2.Size = new System.Drawing.Size(181, 6);
       // 
       // restartWIAServiceToolStripMenuItem
       // 
@@ -502,6 +543,8 @@
       // toolStrip
       // 
       this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scanToolStripButton,
+            this.toolStripSeparator5,
             this.copyToolStripButton,
             this.pasteToolStripButton,
             this.toolStripSeparator2,
@@ -521,6 +564,20 @@
       this.toolStrip.Name = "toolStrip";
       this.toolStrip.Size = new System.Drawing.Size(800, 25);
       this.toolStrip.TabIndex = 1;
+      // 
+      // scanToolStripButton
+      // 
+      this.scanToolStripButton.Image = global::Cyotek.QuickScan.Properties.Resources.Scan;
+      this.scanToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.scanToolStripButton.Name = "scanToolStripButton";
+      this.scanToolStripButton.Size = new System.Drawing.Size(52, 22);
+      this.scanToolStripButton.Text = "&Scan";
+      this.scanToolStripButton.Click += new System.EventHandler(this.ScanToolStripMenuItem_Click);
+      // 
+      // toolStripSeparator5
+      // 
+      this.toolStripSeparator5.Name = "toolStripSeparator5";
+      this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
       // 
       // copyToolStripButton
       // 
@@ -744,7 +801,7 @@
       // 
       this.outputSettingsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.outputSettingsGroupBox.Controls.Add(this.saveButton);
+      this.outputSettingsGroupBox.Controls.Add(this.showImagePreviewButton);
       this.outputSettingsGroupBox.Controls.Add(this.autoSaveCheckBox);
       this.outputSettingsGroupBox.Controls.Add(this.useCounterCheckBox);
       this.outputSettingsGroupBox.Controls.Add(this.counterNumericUpDown);
@@ -755,34 +812,34 @@
       this.outputSettingsGroupBox.Controls.Add(this.browseButton);
       this.outputSettingsGroupBox.Controls.Add(this.folderTextBox);
       this.outputSettingsGroupBox.Controls.Add(this.folderLabel);
-      this.outputSettingsGroupBox.Controls.Add(this.previewLinkLabel);
       this.outputSettingsGroupBox.Controls.Add(this.qualityNumericUpDown);
       this.outputSettingsGroupBox.Controls.Add(this.qualityLabel);
       this.outputSettingsGroupBox.Controls.Add(this.formatLabel);
       this.outputSettingsGroupBox.Controls.Add(this.formatComboBox);
-      this.outputSettingsGroupBox.Location = new System.Drawing.Point(4, 191);
+      this.outputSettingsGroupBox.Location = new System.Drawing.Point(3, 164);
       this.outputSettingsGroupBox.Name = "outputSettingsGroupBox";
       this.outputSettingsGroupBox.Size = new System.Drawing.Size(292, 254);
       this.outputSettingsGroupBox.TabIndex = 2;
       this.outputSettingsGroupBox.TabStop = false;
       this.outputSettingsGroupBox.Text = "Output Settings:";
-      this.outputSettingsGroupBox.Resize += new System.EventHandler(this.OutputSettingsGroupBox_Resize);
       // 
-      // saveButton
+      // showImagePreviewButton
       // 
-      this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.saveButton.Location = new System.Drawing.Point(210, 225);
-      this.saveButton.Name = "saveButton";
-      this.saveButton.Size = new System.Drawing.Size(75, 23);
-      this.saveButton.TabIndex = 15;
-      this.saveButton.Text = "&Save";
-      this.saveButton.UseVisualStyleBackColor = true;
-      this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
+      this.showImagePreviewButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.showImagePreviewButton.Image = global::Cyotek.QuickScan.Properties.Resources.PreviewFile;
+      this.showImagePreviewButton.Location = new System.Drawing.Point(262, 17);
+      this.showImagePreviewButton.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+      this.showImagePreviewButton.Name = "showImagePreviewButton";
+      this.showImagePreviewButton.Size = new System.Drawing.Size(23, 24);
+      this.showImagePreviewButton.TabIndex = 2;
+      this.toolTip.SetToolTip(this.showImagePreviewButton, "Show Output Image Preview");
+      this.showImagePreviewButton.UseVisualStyleBackColor = true;
+      this.showImagePreviewButton.Click += new System.EventHandler(this.ShowImagePreviewButton_Click);
       // 
       // autoSaveCheckBox
       // 
       this.autoSaveCheckBox.AutoSize = true;
-      this.autoSaveCheckBox.Location = new System.Drawing.Point(6, 202);
+      this.autoSaveCheckBox.Location = new System.Drawing.Point(6, 177);
       this.autoSaveCheckBox.Name = "autoSaveCheckBox";
       this.autoSaveCheckBox.Size = new System.Drawing.Size(76, 17);
       this.autoSaveCheckBox.TabIndex = 14;
@@ -793,17 +850,17 @@
       // useCounterCheckBox
       // 
       this.useCounterCheckBox.AutoSize = true;
-      this.useCounterCheckBox.Location = new System.Drawing.Point(5, 179);
+      this.useCounterCheckBox.Location = new System.Drawing.Point(121, 152);
       this.useCounterCheckBox.Name = "useCounterCheckBox";
-      this.useCounterCheckBox.Size = new System.Drawing.Size(85, 17);
+      this.useCounterCheckBox.Size = new System.Drawing.Size(97, 17);
       this.useCounterCheckBox.TabIndex = 13;
-      this.useCounterCheckBox.Text = "&Use Counter";
+      this.useCounterCheckBox.Text = "A&uto increment";
       this.useCounterCheckBox.UseVisualStyleBackColor = true;
       this.useCounterCheckBox.CheckedChanged += new System.EventHandler(this.UseCounterCheckBox_CheckedChanged);
       // 
       // counterNumericUpDown
       // 
-      this.counterNumericUpDown.Location = new System.Drawing.Point(64, 153);
+      this.counterNumericUpDown.Location = new System.Drawing.Point(60, 151);
       this.counterNumericUpDown.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -827,7 +884,7 @@
       // counterLabel
       // 
       this.counterLabel.AutoSize = true;
-      this.counterLabel.Location = new System.Drawing.Point(3, 155);
+      this.counterLabel.Location = new System.Drawing.Point(3, 153);
       this.counterLabel.Name = "counterLabel";
       this.counterLabel.Size = new System.Drawing.Size(47, 13);
       this.counterLabel.TabIndex = 11;
@@ -837,16 +894,16 @@
       // 
       this.fileNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.fileNameTextBox.Location = new System.Drawing.Point(64, 127);
+      this.fileNameTextBox.Location = new System.Drawing.Point(60, 125);
       this.fileNameTextBox.Name = "fileNameTextBox";
-      this.fileNameTextBox.Size = new System.Drawing.Size(222, 20);
+      this.fileNameTextBox.Size = new System.Drawing.Size(225, 20);
       this.fileNameTextBox.TabIndex = 10;
       this.fileNameTextBox.TextChanged += new System.EventHandler(this.FileNameTextBox_TextChanged);
       // 
       // fileNameLabel
       // 
       this.fileNameLabel.AutoSize = true;
-      this.fileNameLabel.Location = new System.Drawing.Point(3, 130);
+      this.fileNameLabel.Location = new System.Drawing.Point(3, 128);
       this.fileNameLabel.Name = "fileNameLabel";
       this.fileNameLabel.Size = new System.Drawing.Size(55, 13);
       this.fileNameLabel.TabIndex = 9;
@@ -855,22 +912,24 @@
       // openFolderButton
       // 
       this.openFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.openFolderButton.Location = new System.Drawing.Point(211, 98);
+      this.openFolderButton.Image = global::Cyotek.QuickScan.Properties.Resources.OpenFolder;
+      this.openFolderButton.Location = new System.Drawing.Point(262, 96);
+      this.openFolderButton.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
       this.openFolderButton.Name = "openFolderButton";
-      this.openFolderButton.Size = new System.Drawing.Size(75, 23);
+      this.openFolderButton.Size = new System.Drawing.Size(23, 23);
       this.openFolderButton.TabIndex = 8;
-      this.openFolderButton.Text = "&Open";
+      this.toolTip.SetToolTip(this.openFolderButton, "Open Folder in File Explorer");
       this.openFolderButton.UseVisualStyleBackColor = true;
       this.openFolderButton.Click += new System.EventHandler(this.OpenFolderButton_Click);
       // 
       // browseButton
       // 
       this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.browseButton.Location = new System.Drawing.Point(130, 98);
+      this.browseButton.Location = new System.Drawing.Point(184, 96);
       this.browseButton.Name = "browseButton";
       this.browseButton.Size = new System.Drawing.Size(75, 23);
       this.browseButton.TabIndex = 7;
-      this.browseButton.Text = "&Browse";
+      this.browseButton.Text = "B&rowse...";
       this.browseButton.UseVisualStyleBackColor = true;
       this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
       // 
@@ -880,7 +939,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.folderTextBox.Location = new System.Drawing.Point(60, 72);
       this.folderTextBox.Name = "folderTextBox";
-      this.folderTextBox.Size = new System.Drawing.Size(226, 20);
+      this.folderTextBox.Size = new System.Drawing.Size(225, 20);
       this.folderTextBox.TabIndex = 6;
       this.folderTextBox.TextChanged += new System.EventHandler(this.FolderTextBox_TextChanged);
       // 
@@ -893,15 +952,6 @@
       this.folderLabel.TabIndex = 5;
       this.folderLabel.Text = "Fo&lder:";
       // 
-      // previewLinkLabel
-      // 
-      this.previewLinkLabel.Location = new System.Drawing.Point(123, 48);
-      this.previewLinkLabel.Name = "previewLinkLabel";
-      this.previewLinkLabel.Size = new System.Drawing.Size(103, 14);
-      this.previewLinkLabel.TabIndex = 4;
-      this.previewLinkLabel.Text = "Preview output image";
-      this.previewLinkLabel.Click += new System.EventHandler(this.PreviewLinkLabel_Click);
-      // 
       // qualityNumericUpDown
       // 
       this.qualityNumericUpDown.Location = new System.Drawing.Point(60, 46);
@@ -912,7 +962,7 @@
             0});
       this.qualityNumericUpDown.Name = "qualityNumericUpDown";
       this.qualityNumericUpDown.Size = new System.Drawing.Size(55, 20);
-      this.qualityNumericUpDown.TabIndex = 3;
+      this.qualityNumericUpDown.TabIndex = 4;
       this.qualityNumericUpDown.Value = new decimal(new int[] {
             97,
             0,
@@ -926,7 +976,7 @@
       this.qualityLabel.Location = new System.Drawing.Point(2, 48);
       this.qualityLabel.Name = "qualityLabel";
       this.qualityLabel.Size = new System.Drawing.Size(42, 13);
-      this.qualityLabel.TabIndex = 2;
+      this.qualityLabel.TabIndex = 3;
       this.qualityLabel.Text = "&Quality:";
       // 
       // formatLabel
@@ -936,15 +986,17 @@
       this.formatLabel.Name = "formatLabel";
       this.formatLabel.Size = new System.Drawing.Size(42, 13);
       this.formatLabel.TabIndex = 0;
-      this.formatLabel.Text = "F&ormat:";
+      this.formatLabel.Text = "For&mat:";
       // 
       // formatComboBox
       // 
+      this.formatComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.formatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.formatComboBox.FormattingEnabled = true;
       this.formatComboBox.Location = new System.Drawing.Point(60, 19);
       this.formatComboBox.Name = "formatComboBox";
-      this.formatComboBox.Size = new System.Drawing.Size(231, 21);
+      this.formatComboBox.Size = new System.Drawing.Size(200, 21);
       this.formatComboBox.TabIndex = 1;
       this.formatComboBox.SelectedIndexChanged += new System.EventHandler(this.FormatComboBox_SelectedIndexChanged);
       // 
@@ -956,7 +1008,7 @@
       this.deviceSettingsGroupBox.Controls.Add(this.dpiLabel);
       this.deviceSettingsGroupBox.Controls.Add(this.typeLabel);
       this.deviceSettingsGroupBox.Controls.Add(this.typeComboBox);
-      this.deviceSettingsGroupBox.Location = new System.Drawing.Point(4, 109);
+      this.deviceSettingsGroupBox.Location = new System.Drawing.Point(3, 82);
       this.deviceSettingsGroupBox.Name = "deviceSettingsGroupBox";
       this.deviceSettingsGroupBox.Size = new System.Drawing.Size(292, 76);
       this.deviceSettingsGroupBox.TabIndex = 1;
@@ -1009,14 +1061,11 @@
       this.deviceGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.deviceGroupBox.Controls.Add(this.continuousCheckBox);
-      this.deviceGroupBox.Controls.Add(this.scanButton);
       this.deviceGroupBox.Controls.Add(this.deviceComboBox);
-      this.deviceGroupBox.Controls.Add(this.previewButton);
       this.deviceGroupBox.Controls.Add(this.devicePropertiesButton);
-      this.deviceGroupBox.Controls.Add(this.devicePromptCheckBox);
-      this.deviceGroupBox.Location = new System.Drawing.Point(4, 3);
+      this.deviceGroupBox.Location = new System.Drawing.Point(3, 3);
       this.deviceGroupBox.Name = "deviceGroupBox";
-      this.deviceGroupBox.Size = new System.Drawing.Size(291, 100);
+      this.deviceGroupBox.Size = new System.Drawing.Size(292, 73);
       this.deviceGroupBox.TabIndex = 0;
       this.deviceGroupBox.TabStop = false;
       this.deviceGroupBox.Text = "Device:";
@@ -1024,23 +1073,13 @@
       // continuousCheckBox
       // 
       this.continuousCheckBox.AutoSize = true;
-      this.continuousCheckBox.Location = new System.Drawing.Point(168, 73);
+      this.continuousCheckBox.Location = new System.Drawing.Point(6, 46);
       this.continuousCheckBox.Name = "continuousCheckBox";
       this.continuousCheckBox.Size = new System.Drawing.Size(79, 17);
       this.continuousCheckBox.TabIndex = 5;
       this.continuousCheckBox.Text = "&Continuous";
       this.continuousCheckBox.UseVisualStyleBackColor = true;
       this.continuousCheckBox.CheckedChanged += new System.EventHandler(this.ContinuousCheckBox_CheckedChanged);
-      // 
-      // scanButton
-      // 
-      this.scanButton.Location = new System.Drawing.Point(87, 69);
-      this.scanButton.Name = "scanButton";
-      this.scanButton.Size = new System.Drawing.Size(75, 23);
-      this.scanButton.TabIndex = 4;
-      this.scanButton.Text = "&Scan";
-      this.scanButton.UseVisualStyleBackColor = true;
-      this.scanButton.Click += new System.EventHandler(this.ScanButton_Click);
       // 
       // deviceComboBox
       // 
@@ -1050,41 +1089,20 @@
       this.deviceComboBox.FormattingEnabled = true;
       this.deviceComboBox.Location = new System.Drawing.Point(6, 19);
       this.deviceComboBox.Name = "deviceComboBox";
-      this.deviceComboBox.Size = new System.Drawing.Size(198, 21);
+      this.deviceComboBox.Size = new System.Drawing.Size(199, 21);
       this.deviceComboBox.TabIndex = 0;
       this.deviceComboBox.SelectedIndexChanged += new System.EventHandler(this.DeviceComboBox_SelectedIndexChanged);
-      // 
-      // previewButton
-      // 
-      this.previewButton.Location = new System.Drawing.Point(6, 69);
-      this.previewButton.Name = "previewButton";
-      this.previewButton.Size = new System.Drawing.Size(75, 23);
-      this.previewButton.TabIndex = 3;
-      this.previewButton.Text = "&Preview";
-      this.previewButton.UseVisualStyleBackColor = true;
-      this.previewButton.Click += new System.EventHandler(this.PreviewButton_Click);
       // 
       // devicePropertiesButton
       // 
       this.devicePropertiesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.devicePropertiesButton.Location = new System.Drawing.Point(210, 17);
+      this.devicePropertiesButton.Location = new System.Drawing.Point(211, 17);
       this.devicePropertiesButton.Name = "devicePropertiesButton";
       this.devicePropertiesButton.Size = new System.Drawing.Size(75, 23);
       this.devicePropertiesButton.TabIndex = 1;
-      this.devicePropertiesButton.Text = "Properti&es";
+      this.devicePropertiesButton.Text = "Properties";
       this.devicePropertiesButton.UseVisualStyleBackColor = true;
       this.devicePropertiesButton.Click += new System.EventHandler(this.DevicePropertiesButton_Click);
-      // 
-      // devicePromptCheckBox
-      // 
-      this.devicePromptCheckBox.AutoSize = true;
-      this.devicePromptCheckBox.Location = new System.Drawing.Point(6, 46);
-      this.devicePromptCheckBox.Name = "devicePromptCheckBox";
-      this.devicePromptCheckBox.Size = new System.Drawing.Size(109, 17);
-      this.devicePromptCheckBox.TabIndex = 2;
-      this.devicePromptCheckBox.Text = "Prompt for &device";
-      this.devicePromptCheckBox.UseVisualStyleBackColor = true;
-      this.devicePromptCheckBox.CheckedChanged += new System.EventHandler(this.DevicePromptCheckBox_CheckedChanged);
       // 
       // previewImageBox
       // 
@@ -1102,18 +1120,6 @@
       this.fileSizeBackgroundWorker.WorkerSupportsCancellation = true;
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
-      // 
-      // toolStripMenuItem10
-      // 
-      this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-      this.toolStripMenuItem10.Size = new System.Drawing.Size(179, 6);
-      // 
-      // playSoundsToolStripMenuItem
-      // 
-      this.playSoundsToolStripMenuItem.Name = "playSoundsToolStripMenuItem";
-      this.playSoundsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-      this.playSoundsToolStripMenuItem.Text = "&Play Sounds";
-      this.playSoundsToolStripMenuItem.Click += new System.EventHandler(this.PlaySoundsToolStripMenuItem_Click);
       // 
       // MainForm
       // 
@@ -1166,9 +1172,6 @@
     private System.Windows.Forms.ComboBox deviceComboBox;
     private Cyotek.Windows.Forms.ImageBox previewImageBox;
     private System.Windows.Forms.Button devicePropertiesButton;
-    private System.Windows.Forms.CheckBox devicePromptCheckBox;
-    private System.Windows.Forms.Button previewButton;
-    private System.Windows.Forms.Button scanButton;
     private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem refreshDeviceListToolStripMenuItem;
@@ -1221,7 +1224,6 @@
     private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
     private System.ComponentModel.BackgroundWorker fileSizeBackgroundWorker;
-    private Windows.Forms.LinkLabel previewLinkLabel;
     private System.Windows.Forms.CheckBox autoSaveCheckBox;
     private System.Windows.Forms.CheckBox useCounterCheckBox;
     private System.Windows.Forms.NumericUpDown counterNumericUpDown;
@@ -1235,7 +1237,6 @@
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
     private System.Windows.Forms.ToolStripMenuItem saveSettingsOnExitToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem saveSettingsNowToolStripMenuItem;
-    private System.Windows.Forms.Button saveButton;
     private System.Windows.Forms.ToolStripMenuItem estimateFileSizesToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
     private System.Windows.Forms.ToolStripMenuItem layoutToolStripMenuItem;
@@ -1261,6 +1262,13 @@
     private System.Windows.Forms.ToolStripMenuItem restartWIAServiceToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem playSoundsToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
+    private System.Windows.Forms.Button showImagePreviewButton;
+    private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+    private System.Windows.Forms.ToolTip toolTip;
+    private System.Windows.Forms.ToolStripButton scanToolStripButton;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+    private System.Windows.Forms.ToolStripMenuItem scanToolStripMenuItem;
+    private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
   }
 }
 

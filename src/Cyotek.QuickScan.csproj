@@ -168,11 +168,23 @@
       <Link>sounds\gmae.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="..\res\file-save.png">
+      <Link>Resources\file-save.png</Link>
+    </Content>
+    <Content Include="..\res\folder-open.png">
+      <Link>Resources\folder-open.png</Link>
+    </Content>
     <Content Include="..\res\image-preview.png">
       <Link>Resources\image-preview.png</Link>
     </Content>
     <Content Include="..\res\paste.png">
       <Link>Resources\paste.png</Link>
+    </Content>
+    <Content Include="..\res\preview.png">
+      <Link>Resources\preview.png</Link>
+    </Content>
+    <Content Include="..\res\scan.png">
+      <Link>Resources\scan.png</Link>
     </Content>
     <Content Include="..\res\vertical-split.png">
       <Link>Resources\vertical-split.png</Link>
