@@ -476,6 +476,7 @@ namespace Cyotek.QuickScan
       fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
       {
         { "now", DateTime.UtcNow.ToString("s") },
+        { "now:exif", DateTime.UtcNow.ToString("yyyy:MM:dd HH:mm:ss") },
         { "year", DateTime.UtcNow.Year.ToString(CultureInfo.InvariantCulture) },
         { "appname", Application.ProductName },
         { "appversion", Application.ProductVersion },
