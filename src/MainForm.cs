@@ -144,7 +144,7 @@ namespace Cyotek.QuickScan
 
       estimateFileSizesToolStripMenuItem.Checked = _settings.EstimateFileSizes;
       fileSizeToolStripStatusLabel.Visible = _settings.EstimateFileSizes;
-      playSoundsToolStripMenuItem.CheckOnClick = _settings.PlaySounds;
+      playSoundsToolStripMenuItem.Checked = _settings.PlaySounds;
 
       previewImageBox.ShowPixelGrid = _settings.ShowPixelGrid;
       this.SetOrientation(_settings.LayoutOrientation);
