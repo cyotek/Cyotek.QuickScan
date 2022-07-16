@@ -77,6 +77,15 @@ namespace Cyotek.QuickScan
 
       this.PrepareElevationItems();
 
+      this.ApplyWindowSettings();
+      this.ApplySettings();
+      this.UpdateUi();
+    }
+
+    protected override void OnShown(EventArgs e)
+    {
+      base.OnShown(e);
+
       try
       {
         _settings.IgnoreUpdates = true;
@@ -88,10 +97,6 @@ namespace Cyotek.QuickScan
       {
         _settings.IgnoreUpdates = false;
       }
-
-      this.ApplyWindowSettings();
-      this.ApplySettings();
-      this.UpdateUi();
     }
 
     #endregion Protected Methods
@@ -275,39 +280,44 @@ namespace Cyotek.QuickScan
 
         if (device != null)
         {
-          WiaProperties properties;
-          Property xDpi;
-          Property yDpi;
-          int min;
-          int max;
-
-          properties = device.Items[1].Properties;
-          xDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_XRES);
-          yDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_YRES);
-
-          try
-          {
-            min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
-          }
-          catch (COMException)
-          {
-            min = 150;
-          }
-
-          try
-          {
-            max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
-          }
-          catch (COMException)
-          {
-            max = 4800;
-          }
-
-          dpiNumericUpDown.Minimum = min;
-          dpiNumericUpDown.Maximum = max;
-          dpiNumericUpDown.Value = max;
+          this.SetDpi(device);
         }
       }
+    }
+
+    private void SetDpi(Device device)
+    {
+      WiaProperties properties;
+      Property xDpi;
+      Property yDpi;
+      int min;
+      int max;
+
+      properties = device.Items[1].Properties;
+      xDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_XRES);
+      yDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_YRES);
+
+      try
+      {
+        min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
+      }
+      catch (COMException)
+      {
+        min = 150;
+      }
+
+      try
+      {
+        max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
+      }
+      catch (COMException)
+      {
+        max = 4800;
+      }
+
+      dpiNumericUpDown.Minimum = min;
+      dpiNumericUpDown.Maximum = max;
+      dpiNumericUpDown.Value = max;
     }
 
     private void DevicePromptCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -928,14 +938,9 @@ namespace Cyotek.QuickScan
         {
           ImageFile image;
 
-          if (keepSize)
-          {
-            image = this.GetImage(this.RepeatLastScan);
-          }
-          else
-          {
-            image = this.GetImage(getImage);
-          }
+          image = this.GetImage(keepSize
+            ? this.RepeatLastScan
+            : getImage);
 
           if (image != null)
           {
