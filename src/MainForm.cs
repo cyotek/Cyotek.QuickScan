@@ -77,6 +77,8 @@ namespace Cyotek.QuickScan
 
       this.PrepareElevationItems();
 
+      this.LoadFormats();
+
       this.ApplyWindowSettings();
       this.ApplySettings();
       this.UpdateUi();
@@ -90,7 +92,6 @@ namespace Cyotek.QuickScan
       {
         _settings.IgnoreUpdates = true;
         this.LoadTypes();
-        this.LoadFormats();
         this.LoadDevices();
       }
       finally
@@ -617,8 +618,6 @@ namespace Cyotek.QuickScan
       formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Portable Network Graphics (*.png)", WiaFormatId.Png));
       formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Tagged Image File Format (*.tiff)", WiaFormatId.Tiff));
       formatComboBox.Items.Add(new KeyValueListBoxItem<Guid>("Graphics Interchange Format (*.gif)", WiaFormatId.Gif));
-
-      formatComboBox.SelectedIndex = 0;
     }
 
     private void LoadSettings()
@@ -1214,6 +1213,11 @@ namespace Cyotek.QuickScan
           formatComboBox.SelectedIndex = i;
           break;
         }
+      }
+
+      if (formatComboBox.SelectedIndex == -1)
+      {
+        formatComboBox.SelectedIndex = 0;
       }
     }
 
