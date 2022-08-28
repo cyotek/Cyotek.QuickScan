@@ -447,8 +447,6 @@ namespace Cyotek.QuickScan
 
           dialog = new CommonDialog();
           image = getImage(device, dialog);
-
-          device.Items[1].Properties.Dump();
         }
       }
       else

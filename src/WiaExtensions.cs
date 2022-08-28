@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using WIA;
@@ -83,9 +84,12 @@ namespace Cyotek.QuickScan
       return properties[((int)id).ToString()];
     }
 
+    [HandleProcessCorruptedStateExceptions]
     public static string GetValueString(this Property property)
     {
       string value;
+
+      // HACK: Sometimes AccessViolationException is thrown trying to get the value, hence testing HandleProcessCorruptedStateExceptions
 
       try
       {
