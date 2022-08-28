@@ -7,7 +7,7 @@ SET SCRIPTPATH=%SCRIPTPATH:~0,-1%
 
 CD %SCRIPTPATH%
 
-CALL %CTKBLDROOT%SetupEnv.cmd
+CALL %CTKBLDROOT%\SetupEnv.cmd
 
 REM Build and sign the file
 %msbuildexe% Cyotek.QuickScan.sln /p:Configuration=Release /verbosity:minimal /nologo /t:Clean,Build
