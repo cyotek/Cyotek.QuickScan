@@ -139,7 +139,7 @@
       this.cancelScanButton = new System.Windows.Forms.Button();
       this.reconfigureScanButton = new System.Windows.Forms.Button();
       this.nextScanButton = new System.Windows.Forms.Button();
-      this.label1 = new System.Windows.Forms.Label();
+      this.continueScanningLabel = new System.Windows.Forms.Label();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.toolTip = new System.Windows.Forms.ToolTip(this.components);
       this.menuStrip.SuspendLayout();
@@ -1158,7 +1158,7 @@
       this.continuationPanel.Controls.Add(this.cancelScanButton);
       this.continuationPanel.Controls.Add(this.reconfigureScanButton);
       this.continuationPanel.Controls.Add(this.nextScanButton);
-      this.continuationPanel.Controls.Add(this.label1);
+      this.continuationPanel.Controls.Add(this.continueScanningLabel);
       this.continuationPanel.Dock = System.Windows.Forms.DockStyle.Top;
       this.continuationPanel.ForeColor = System.Drawing.SystemColors.InfoText;
       this.continuationPanel.Location = new System.Drawing.Point(0, 0);
@@ -1169,6 +1169,7 @@
       // 
       // cancelScanButton
       // 
+      this.cancelScanButton.Enabled = false;
       this.cancelScanButton.Location = new System.Drawing.Point(306, 3);
       this.cancelScanButton.Name = "cancelScanButton";
       this.cancelScanButton.Size = new System.Drawing.Size(75, 23);
@@ -1179,6 +1180,7 @@
       // 
       // reconfigureScanButton
       // 
+      this.reconfigureScanButton.Enabled = false;
       this.reconfigureScanButton.Location = new System.Drawing.Point(191, 3);
       this.reconfigureScanButton.Name = "reconfigureScanButton";
       this.reconfigureScanButton.Size = new System.Drawing.Size(109, 23);
@@ -1189,6 +1191,7 @@
       // 
       // nextScanButton
       // 
+      this.nextScanButton.Enabled = false;
       this.nextScanButton.Location = new System.Drawing.Point(110, 3);
       this.nextScanButton.Name = "nextScanButton";
       this.nextScanButton.Size = new System.Drawing.Size(75, 23);
@@ -1197,14 +1200,15 @@
       this.nextScanButton.UseVisualStyleBackColor = true;
       this.nextScanButton.Click += new System.EventHandler(this.NextScanButton_Click);
       // 
-      // label1
+      // continueScanningLabel
       // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(3, 8);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(101, 13);
-      this.label1.TabIndex = 0;
-      this.label1.Text = "Continue scanning?";
+      this.continueScanningLabel.AutoSize = true;
+      this.continueScanningLabel.Enabled = false;
+      this.continueScanningLabel.Location = new System.Drawing.Point(3, 8);
+      this.continueScanningLabel.Name = "continueScanningLabel";
+      this.continueScanningLabel.Size = new System.Drawing.Size(101, 13);
+      this.continueScanningLabel.TabIndex = 0;
+      this.continueScanningLabel.Text = "Continue scanning?";
       // 
       // fileSizeBackgroundWorker
       // 
@@ -1365,7 +1369,7 @@
         private System.Windows.Forms.Button cancelScanButton;
         private System.Windows.Forms.Button reconfigureScanButton;
         private System.Windows.Forms.Button nextScanButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label continueScanningLabel;
         private System.Windows.Forms.ToolStripButton saveToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
         private System.Windows.Forms.ToolStripMenuItem inlinePromptToolStripMenuItem;

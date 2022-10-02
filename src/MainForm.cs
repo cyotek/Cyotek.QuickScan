@@ -160,6 +160,8 @@ namespace Cyotek.QuickScan
       playSoundsToolStripMenuItem.Checked = _settings.PlaySounds;
       inlinePromptToolStripMenuItem.Checked = _settings.InlineScanPrompt;
 
+      continuationPanel.Visible = _settings.InlineScanPrompt;
+
       previewImageBox.ShowPixelGrid = _settings.ShowPixelGrid;
       this.SetOrientation(_settings.LayoutOrientation);
       this.SetPreview(_settings.ShowPreview);
@@ -598,6 +600,8 @@ namespace Cyotek.QuickScan
       inlinePromptToolStripMenuItem.Checked = !inlinePromptToolStripMenuItem.Checked;
 
       _settings.InlineScanPrompt = inlinePromptToolStripMenuItem.Checked;
+
+      continuationPanel.Visible = _settings.InlineScanPrompt;
     }
 
     private void LoadDevices()
@@ -1159,7 +1163,10 @@ namespace Cyotek.QuickScan
       deviceSettingsGroupBox.Enabled = !enabled;
       this.UpdateUi();
 
-      continuationPanel.Visible = enabled;
+      continueScanningLabel.Enabled = enabled;
+      nextScanButton.Enabled = enabled;
+      reconfigureScanButton.Enabled = enabled;
+      cancelScanButton.Enabled = enabled;
     }
 
     private void SetCounter(int counter)
