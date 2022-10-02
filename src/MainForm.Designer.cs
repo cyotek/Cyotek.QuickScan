@@ -1143,11 +1143,11 @@
       // 
       // cancelScanButton
       // 
-      this.cancelScanButton.Location = new System.Drawing.Point(272, 2);
+      this.cancelScanButton.Location = new System.Drawing.Point(306, 3);
       this.cancelScanButton.Name = "cancelScanButton";
       this.cancelScanButton.Size = new System.Drawing.Size(75, 23);
       this.cancelScanButton.TabIndex = 3;
-      this.cancelScanButton.Text = "Cancel";
+      this.cancelScanButton.Text = "&No";
       this.cancelScanButton.UseVisualStyleBackColor = true;
       this.cancelScanButton.Click += new System.EventHandler(this.CancelScanButton_Click);
       // 
@@ -1155,9 +1155,9 @@
       // 
       this.reconfigureScanButton.Location = new System.Drawing.Point(191, 3);
       this.reconfigureScanButton.Name = "reconfigureScanButton";
-      this.reconfigureScanButton.Size = new System.Drawing.Size(75, 23);
+      this.reconfigureScanButton.Size = new System.Drawing.Size(109, 23);
       this.reconfigureScanButton.TabIndex = 2;
-      this.reconfigureScanButton.Text = "Co&nfigure...";
+      this.reconfigureScanButton.Text = "Yes, &Customise...";
       this.reconfigureScanButton.UseVisualStyleBackColor = true;
       this.reconfigureScanButton.Click += new System.EventHandler(this.ReconfigureScanButton_Click);
       // 
