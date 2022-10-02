@@ -132,8 +132,14 @@
       this.deviceComboBox = new System.Windows.Forms.ComboBox();
       this.devicePropertiesButton = new System.Windows.Forms.Button();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
+      this.continuationPanel = new System.Windows.Forms.Panel();
+      this.cancelScanButton = new System.Windows.Forms.Button();
+      this.reconfigureScanButton = new System.Windows.Forms.Button();
+      this.nextScanButton = new System.Windows.Forms.Button();
+      this.label1 = new System.Windows.Forms.Label();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+      this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -147,6 +153,7 @@
       this.deviceSettingsGroupBox.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dpiNumericUpDown)).BeginInit();
       this.deviceGroupBox.SuspendLayout();
+      this.continuationPanel.SuspendLayout();
       this.SuspendLayout();
       // 
       // menuStrip
@@ -182,41 +189,41 @@
       this.scanToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.Scan;
       this.scanToolStripMenuItem.Name = "scanToolStripMenuItem";
       this.scanToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-      this.scanToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+      this.scanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
       this.scanToolStripMenuItem.Text = "S&can...";
       this.scanToolStripMenuItem.Click += new System.EventHandler(this.ScanToolStripMenuItem_Click);
       // 
       // toolStripMenuItem11
       // 
       this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-      this.toolStripMenuItem11.Size = new System.Drawing.Size(135, 6);
+      this.toolStripMenuItem11.Size = new System.Drawing.Size(177, 6);
       // 
       // saveToolStripMenuItem
       // 
       this.saveToolStripMenuItem.Image = global::Cyotek.QuickScan.Properties.Resources.SaveFile;
       this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
       this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-      this.saveToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+      this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
       this.saveToolStripMenuItem.Text = "&Save";
       this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
       // 
       // saveAsToolStripMenuItem
       // 
       this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-      this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+      this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
       this.saveAsToolStripMenuItem.Text = "Save &As...";
       this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
       // 
       // toolStripMenuItem5
       // 
       this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-      this.toolStripMenuItem5.Size = new System.Drawing.Size(135, 6);
+      this.toolStripMenuItem5.Size = new System.Drawing.Size(177, 6);
       // 
       // exitToolStripMenuItem
       // 
       this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
       this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-      this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+      this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
       this.exitToolStripMenuItem.Text = "E&xit";
       this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
       // 
@@ -544,6 +551,7 @@
       // 
       this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.scanToolStripButton,
+            this.saveToolStripButton,
             this.toolStripSeparator5,
             this.copyToolStripButton,
             this.pasteToolStripButton,
@@ -792,6 +800,7 @@
       // splitContainer.Panel2
       // 
       this.splitContainer.Panel2.Controls.Add(this.previewImageBox);
+      this.splitContainer.Panel2.Controls.Add(this.continuationPanel);
       this.splitContainer.Size = new System.Drawing.Size(800, 486);
       this.splitContainer.SplitterDistance = 298;
       this.splitContainer.TabIndex = 2;
@@ -1109,18 +1118,83 @@
       // 
       this.previewImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
       this.previewImageBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
-      this.previewImageBox.Location = new System.Drawing.Point(0, 0);
+      this.previewImageBox.Location = new System.Drawing.Point(0, 32);
       this.previewImageBox.Name = "previewImageBox";
       this.previewImageBox.ShowPixelGrid = true;
-      this.previewImageBox.Size = new System.Drawing.Size(498, 486);
+      this.previewImageBox.Size = new System.Drawing.Size(498, 454);
       this.previewImageBox.TabIndex = 0;
       this.previewImageBox.ShowPixelGridChanged += new System.EventHandler(this.PreviewImageBox_ShowPixelGridChanged);
+      // 
+      // continuationPanel
+      // 
+      this.continuationPanel.BackColor = System.Drawing.SystemColors.Info;
+      this.continuationPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.continuationPanel.Controls.Add(this.cancelScanButton);
+      this.continuationPanel.Controls.Add(this.reconfigureScanButton);
+      this.continuationPanel.Controls.Add(this.nextScanButton);
+      this.continuationPanel.Controls.Add(this.label1);
+      this.continuationPanel.Dock = System.Windows.Forms.DockStyle.Top;
+      this.continuationPanel.ForeColor = System.Drawing.SystemColors.InfoText;
+      this.continuationPanel.Location = new System.Drawing.Point(0, 0);
+      this.continuationPanel.Name = "continuationPanel";
+      this.continuationPanel.Size = new System.Drawing.Size(498, 32);
+      this.continuationPanel.TabIndex = 1;
+      this.continuationPanel.Visible = false;
+      // 
+      // cancelScanButton
+      // 
+      this.cancelScanButton.Location = new System.Drawing.Point(272, 2);
+      this.cancelScanButton.Name = "cancelScanButton";
+      this.cancelScanButton.Size = new System.Drawing.Size(75, 23);
+      this.cancelScanButton.TabIndex = 3;
+      this.cancelScanButton.Text = "Cancel";
+      this.cancelScanButton.UseVisualStyleBackColor = true;
+      this.cancelScanButton.Click += new System.EventHandler(this.CancelScanButton_Click);
+      // 
+      // reconfigureScanButton
+      // 
+      this.reconfigureScanButton.Location = new System.Drawing.Point(191, 3);
+      this.reconfigureScanButton.Name = "reconfigureScanButton";
+      this.reconfigureScanButton.Size = new System.Drawing.Size(75, 23);
+      this.reconfigureScanButton.TabIndex = 2;
+      this.reconfigureScanButton.Text = "Co&nfigure...";
+      this.reconfigureScanButton.UseVisualStyleBackColor = true;
+      this.reconfigureScanButton.Click += new System.EventHandler(this.ReconfigureScanButton_Click);
+      // 
+      // nextScanButton
+      // 
+      this.nextScanButton.Location = new System.Drawing.Point(110, 3);
+      this.nextScanButton.Name = "nextScanButton";
+      this.nextScanButton.Size = new System.Drawing.Size(75, 23);
+      this.nextScanButton.TabIndex = 1;
+      this.nextScanButton.Text = "&Yes";
+      this.nextScanButton.UseVisualStyleBackColor = true;
+      this.nextScanButton.Click += new System.EventHandler(this.NextScanButton_Click);
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(3, 8);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(101, 13);
+      this.label1.TabIndex = 0;
+      this.label1.Text = "Continue scanning?";
       // 
       // fileSizeBackgroundWorker
       // 
       this.fileSizeBackgroundWorker.WorkerSupportsCancellation = true;
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
+      // 
+      // saveToolStripButton
+      // 
+      this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.saveToolStripButton.Image = global::Cyotek.QuickScan.Properties.Resources.SaveFile;
+      this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.saveToolStripButton.Name = "saveToolStripButton";
+      this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+      this.saveToolStripButton.Text = "Save";
+      this.saveToolStripButton.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
       // 
       // MainForm
       // 
@@ -1158,6 +1232,8 @@
       this.deviceSettingsGroupBox.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dpiNumericUpDown)).EndInit();
       this.deviceGroupBox.ResumeLayout(false);
+      this.continuationPanel.ResumeLayout(false);
+      this.continuationPanel.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1269,6 +1345,12 @@
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     private System.Windows.Forms.ToolStripMenuItem scanToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
-  }
+        private System.Windows.Forms.Panel continuationPanel;
+        private System.Windows.Forms.Button cancelScanButton;
+        private System.Windows.Forms.Button reconfigureScanButton;
+        private System.Windows.Forms.Button nextScanButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripButton saveToolStripButton;
+    }
 }
 
