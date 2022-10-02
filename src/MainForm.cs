@@ -33,11 +33,15 @@ namespace Cyotek.QuickScan
 
     private bool _acceptSplitterChanges;
 
+    private DialogResult _continuationResult;
+
     private IDeviceManager _deviceManager;
 
     private Image _image;
 
     private ImageFile _imageFile;
+
+    private bool _isLimitedUi;
 
     private Settings _settings;
 
@@ -62,10 +66,19 @@ namespace Cyotek.QuickScan
     {
       base.OnFormClosing(e);
 
-      if (!e.Cancel && _settings.SaveSettingsOnExit)
+      if (!e.Cancel)
       {
+        if (_isLimitedUi)
+        {
+          _continuationResult = DialogResult.Cancel;
+        }
+
         this.CleanUp();
-        this.SaveSettings();
+
+        if (_settings.SaveSettingsOnExit)
+        {
+          this.SaveSettings();
+        }
       }
     }
 
@@ -145,6 +158,9 @@ namespace Cyotek.QuickScan
       estimateFileSizesToolStripMenuItem.Checked = _settings.EstimateFileSizes;
       fileSizeToolStripStatusLabel.Visible = _settings.EstimateFileSizes;
       playSoundsToolStripMenuItem.Checked = _settings.PlaySounds;
+      inlinePromptToolStripMenuItem.Checked = _settings.InlineScanPrompt;
+
+      continuationPanel.Visible = _settings.InlineScanPrompt;
 
       previewImageBox.ShowPixelGrid = _settings.ShowPixelGrid;
       this.SetOrientation(_settings.LayoutOrientation);
@@ -226,6 +242,11 @@ namespace Cyotek.QuickScan
       }
     }
 
+    private void CancelScanButton_Click(object sender, EventArgs e)
+    {
+      _continuationResult = DialogResult.Cancel;
+    }
+
     private void CentimetersToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SetUnit(Unit.Centimeter);
@@ -283,41 +304,6 @@ namespace Cyotek.QuickScan
           this.SetDpi(device);
         }
       }
-    }
-
-    private void SetDpi(Device device)
-    {
-      WiaProperties properties;
-      Property xDpi;
-      Property yDpi;
-      int min;
-      int max;
-
-      properties = device.Items[1].Properties;
-      xDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_XRES);
-      yDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_YRES);
-
-      try
-      {
-        min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
-      }
-      catch (COMException)
-      {
-        min = 150;
-      }
-
-      try
-      {
-        max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
-      }
-      catch (COMException)
-      {
-        max = 4800;
-      }
-
-      dpiNumericUpDown.Minimum = min;
-      dpiNumericUpDown.Maximum = max;
-      dpiNumericUpDown.Value = max;
     }
 
     private void DevicePropertiesButton_Click(object sender, EventArgs e)
@@ -433,6 +419,13 @@ namespace Cyotek.QuickScan
       }
     }
 
+    private DialogResult GetContinuationAction()
+    {
+      return _settings.InlineScanPrompt
+        ? this.GetInlineContinuationAction()
+        : MessageBox.Show("Do you want to continue scanning using the current image size?", Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+    }
+
     private ImageFile GetImage(Func<Device, CommonDialog, ImageFile> getImage)
     {
       Device device;
@@ -468,6 +461,22 @@ namespace Cyotek.QuickScan
         Quality = _settings.Quality,
         Image = _image.Copy()
       };
+    }
+
+    private DialogResult GetInlineContinuationAction()
+    {
+      _continuationResult = DialogResult.None;
+
+      this.ShowContinuationBar();
+
+      do
+      {
+        Application.DoEvents(); // HACK
+      } while (_continuationResult == DialogResult.None);
+
+      this.HideContinuationBar();
+
+      return _continuationResult;
     }
 
     private Dictionary<string, string> GetMergeFields()
@@ -566,6 +575,11 @@ namespace Cyotek.QuickScan
       return deviceInfo;
     }
 
+    private void HideContinuationBar()
+    {
+      this.SetContinuationBarState(false);
+    }
+
     private void HorizontalLayoutToolStripButton_Click(object sender, EventArgs e)
     {
       this.SetOrientation(horizontalLayoutToolStripButton.Checked ? Orientation.Vertical : Orientation.Horizontal);
@@ -579,6 +593,15 @@ namespace Cyotek.QuickScan
     private void InchesToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SetUnit(Unit.Inch);
+    }
+
+    private void InlinePromptToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      inlinePromptToolStripMenuItem.Checked = !inlinePromptToolStripMenuItem.Checked;
+
+      _settings.InlineScanPrompt = inlinePromptToolStripMenuItem.Checked;
+
+      continuationPanel.Visible = _settings.InlineScanPrompt;
     }
 
     private void LoadDevices()
@@ -632,6 +655,11 @@ namespace Cyotek.QuickScan
       typeComboBox.Items.Add(new KeyValueListBoxItem<WiaImageIntent>("Grayscale", WiaImageIntent.GrayscaleIntent));
       typeComboBox.Items.Add(new KeyValueListBoxItem<WiaImageIntent>("Monochrome", WiaImageIntent.TextIntent));
       typeComboBox.SelectedIndex = 0;
+    }
+
+    private void NextScanButton_Click(object sender, EventArgs e)
+    {
+      _continuationResult = DialogResult.Yes;
     }
 
     private void OpenFolderButton_Click(object sender, EventArgs e)
@@ -763,8 +791,6 @@ namespace Cyotek.QuickScan
       playSoundsToolStripMenuItem.Checked = !playSoundsToolStripMenuItem.Checked;
 
       _settings.PlaySounds = playSoundsToolStripMenuItem.Checked;
-
-      this.ApplySettings();
     }
 
     private void PrepareElevationItems()
@@ -807,44 +833,6 @@ namespace Cyotek.QuickScan
       this.ShowImagePreview();
     }
 
-    private void ShowImagePreview()
-    {
-      if (_image != null)
-      {
-        using (this.CreateStatusController("Creating preview image..."))
-        {
-          Guid format;
-          int quality;
-          ImageCodecInfo codec;
-          EncoderParameters parameters;
-
-          format = _settings.Format;
-          quality = _settings.Quality;
-          codec = ImageCodecHelpers.GetImageCodec(format);
-          parameters = ImageCodecHelpers.GetEncoderParameters(codec, quality);
-
-          using (Image copy = _image)
-          {
-            using (MemoryStream stream = new MemoryStream())
-            {
-              copy.Save(stream, codec, parameters);
-
-              stream.Position = 0;
-
-              using (Image loaded = Image.FromStream(stream))
-              {
-                ImagePreviewWindow.ShowImagePreview(loaded);
-              }
-            }
-          }
-        }
-      }
-      else
-      {
-        UiHelpers.ShowWarning("Please scan an image first.");
-      }
-    }
-
     private void QualityNumericUpDown_ValueChanged(object sender, EventArgs e)
     {
       _settings.Quality = (int)qualityNumericUpDown.Value;
@@ -853,6 +841,11 @@ namespace Cyotek.QuickScan
       {
         this.CalculateFileSize();
       }
+    }
+
+    private void ReconfigureScanButton_Click(object sender, EventArgs e)
+    {
+      _continuationResult = DialogResult.No;
     }
 
     private void RefreshDeviceListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -939,7 +932,7 @@ namespace Cyotek.QuickScan
             {
               this.PlaySound(_settings.NextScanSound);
 
-              switch (MessageBox.Show("Do you want to continue scanning using the current image size?", Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+              switch (this.GetContinuationAction())
               {
                 case DialogResult.Yes:
                   keepSize = true;
@@ -1106,6 +1099,18 @@ namespace Cyotek.QuickScan
       saveSettingsOnExitToolStripMenuItem.Checked = _settings.SaveSettingsOnExit;
     }
 
+    private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      string fileName;
+
+      fileName = this.SaveImage();
+
+      if (!string.IsNullOrEmpty(fileName))
+      {
+        MessageBox.Show(string.Format("File saved to {0}.", fileName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+      }
+    }
+
     private void ScanButton_Click(object sender, EventArgs e)
     {
       this.RunScanLoop((device, dialog) =>
@@ -1143,6 +1148,25 @@ namespace Cyotek.QuickScan
 
         PropertiesDialog.ShowPropertiesDialog(properties);
       });
+    }
+
+    private void ScanToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
+    }
+
+    private void SetContinuationBarState(bool enabled)
+    {
+      _isLimitedUi = enabled;
+
+      deviceGroupBox.Enabled = !enabled;
+      deviceSettingsGroupBox.Enabled = !enabled;
+      this.UpdateUi();
+
+      continueScanningLabel.Enabled = enabled;
+      nextScanButton.Enabled = enabled;
+      reconfigureScanButton.Enabled = enabled;
+      cancelScanButton.Enabled = enabled;
     }
 
     private void SetCounter(int counter)
@@ -1194,6 +1218,41 @@ namespace Cyotek.QuickScan
       {
         deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YEXTENT, _image.Height);
       }
+    }
+
+    private void SetDpi(Device device)
+    {
+      WiaProperties properties;
+      Property xDpi;
+      Property yDpi;
+      int min;
+      int max;
+
+      properties = device.Items[1].Properties;
+      xDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_XRES);
+      yDpi = properties.GetProperty(WiaPropertyId.WIA_IPS_YRES);
+
+      try
+      {
+        min = Math.Max(xDpi.SubTypeMin, yDpi.SubTypeMin);
+      }
+      catch (COMException)
+      {
+        min = 150;
+      }
+
+      try
+      {
+        max = Math.Min(xDpi.SubTypeMax, yDpi.SubTypeMax);
+      }
+      catch (COMException)
+      {
+        max = 4800;
+      }
+
+      dpiNumericUpDown.Minimum = min;
+      dpiNumericUpDown.Maximum = max;
+      dpiNumericUpDown.Value = max;
     }
 
     private void SetDpi(int dpi)
@@ -1340,6 +1399,54 @@ namespace Cyotek.QuickScan
       this.UpdateSize();
     }
 
+    private void ShowContinuationBar()
+    {
+      this.SetContinuationBarState(true);
+    }
+
+    private void ShowImagePreview()
+    {
+      if (_image != null)
+      {
+        using (this.CreateStatusController("Creating preview image..."))
+        {
+          Guid format;
+          int quality;
+          ImageCodecInfo codec;
+          EncoderParameters parameters;
+
+          format = _settings.Format;
+          quality = _settings.Quality;
+          codec = ImageCodecHelpers.GetImageCodec(format);
+          parameters = ImageCodecHelpers.GetEncoderParameters(codec, quality);
+
+          using (Image copy = _image)
+          {
+            using (MemoryStream stream = new MemoryStream())
+            {
+              copy.Save(stream, codec, parameters);
+
+              stream.Position = 0;
+
+              using (Image loaded = Image.FromStream(stream))
+              {
+                ImagePreviewWindow.ShowImagePreview(loaded);
+              }
+            }
+          }
+        }
+      }
+      else
+      {
+        UiHelpers.ShowWarning("Please scan an image first.");
+      }
+    }
+
+    private void ShowImagePreviewButton_Click(object sender, EventArgs e)
+    {
+      this.ShowImagePreview();
+    }
+
     private void ShowPreviewToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SetPreview(!_settings.ShowPreview);
@@ -1414,7 +1521,7 @@ namespace Cyotek.QuickScan
     {
       bool canScan;
 
-      canScan = deviceComboBox.SelectedIndex != -1;
+      canScan = deviceComboBox.SelectedIndex != -1 && !_isLimitedUi;
 
       devicePropertiesButton.Enabled = canScan;
       scanToolStripButton.Enabled = canScan;
@@ -1472,27 +1579,5 @@ namespace Cyotek.QuickScan
     }
 
     #endregion Private Methods
-
-    private void ShowImagePreviewButton_Click(object sender, EventArgs e)
-    {
-      this.ShowImagePreview();
-    }
-
-    private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-      string fileName;
-
-      fileName = this.SaveImage();
-
-      if (!string.IsNullOrEmpty(fileName))
-      {
-        MessageBox.Show(string.Format("File saved to {0}.", fileName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-      }
-    }
-
-    private void ScanToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
-    }
   }
 }

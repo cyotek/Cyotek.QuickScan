@@ -68,6 +68,8 @@
       this.estimateFileSizesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
       this.playSoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
+      this.inlinePromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
       this.saveSettingsOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.saveSettingsNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +82,7 @@
       this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStrip = new System.Windows.Forms.ToolStrip();
       this.scanToolStripButton = new System.Windows.Forms.ToolStripButton();
+      this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
       this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
       this.pasteToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -132,6 +135,11 @@
       this.deviceComboBox = new System.Windows.Forms.ComboBox();
       this.devicePropertiesButton = new System.Windows.Forms.Button();
       this.previewImageBox = new Cyotek.Windows.Forms.ImageBox();
+      this.continuationPanel = new System.Windows.Forms.Panel();
+      this.cancelScanButton = new System.Windows.Forms.Button();
+      this.reconfigureScanButton = new System.Windows.Forms.Button();
+      this.nextScanButton = new System.Windows.Forms.Button();
+      this.continueScanningLabel = new System.Windows.Forms.Label();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.toolTip = new System.Windows.Forms.ToolTip(this.components);
       this.menuStrip.SuspendLayout();
@@ -147,6 +155,7 @@
       this.deviceSettingsGroupBox.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dpiNumericUpDown)).BeginInit();
       this.deviceGroupBox.SuspendLayout();
+      this.continuationPanel.SuspendLayout();
       this.SuspendLayout();
       // 
       // menuStrip
@@ -439,6 +448,8 @@
             this.estimateFileSizesToolStripMenuItem,
             this.toolStripMenuItem6,
             this.playSoundsToolStripMenuItem,
+            this.toolStripMenuItem12,
+            this.inlinePromptToolStripMenuItem,
             this.toolStripMenuItem10,
             this.saveSettingsOnExitToolStripMenuItem,
             this.saveSettingsNowToolStripMenuItem});
@@ -466,6 +477,18 @@
       this.playSoundsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
       this.playSoundsToolStripMenuItem.Text = "&Play Sounds";
       this.playSoundsToolStripMenuItem.Click += new System.EventHandler(this.PlaySoundsToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem12
+      // 
+      this.toolStripMenuItem12.Name = "toolStripMenuItem12";
+      this.toolStripMenuItem12.Size = new System.Drawing.Size(179, 6);
+      // 
+      // inlinePromptToolStripMenuItem
+      // 
+      this.inlinePromptToolStripMenuItem.Name = "inlinePromptToolStripMenuItem";
+      this.inlinePromptToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+      this.inlinePromptToolStripMenuItem.Text = "&Inline Prompt";
+      this.inlinePromptToolStripMenuItem.Click += new System.EventHandler(this.InlinePromptToolStripMenuItem_Click);
       // 
       // toolStripMenuItem10
       // 
@@ -544,6 +567,7 @@
       // 
       this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.scanToolStripButton,
+            this.saveToolStripButton,
             this.toolStripSeparator5,
             this.copyToolStripButton,
             this.pasteToolStripButton,
@@ -573,6 +597,16 @@
       this.scanToolStripButton.Size = new System.Drawing.Size(52, 22);
       this.scanToolStripButton.Text = "&Scan";
       this.scanToolStripButton.Click += new System.EventHandler(this.ScanToolStripMenuItem_Click);
+      // 
+      // saveToolStripButton
+      // 
+      this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.saveToolStripButton.Image = global::Cyotek.QuickScan.Properties.Resources.SaveFile;
+      this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.saveToolStripButton.Name = "saveToolStripButton";
+      this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+      this.saveToolStripButton.Text = "Save";
+      this.saveToolStripButton.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
       // 
       // toolStripSeparator5
       // 
@@ -792,6 +826,7 @@
       // splitContainer.Panel2
       // 
       this.splitContainer.Panel2.Controls.Add(this.previewImageBox);
+      this.splitContainer.Panel2.Controls.Add(this.continuationPanel);
       this.splitContainer.Size = new System.Drawing.Size(800, 486);
       this.splitContainer.SplitterDistance = 298;
       this.splitContainer.TabIndex = 2;
@@ -1109,12 +1144,71 @@
       // 
       this.previewImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
       this.previewImageBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
-      this.previewImageBox.Location = new System.Drawing.Point(0, 0);
+      this.previewImageBox.Location = new System.Drawing.Point(0, 32);
       this.previewImageBox.Name = "previewImageBox";
       this.previewImageBox.ShowPixelGrid = true;
-      this.previewImageBox.Size = new System.Drawing.Size(498, 486);
+      this.previewImageBox.Size = new System.Drawing.Size(498, 454);
       this.previewImageBox.TabIndex = 0;
       this.previewImageBox.ShowPixelGridChanged += new System.EventHandler(this.PreviewImageBox_ShowPixelGridChanged);
+      // 
+      // continuationPanel
+      // 
+      this.continuationPanel.BackColor = System.Drawing.SystemColors.Info;
+      this.continuationPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.continuationPanel.Controls.Add(this.cancelScanButton);
+      this.continuationPanel.Controls.Add(this.reconfigureScanButton);
+      this.continuationPanel.Controls.Add(this.nextScanButton);
+      this.continuationPanel.Controls.Add(this.continueScanningLabel);
+      this.continuationPanel.Dock = System.Windows.Forms.DockStyle.Top;
+      this.continuationPanel.ForeColor = System.Drawing.SystemColors.InfoText;
+      this.continuationPanel.Location = new System.Drawing.Point(0, 0);
+      this.continuationPanel.Name = "continuationPanel";
+      this.continuationPanel.Size = new System.Drawing.Size(498, 32);
+      this.continuationPanel.TabIndex = 1;
+      this.continuationPanel.Visible = false;
+      // 
+      // cancelScanButton
+      // 
+      this.cancelScanButton.Enabled = false;
+      this.cancelScanButton.Location = new System.Drawing.Point(306, 3);
+      this.cancelScanButton.Name = "cancelScanButton";
+      this.cancelScanButton.Size = new System.Drawing.Size(75, 23);
+      this.cancelScanButton.TabIndex = 3;
+      this.cancelScanButton.Text = "&No";
+      this.cancelScanButton.UseVisualStyleBackColor = true;
+      this.cancelScanButton.Click += new System.EventHandler(this.CancelScanButton_Click);
+      // 
+      // reconfigureScanButton
+      // 
+      this.reconfigureScanButton.Enabled = false;
+      this.reconfigureScanButton.Location = new System.Drawing.Point(191, 3);
+      this.reconfigureScanButton.Name = "reconfigureScanButton";
+      this.reconfigureScanButton.Size = new System.Drawing.Size(109, 23);
+      this.reconfigureScanButton.TabIndex = 2;
+      this.reconfigureScanButton.Text = "Yes, &Customise...";
+      this.reconfigureScanButton.UseVisualStyleBackColor = true;
+      this.reconfigureScanButton.Click += new System.EventHandler(this.ReconfigureScanButton_Click);
+      // 
+      // nextScanButton
+      // 
+      this.nextScanButton.Enabled = false;
+      this.nextScanButton.Location = new System.Drawing.Point(110, 3);
+      this.nextScanButton.Name = "nextScanButton";
+      this.nextScanButton.Size = new System.Drawing.Size(75, 23);
+      this.nextScanButton.TabIndex = 1;
+      this.nextScanButton.Text = "&Yes";
+      this.nextScanButton.UseVisualStyleBackColor = true;
+      this.nextScanButton.Click += new System.EventHandler(this.NextScanButton_Click);
+      // 
+      // continueScanningLabel
+      // 
+      this.continueScanningLabel.AutoSize = true;
+      this.continueScanningLabel.Enabled = false;
+      this.continueScanningLabel.Location = new System.Drawing.Point(3, 8);
+      this.continueScanningLabel.Name = "continueScanningLabel";
+      this.continueScanningLabel.Size = new System.Drawing.Size(101, 13);
+      this.continueScanningLabel.TabIndex = 0;
+      this.continueScanningLabel.Text = "Continue scanning?";
       // 
       // fileSizeBackgroundWorker
       // 
@@ -1158,6 +1252,8 @@
       this.deviceSettingsGroupBox.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dpiNumericUpDown)).EndInit();
       this.deviceGroupBox.ResumeLayout(false);
+      this.continuationPanel.ResumeLayout(false);
+      this.continuationPanel.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1269,6 +1365,14 @@
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     private System.Windows.Forms.ToolStripMenuItem scanToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
-  }
+        private System.Windows.Forms.Panel continuationPanel;
+        private System.Windows.Forms.Button cancelScanButton;
+        private System.Windows.Forms.Button reconfigureScanButton;
+        private System.Windows.Forms.Button nextScanButton;
+        private System.Windows.Forms.Label continueScanningLabel;
+        private System.Windows.Forms.ToolStripButton saveToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
+        private System.Windows.Forms.ToolStripMenuItem inlinePromptToolStripMenuItem;
+    }
 }
 

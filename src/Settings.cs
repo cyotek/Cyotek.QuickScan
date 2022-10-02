@@ -45,6 +45,8 @@ namespace Cyotek.QuickScan
 
     private WiaImageIntent _imageIntent;
 
+    private bool _inlineScanPrompt;
+
     private Orientation _layoutOrientation;
 
     private IDictionary<PropertyTag, Tuple<PropertyTagType, string>> _metadata;
@@ -93,6 +95,7 @@ namespace Cyotek.QuickScan
       _metadata = new Dictionary<PropertyTag, Tuple<PropertyTagType, string>>();
       _saveSettingsOnExit = true;
       _nextScanSound = _defaultNextScanSound;
+      _inlineScanPrompt = true;
     }
 
     #endregion Public Constructors
@@ -161,6 +164,12 @@ namespace Cyotek.QuickScan
     {
       get => _imageIntent;
       set => this.UpdateValue(ref _imageIntent, value);
+    }
+
+    public bool InlineScanPrompt
+    {
+      get => _inlineScanPrompt;
+      set => this.UpdateValue(ref _inlineScanPrompt, value);
     }
 
     public Orientation LayoutOrientation
@@ -306,6 +315,7 @@ namespace Cyotek.QuickScan
         settings = this.CreateMachineSection(data, "UI");
         this.ReadInt(ref _optionsSplitterSize, settings[nameof(this.OptionsSplitterSize)]);
         _windowPosition = settings[nameof(this.WindowPosition)];
+        this.ReadBool(ref _inlineScanPrompt, settings[nameof(this.InlineScanPrompt)]);
 
         settings = (IniSectionToken)data.CreateSection("Sounds");
         this.ReadBool(ref _playSounds, settings[nameof(this.PlaySounds)]);
@@ -353,6 +363,7 @@ namespace Cyotek.QuickScan
       settings = this.CreateMachineSection(data, "UI");
       settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
       settings[nameof(this.WindowPosition)] = _windowPosition;
+      settings[nameof(this.InlineScanPrompt)] = _inlineScanPrompt.ToString();
 
       settings = (IniSectionToken)data.CreateSection("Sounds");
       settings[nameof(this.PlaySounds)] = _playSounds.ToString();
