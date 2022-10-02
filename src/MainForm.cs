@@ -158,6 +158,7 @@ namespace Cyotek.QuickScan
       estimateFileSizesToolStripMenuItem.Checked = _settings.EstimateFileSizes;
       fileSizeToolStripStatusLabel.Visible = _settings.EstimateFileSizes;
       playSoundsToolStripMenuItem.Checked = _settings.PlaySounds;
+      inlinePromptToolStripMenuItem.Checked = _settings.InlineScanPrompt;
 
       previewImageBox.ShowPixelGrid = _settings.ShowPixelGrid;
       this.SetOrientation(_settings.LayoutOrientation);
@@ -592,6 +593,13 @@ namespace Cyotek.QuickScan
       this.SetUnit(Unit.Inch);
     }
 
+    private void InlinePromptToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      inlinePromptToolStripMenuItem.Checked = !inlinePromptToolStripMenuItem.Checked;
+
+      _settings.InlineScanPrompt = inlinePromptToolStripMenuItem.Checked;
+    }
+
     private void LoadDevices()
     {
       IDeviceInfos devices;
@@ -779,8 +787,6 @@ namespace Cyotek.QuickScan
       playSoundsToolStripMenuItem.Checked = !playSoundsToolStripMenuItem.Checked;
 
       _settings.PlaySounds = playSoundsToolStripMenuItem.Checked;
-
-      this.ApplySettings();
     }
 
     private void PrepareElevationItems()
