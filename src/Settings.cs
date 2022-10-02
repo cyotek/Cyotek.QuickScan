@@ -95,6 +95,7 @@ namespace Cyotek.QuickScan
       _metadata = new Dictionary<PropertyTag, Tuple<PropertyTagType, string>>();
       _saveSettingsOnExit = true;
       _nextScanSound = _defaultNextScanSound;
+      _inlineScanPrompt = true;
     }
 
     #endregion Public Constructors
