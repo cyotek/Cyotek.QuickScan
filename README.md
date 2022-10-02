@@ -141,9 +141,9 @@ default. If you want to revert to the old modal message, ensure
   (greater than 600) you may end up with "corrupt" images where,
   the bottom of the image is either missing, or is composed of
   bands from other parts of the image. Not sure if this is a
-  problem with WIA or the scanner. As with most of my scanner
-  issues, I get this with the OpticSlim 1180. To resolve I
-  gradually reproduce the DPI until I get a "clean" image
+  problem with WIA or the scanner driver. As with most of my
+  scanner issues, I get this with the OpticSlim 1180. To resolve
+  I gradually reduce the DPI until I get a "clean" image
 
 ## Requirements
 
