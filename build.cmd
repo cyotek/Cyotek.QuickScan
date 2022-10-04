@@ -30,8 +30,10 @@ copy /y ..\LICENSE.txt
 copy /y ..\README.md
 copy /y ..\CHANGELOG.md
 copy /y ..\res\gmae.wav sounds\
+copy /y ..\restartservice\bin\release\rstrtwia.exe
 
 CALL sign-program ctkqscan.exe
+CALL sign-program rstrtwia.exe
 
 %zipexe% a Cyotek.QuickScan.1.0.x.zip -r
 

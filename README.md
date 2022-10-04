@@ -13,7 +13,7 @@ as possible, with automatic saving and file name generation. It
 especially shines at chain-scanning multiple images using the
 same parameters.
 
-## A note from updating from 1.0 to 1.1
+## A note when upgrading from version 1.0
 
 The original version of this application displayed a modal
 confirmation prompt each time it had finished scanning. This
@@ -29,6 +29,9 @@ can be used when chain scanning. The remainder of this document
 assumes that inline prompting is enabled as this is the new
 default. If you want to revert to the old modal message, ensure
 **Inline Prompt** from the **Options** menu is unchecked.
+
+Also note that due to a change in how the ini file is parsed,
+the **Output Folder** field will need to be reset.
 
 ## Quick Start
 
@@ -133,10 +136,8 @@ default. If you want to revert to the old modal message, ensure
   they are switched on (if they require separate power), or when
   the OS/scanner resumes from sleep. In this scenario restarting
   the _Windows Image Acquisition (WIA)_ service seems to be the
-  solution. Quick Scan _can_ do this, but the current
-  implementation isn't appropriate if you scan to a mapped drive
-  as the process has to elevate itself - and the mapped drive
-  most likely won't be available
+  solution - you can do this from within Quick Scan from the
+  **Tools** menu
 * If you are scanning large images (above A4 size) at a high DPI
   (greater than 600) you may end up with "corrupt" images where,
   the bottom of the image is either missing, or is composed of

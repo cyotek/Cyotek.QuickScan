@@ -1,15 +1,30 @@
 # Cyotek Quick Scan Change Log
 
-## 1.1 (WIP)
+## 1.2 (04Oct2022)
 
-### Breaking Change
+### Changed
 
+* If you use the **Restart WIA Service** option found in the
+  **Tools** menu, this now delegates to an external program for
+  requesting elevation and then restarting the service, avoiding
+  the core Quick Scan requiring elevation
+
+## 1.1 (02Oct2022)
+
+### Breaking
+
+* Now requires .NET Framework 4.8
 * Due to the switch in the ini parser, it is almost certain that
   when upgrading from 1.0 to 1.1 the _Output Folder_ setting
   will be corrupted and will need to be re-defined
 
 ### Added
 
+* The confirmation prompt displayed at the conclusion of an
+  scan-and-save sequence is now inline and means imagine editing
+  tools can be used when chain scanning. If you prefer the
+  original modal prompt, this can be re-enabled from the
+  **Options** menu
 * Added `ctkqscan.default.ini`, a commented ini file with all
   settings documented (including ones which can't be currently
   set in the UI). If the main `ctkqscan.ini` is missing, the
@@ -43,7 +58,7 @@
 * The UI now works properly with high DPI displays
 * Fixed a crash trying to do an immediate scan (not preview) and
   no previous scan settings were saved
-* Fixed a crash that occur occur when trying to calculate file
+* Fixed a crash that could occur when trying to calculate file
   sizes
 * The `WIA_ERROR_OFFLINE` error is gracefully handled
 * The _Save Settings on Exit_ setting is now preserved between

@@ -1,7 +1,4 @@
-﻿using System;
-using System.ServiceProcess;
-
-// Cyotek Quick Scan
+﻿// Cyotek Quick Scan
 // https://github.com/cyotek/Cyotek.QuickScan
 
 // Copyright © 2022 Cyotek Ltd.
@@ -11,6 +8,10 @@ using System.ServiceProcess;
 
 // Found this code useful?
 // https://www.cyotek.com/contribute
+
+using System;
+using System.ServiceProcess;
+using System.Windows.Forms;
 
 namespace Cyotek.QuickScan
 {
@@ -36,7 +37,7 @@ namespace Cyotek.QuickScan
           int updatedTicks;
 
           currentTicks = Environment.TickCount;
-          
+
           if (serviceController.Status != ServiceControllerStatus.Stopped)
           {
             serviceController.Stop();
@@ -50,10 +51,12 @@ namespace Cyotek.QuickScan
           serviceController.Start();
           serviceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
         }
+
+        MessageBox.Show("Service successfully restarted.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
       catch (Exception ex)
       {
-        UiHelpers.ShowError("Failed to restart service.", ex);
+        MessageBox.Show(string.Format("Failed to restart service. {0}", ex.Message), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -69,7 +72,7 @@ namespace Cyotek.QuickScan
       }
       catch (Exception ex)
       {
-        UiHelpers.ShowError("Failed to start service.", ex);
+        MessageBox.Show(string.Format("Failed to start service. {0}", ex.Message), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -85,7 +88,7 @@ namespace Cyotek.QuickScan
       }
       catch (Exception ex)
       {
-        UiHelpers.ShowError("Failed to stop service.", ex);
+        MessageBox.Show(string.Format("Failed to stop service. {0}", ex.Message), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
