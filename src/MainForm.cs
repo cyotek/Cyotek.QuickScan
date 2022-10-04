@@ -1,5 +1,4 @@
-﻿using Cyotek.Tools.DuplicateFileFinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -795,25 +794,18 @@ namespace Cyotek.QuickScan
 
     private void PrepareElevationItems()
     {
-      if (!ElevationHelper.IsElevated)
+      NativeMethods.SHSTOCKICONINFO info;
+
+      info = new NativeMethods.SHSTOCKICONINFO
       {
-        NativeMethods.SHSTOCKICONINFO info;
+        cbSize = Marshal.SizeOf<NativeMethods.SHSTOCKICONINFO>()
+      };
 
-        info = new NativeMethods.SHSTOCKICONINFO
-        {
-          cbSize = Marshal.SizeOf<NativeMethods.SHSTOCKICONINFO>()
-        };
+      NativeMethods.SHGetStockIconInfo(NativeMethods.SIID_SHIELD, NativeMethods.SHGSI_ICON | NativeMethods.SHGSI_SMALLICON, ref info);
 
-        NativeMethods.SHGetStockIconInfo(NativeMethods.SIID_SHIELD, NativeMethods.SHGSI_ICON | NativeMethods.SHGSI_SMALLICON, ref info);
+      restartWIAServiceToolStripMenuItem.Image = Icon.FromHandle(info.hIcon).ToBitmap();
 
-        restartWIAServiceToolStripMenuItem.Image = Icon.FromHandle(info.hIcon).ToBitmap();
-
-        NativeMethods.DestroyIcon(info.hIcon);
-      }
-    }
-
-    private void PreviewButton_Click(object sender, EventArgs e)
-    {
+      NativeMethods.DestroyIcon(info.hIcon);
     }
 
     private void PreviewImageBox_ShowPixelGridChanged(object sender, EventArgs e)
@@ -866,19 +858,17 @@ namespace Cyotek.QuickScan
 
     private void RestartWIAServiceToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      if (ElevationHelper.IsElevated)
+      string fileName;
+
+      fileName = Path.Combine(Application.StartupPath, "rstrtwia.exe");
+
+      try
       {
-        if (MessageBox.Show("Are you sure you want to restart the WIA service?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-        {
-          using (this.CreateStatusController("Restarting WIA service..."))
-          {
-            ServiceUtilities.RestartService(ServiceUtilities.WiaServiceName, ServiceUtilities.DefaultTimeOut);
-          }
-        }
+        Process.Start(fileName);
       }
-      else if (MessageBox.Show("This action requires elevation. Restart as administrator?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+      catch (Exception ex)
       {
-        ElevationHelper.Elevate();
+        UiHelpers.ShowError("Failed to execute helper program.", ex);
       }
     }
 

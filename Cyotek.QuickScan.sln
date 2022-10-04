@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29209.62
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyotek.QuickScan", "src\Cyotek.QuickScan.csproj", "{6802C96F-97BD-4AC1-B399-D0F97A1D4BE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyotek.QuickScan.RestartService", "restartservice\Cyotek.QuickScan.RestartService.csproj", "{40035A0E-03CC-4C17-9B32-BAFD10A30F8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6802C96F-97BD-4AC1-B399-D0F97A1D4BE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6802C96F-97BD-4AC1-B399-D0F97A1D4BE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6802C96F-97BD-4AC1-B399-D0F97A1D4BE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40035A0E-03CC-4C17-9B32-BAFD10A30F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40035A0E-03CC-4C17-9B32-BAFD10A30F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40035A0E-03CC-4C17-9B32-BAFD10A30F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40035A0E-03CC-4C17-9B32-BAFD10A30F8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
