@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 // Cyotek Quick Scan
@@ -18,9 +19,11 @@ namespace Cyotek.QuickScan
   {
     #region Public Methods
 
-    public static string MailMerge(this string text, IDictionary<string, string> tokens, char tokenStart, char tokenEnd)
+    public static bool EqualsIgnoreCase(this string a, string b) => string.Equals(a, b, StringComparison.InvariantCultureIgnoreCase);
+
+    public static string MailMerge(this string text, char tokenStart, char tokenEnd, Func<string, string> evaluate)
     {
-      if (text != null && tokens != null && tokens.Count != 0)
+      if (text != null)
       {
         int length;
 
@@ -49,16 +52,14 @@ namespace Cyotek.QuickScan
             else if (c == tokenEnd && readingField)
             {
               string key;
+              string result;
 
               key = name.ToString();
+              result = evaluate(key);
 
-              if (tokens.TryGetValue(key, out string value))
+              if (result != null)
               {
-                sb.Append(value);
-              }
-              else if (tokens.TryGetValue(tokenStart + key + tokenEnd, out value))
-              {
-                sb.Append(value);
+                sb.Append(result);
               }
               else
               {
