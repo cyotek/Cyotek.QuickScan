@@ -118,12 +118,7 @@ the **Output Folder** field will need to be reset.
   110 and 220, I haven't had any issues. With the Plustek
   OpticSlim 1180 I _always_ have to display the WIA Scan
   dialogue and reselect all parameters
-* Rarely, the program will crash when trying to read WIA
-  properties in order to generate EXIF metadata. When this
-  happens, I usually just start again from where I left off
-  (remembering to manually reset the counter!) as lightening
-  generally doesn't hit twice. I have ideas on resolving this in
-  a future PR.
+* Rarely, reading WIA properties causes a crash
 * Sometimes, an image is so large the program crashes trying to
   save the modified version. When this happens, Quick Scan will
   instead save the original image from the scanner. This keeps
