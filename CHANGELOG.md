@@ -1,5 +1,15 @@
 # Cyotek Quick Scan Change Log
 
+## 1.2.1 (08Oct2022)
+
+### Fixed
+
+* Metadata tokens are now evaluated on demand, preventing a
+  fatal crash which sometimes occurred when saving an image and
+  trying to read all WIA device properties
+* Timestamp saved into images is now the timestamp of the scan,
+  not that of the time the image was saved
+
 ## 1.2 (04Oct2022)
 
 ### Changed

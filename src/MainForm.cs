@@ -42,6 +42,8 @@ namespace Cyotek.QuickScan
 
     private bool _isLimitedUi;
 
+    private DateTimeOffset _lastScanDateTime;
+
     private Settings _settings;
 
     private SoundPlayer _soundPlayer;
@@ -128,13 +130,9 @@ namespace Cyotek.QuickScan
 
     private void AddMetadata(Image image)
     {
-      Dictionary<string, string> fields;
-
-      fields = this.GetMergeFields();
-
       foreach (KeyValuePair<PropertyTag, Tuple<PropertyTagType, string>> pair in _settings.Metadata)
       {
-        image.SetPropertyItem(pair.Key, pair.Value.Item1, pair.Value.Item2.MailMerge(fields, '{', '}'));
+        image.SetPropertyItem(pair.Key, pair.Value.Item1, pair.Value.Item2.MailMerge('{', '}', this.EvaluateMergeToken));
       }
     }
 
@@ -340,6 +338,57 @@ namespace Cyotek.QuickScan
       this.ApplySettings();
     }
 
+    private string EvaluateMergeToken(string token)
+    {
+      string result;
+
+      if (token.EqualsIgnoreCase("now"))
+      {
+        result = _lastScanDateTime.ToString("s");
+      }
+      else if (token.EqualsIgnoreCase("now:exif"))
+      {
+        result = _lastScanDateTime.ToString("yyyy:MM:dd HH:mm:ss");
+      }
+      else if (token.EqualsIgnoreCase("year"))
+      {
+        result = _lastScanDateTime.Year.ToString(CultureInfo.InvariantCulture);
+      }
+      else if (token.EqualsIgnoreCase("appname"))
+      {
+        result = Application.ProductName;
+      }
+      else if (token.EqualsIgnoreCase("appversion"))
+      {
+        result = Application.ProductVersion;
+      }
+      else if (token != null && token.Length > 1 && token[0] == '#')
+      {
+        result = null;
+        token = token.Substring(1);
+
+        // TODO: This will be wrong if multiple devices are present and the user
+        // chooses a different one from the dialog versus this selection
+        this.PerformDeviceAction(device =>
+        {
+          foreach (Property property in device.Properties)
+          {
+            if (property.Name.EqualsIgnoreCase(token))
+            {
+              result = property.GetValueString();
+              break;
+            }
+          }
+        });
+      }
+      else
+      {
+        result = null;
+      }
+
+      return result;
+    }
+
     private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.Close();
@@ -477,32 +526,6 @@ namespace Cyotek.QuickScan
       this.HideContinuationBar();
 
       return _continuationResult;
-    }
-
-    private Dictionary<string, string> GetMergeFields()
-    {
-      Dictionary<string, string> fields;
-
-      fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-      {
-        { "now", DateTime.UtcNow.ToString("s") },
-        { "now:exif", DateTime.UtcNow.ToString("yyyy:MM:dd HH:mm:ss") },
-        { "year", DateTime.UtcNow.Year.ToString(CultureInfo.InvariantCulture) },
-        { "appname", Application.ProductName },
-        { "appversion", Application.ProductVersion },
-      };
-
-      // TODO: This will be wrong if multiple devices are present and the user
-      // chooses a different one from the dialog versus this selection
-      this.PerformDeviceAction(device =>
-      {
-        foreach (Property property in device.Properties)
-        {
-          fields.Add("#" + property.Name, property.GetValueString());
-        }
-      });
-
-      return fields;
     }
 
     private Device GetSelectedDevice()
@@ -914,6 +937,8 @@ namespace Cyotek.QuickScan
           if (image != null)
           {
             string fileName;
+
+            _lastScanDateTime = DateTimeOffset.UtcNow;
 
             this.SetImage(image);
 

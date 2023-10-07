@@ -91,7 +91,14 @@ namespace Cyotek.QuickScan
           property = _properties[i + 1];
           type = (WiaPropertyType)property.Type;
 
-          value = property.GetValueString();
+          try
+          {
+            value = property.GetValueString();
+          }
+          catch (Exception ex)
+          {
+            value = "{" + ex.Message + "}";
+          }
 
           item = new ListViewItem();
 
