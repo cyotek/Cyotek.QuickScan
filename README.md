@@ -86,6 +86,26 @@ the **Output Folder** field will need to be reset.
     generated and the counter incremented (if these features are
     enabled)
 
+## A note for Windows 10 users
+
+I do most of my scanning on Windows 11, but recently when using
+Windows 10, I was irked to find focus kept getting stolen from
+the application I was entering data in back to Quick Scan (which
+is why I put in the inline feature to begin with!). Version 1.3
+introduces a new per-machine "Show Progress" option that
+controls if the progress dialog for _subsequent_ scans is
+displayed. While this is useful for avoiding having Quick Scan
+take focus after while you're working in another application, it
+has the following caveats
+
+1. It only applies to scans reusing previous parameters. If you
+   display the WIA GUI to configure the scan size etc, progress
+   will be shown for that first scan
+2. As far as I know it isn't possible to get the progress
+   programmatically, so there isn't an inline progress bar
+3. In a similar fashion to the above, there isn't a way to
+   cancel a scan either
+
 ## Other Features
 
 * Copy - copies the current image to the Windows Clipboard
