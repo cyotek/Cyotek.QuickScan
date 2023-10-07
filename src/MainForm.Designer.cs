@@ -142,6 +142,7 @@
       this.continueScanningLabel = new System.Windows.Forms.Label();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+      this.showProgressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -450,6 +451,7 @@
             this.playSoundsToolStripMenuItem,
             this.toolStripMenuItem12,
             this.inlinePromptToolStripMenuItem,
+            this.showProgressToolStripMenuItem,
             this.toolStripMenuItem10,
             this.saveSettingsOnExitToolStripMenuItem,
             this.saveSettingsNowToolStripMenuItem});
@@ -1216,6 +1218,13 @@
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
       // 
+      // showProgressToolStripMenuItem
+      // 
+      this.showProgressToolStripMenuItem.Name = "showProgressToolStripMenuItem";
+      this.showProgressToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+      this.showProgressToolStripMenuItem.Text = "Show Pro&gress";
+      this.showProgressToolStripMenuItem.Click += new System.EventHandler(this.ShowProgressToolStripMenuItem_Click);
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1373,6 +1382,7 @@
         private System.Windows.Forms.ToolStripButton saveToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
         private System.Windows.Forms.ToolStripMenuItem inlinePromptToolStripMenuItem;
-    }
+    private System.Windows.Forms.ToolStripMenuItem showProgressToolStripMenuItem;
+  }
 }
 

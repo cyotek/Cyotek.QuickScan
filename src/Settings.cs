@@ -9,7 +9,7 @@ using WIA;
 // Cyotek Quick Scan
 // https://github.com/cyotek/Cyotek.QuickScan
 
-// Copyright © 2019-2022 Cyotek Ltd.
+// Copyright © 2019-2023 Cyotek Ltd.
 
 // This work is licensed under the MIT License.
 // See LICENSE.TXT for the full text
@@ -71,6 +71,8 @@ namespace Cyotek.QuickScan
 
     private bool _showPreview;
 
+    private bool _showProgress;
+
     private Unit _unit;
 
     private bool _useCounter;
@@ -96,6 +98,7 @@ namespace Cyotek.QuickScan
       _saveSettingsOnExit = true;
       _nextScanSound = _defaultNextScanSound;
       _inlineScanPrompt = true;
+      _showProgress = true;
     }
 
     #endregion Public Constructors
@@ -240,6 +243,12 @@ namespace Cyotek.QuickScan
       set => this.UpdateValue(ref _showPreview, value);
     }
 
+    public bool ShowProgress
+    {
+      get => _showProgress;
+      set => this.UpdateValue(ref _showProgress, value);
+    }
+
     public Unit Unit
     {
       get => _unit;
@@ -313,6 +322,7 @@ namespace Cyotek.QuickScan
         this.ReadEnum(ref _unit, settings["Unit"]);
 
         settings = this.CreateMachineSection(data, "UI");
+        this.ReadBool(ref _showProgress, settings[nameof(this.ShowProgress)]);
         this.ReadInt(ref _optionsSplitterSize, settings[nameof(this.OptionsSplitterSize)]);
         _windowPosition = settings[nameof(this.WindowPosition)];
         this.ReadBool(ref _inlineScanPrompt, settings[nameof(this.InlineScanPrompt)]);
@@ -361,6 +371,7 @@ namespace Cyotek.QuickScan
       settings["Orientation"] = _layoutOrientation.ToString();
 
       settings = this.CreateMachineSection(data, "UI");
+      settings[nameof(this.ShowProgress)] = _showProgress.ToString(CultureInfo.InvariantCulture);
       settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
       settings[nameof(this.WindowPosition)] = _windowPosition;
       settings[nameof(this.InlineScanPrompt)] = _inlineScanPrompt.ToString();
