@@ -16,7 +16,7 @@ using WiaProperties = WIA.Properties;
 // Cyotek Quick Scan
 // https://github.com/cyotek/Cyotek.QuickScan
 
-// Copyright © 2019-2022 Cyotek Ltd.
+// Copyright © 2019-2023 Cyotek Ltd.
 
 // This work is licensed under the MIT License.
 // See LICENSE.TXT for the full text
@@ -158,6 +158,7 @@ namespace Cyotek.QuickScan
       fileSizeToolStripStatusLabel.Visible = _settings.EstimateFileSizes;
       playSoundsToolStripMenuItem.Checked = _settings.PlaySounds;
       inlinePromptToolStripMenuItem.Checked = _settings.InlineScanPrompt;
+      showProgressToolStripMenuItem.Checked = _settings.ShowProgress;
 
       continuationPanel.Visible = _settings.InlineScanPrompt;
 
@@ -853,7 +854,9 @@ namespace Cyotek.QuickScan
 
       this.SetDeviceProperties(item.Properties, _image.Width, _image.Height);
 
-      return dialog.ShowTransfer(item, _settings.FormatString, false);
+      return _settings.ShowProgress
+        ? dialog.ShowTransfer(item, _settings.FormatString, false)
+        : item.Transfer(_settings.FormatString);
     }
 
     private void RestartWIAServiceToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1440,6 +1443,13 @@ namespace Cyotek.QuickScan
     private void ShowPreviewToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.SetPreview(!_settings.ShowPreview);
+    }
+
+    private void ShowProgressToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      showProgressToolStripMenuItem.Checked = !showProgressToolStripMenuItem.Checked;
+
+      _settings.ShowProgress = showProgressToolStripMenuItem.Checked;
     }
 
     private void SplitContainer_SplitterMoved(object sender, SplitterEventArgs e)
