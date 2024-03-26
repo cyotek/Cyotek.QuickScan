@@ -722,22 +722,6 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private void PerformDeviceInfoAction(Action<DeviceInfo> action)
-    {
-      DeviceInfo device;
-
-      device = this.GetSelectedDeviceInfo();
-
-      if (device != null)
-      {
-        action(device);
-      }
-      else
-      {
-        UiHelpers.ShowWarning("No device selected.");
-      }
-    }
-
     private void PerformImageAction(Func<Image, Image> action)
     {
       if (_image != null)
@@ -1127,31 +1111,6 @@ namespace Cyotek.QuickScan
       {
         MessageBox.Show(string.Format("File saved to {0}.", fileName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
-    }
-
-    private void ScanButton_Click(object sender, EventArgs e)
-    {
-      this.RunScanLoop((device, dialog) =>
-      {
-        Item item;
-        ImageFile image;
-
-        item = device.Items[1];
-
-        this.SetDeviceProperties(item.Properties, -1, -1);
-
-        try
-        {
-          image = dialog.ShowTransfer(item, _settings.FormatString, false);
-        }
-        catch (Exception ex)
-        {
-          UiHelpers.ShowError("Failed to scan image.", ex);
-          image = null;
-        }
-
-        return image;
-      });
     }
 
     private void ScanPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
