@@ -84,9 +84,8 @@ namespace Cyotek.QuickScan
         versionLabel.Text = string.Format("Version {0}", info.FileVersion);
         copyrightLabel.Text = info.LegalCopyright;
 
-        //this.AddReadme("changelog.md");
+        this.AddReadme("changelog.md");
         this.AddReadme("readme.md");
-        //this.AddReadme("acknowledgements.md");
         this.AddReadme("license.txt");
 
         this.LoadDocumentForTab(docsTabControl.SelectedTab);
