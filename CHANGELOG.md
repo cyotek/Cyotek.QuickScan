@@ -1,5 +1,12 @@
 # Cyotek Quick Scan Change Log
 
+## 1.3 (07Oct2023)
+
+### Added
+
+* Added new Show Progress option. If disabled, the transfer
+  progress dialog when chain scanning is no longer displayed
+
 ## 1.2.1 (08Oct2022)
 
 ### Fixed
