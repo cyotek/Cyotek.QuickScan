@@ -84,6 +84,17 @@ namespace Cyotek.QuickScan
       return properties[((int)id).ToString()];
     }
 
+    public static int GetPropertyInt32Value(this WiaProperties properties, WiaPropertyId id)
+    {
+      Property property;
+
+      property = properties.GetProperty(id);
+
+      return property != null && (WiaPropertyType)property.Type == WiaPropertyType.LongPropertyType
+        ? (int)property.get_Value()
+        : 0;
+    }
+
     [HandleProcessCorruptedStateExceptions]
     public static string GetValueString(this Property property)
     {

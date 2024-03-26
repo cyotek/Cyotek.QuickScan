@@ -44,6 +44,14 @@ namespace Cyotek.QuickScan
 
     private DateTimeOffset _lastScanDateTime;
 
+    private int _lastScanHeight;
+
+    private int _lastScanWidth;
+
+    private int _lastScanXPos;
+
+    private int _lastScanYPos;
+
     private Settings _settings;
 
     private SoundPlayer _soundPlayer;
@@ -755,6 +763,53 @@ namespace Cyotek.QuickScan
       }
     }
 
+    private ImageFile PerformNewScan(Device device, CommonDialog dialog)
+    {
+      Items items;
+      ImageFile result;
+
+      // if you use ShowAcquireImage, the resulting device properties don't
+      // reflect the original scan. For example, WIA_IPS_XPOS and WIA_IPS_YPOS
+      // will both be zero, even if co-ordinates were originally offset. To
+      // allow chain scanning when using non-zero co-ordinates, we need to use
+      // ShowSelectItems to get the "definition" of the pending scan, extract
+      // what we need, then manually request the scan with.
+      //
+      // Happily, this also allows me to fix a previous bug where if the DPI of
+      // the scan didn't match the UI DPI, subsequent scans would either be
+      // invalid or fail.
+
+      items = dialog.ShowSelectItems(device, Intent: _settings.ImageIntent, Bias: WiaImageBias.MaximizeQuality, SingleSelect: true, UseCommonUI: true, CancelError: false);
+
+      if (items != null && items.Count == 1)
+      {
+        WiaProperties properties;
+
+        properties = items[1].Properties;
+
+        _lastScanXPos = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_XPOS);
+        _lastScanYPos = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_YPOS);
+        _lastScanWidth = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_XEXTENT);
+        _lastScanHeight = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_YEXTENT);
+
+        // TODO: Intent is going to be wrong if user chooses Grayscale or Black
+        // and White in the GUI. This actually maps to WIA_IPA_DATATYPE (4103
+        // with values including WIA_DATA_COLOR_DITHER, WIA_DATA_GRAYSCALE and
+        // WIA_DATA_THRESHOLD which I only discovered while testing this new approach
+
+        this.SetIntent((WiaImageIntent)properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_CUR_INTENT));
+        this.SetDpi(properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_XRES));
+
+        result = this.RepeatLastScan(device, dialog);
+      }
+      else
+      {
+        result = null;
+      }
+
+      return result;
+    }
+
     private void PixelGridToolStripMenuItem_Click(object sender, EventArgs e)
     {
       _settings.ShowPixelGrid = !_settings.ShowPixelGrid;
@@ -859,7 +914,7 @@ namespace Cyotek.QuickScan
 
       item = device.Items[1];
 
-      this.SetDeviceProperties(item.Properties, _image.Width, _image.Height);
+      this.SetDeviceProperties(item.Properties, _lastScanXPos, _lastScanYPos, _lastScanWidth, _lastScanHeight);
 
       return _settings.ShowProgress
         ? dialog.ShowTransfer(item, _settings.FormatString, false)
@@ -900,7 +955,7 @@ namespace Cyotek.QuickScan
       });
     }
 
-    private void RunScanLoop(Func<Device, CommonDialog, ImageFile> getImage)
+    private void RunScanLoop()
     {
       if (this.ValidateOutputOptions(true))
       {
@@ -914,9 +969,9 @@ namespace Cyotek.QuickScan
         {
           ImageFile image;
 
-          image = this.GetImage(keepSize
-            ? this.RepeatLastScan
-            : getImage);
+          image = keepSize
+            ? this.GetImage(this.RepeatLastScan)
+            : this.GetImage(this.PerformNewScan);
 
           if (image != null)
           {
@@ -1121,15 +1176,13 @@ namespace Cyotek.QuickScan
 
         properties = device.Items[1].Properties;
 
-        this.SetDeviceProperties(properties, -1, -1);
-
         PropertiesDialog.ShowPropertiesDialog(properties);
       });
     }
 
     private void ScanToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      this.RunScanLoop((_, dialog) => dialog.ShowAcquireImage(WiaDeviceType.ScannerDeviceType, _settings.ImageIntent, WiaImageBias.MaximizeQuality, _settings.FormatString, false, true, false));
+      this.RunScanLoop();
     }
 
     private void SetContinuationBarState(bool enabled)
@@ -1166,7 +1219,7 @@ namespace Cyotek.QuickScan
       }
     }
 
-    private void SetDeviceProperties(WiaProperties deviceProperties, int width, int height)
+    private void SetDeviceProperties(WiaProperties deviceProperties, int left, int top, int width, int height)
     {
       if (_settings.ScanDpi <= 0)
       {
@@ -1178,13 +1231,16 @@ namespace Cyotek.QuickScan
       deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XRES, _settings.ScanDpi);
       deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YRES, _settings.ScanDpi);
 
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XPOS, left);
+      deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YPOS, top);
+
       if (width < 0)
       {
         deviceProperties.SetPropertyMaximum(WiaPropertyId.WIA_IPS_XEXTENT);
       }
       else
       {
-        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XEXTENT, _image.Width);
+        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_XEXTENT, width);
       }
 
       if (height < 0)
@@ -1193,7 +1249,7 @@ namespace Cyotek.QuickScan
       }
       else
       {
-        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YEXTENT, _image.Height);
+        deviceProperties.SetPropertyValue(WiaPropertyId.WIA_IPS_YEXTENT, height);
       }
     }
 
@@ -1234,6 +1290,8 @@ namespace Cyotek.QuickScan
 
     private void SetDpi(int dpi)
     {
+      _settings.ScanDpi = dpi;
+
       if (dpi >= dpiNumericUpDown.Minimum && dpi <= dpiNumericUpDown.Maximum)
       {
         dpiNumericUpDown.Value = dpi;
@@ -1309,6 +1367,8 @@ namespace Cyotek.QuickScan
 
     private void SetIntent(WiaImageIntent imageIntent)
     {
+      _settings.ImageIntent = imageIntent;
+
       for (int i = 0; i < typeComboBox.Items.Count; i++)
       {
         if (typeComboBox.Items[i] is KeyValueListBoxItem<WiaImageIntent> item && item.Value == imageIntent)
