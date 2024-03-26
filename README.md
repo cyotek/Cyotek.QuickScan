@@ -117,34 +117,37 @@ has the following caveats
 * This is only a slight step above an internal tool, so UX may
   not be great and error handling certainly isn't. Please report
   any problems so I can continue to improve this tool.
-* If you have multiple scanners, make sure you select the device
-  you want to use first before clicking **Scan**. WIA will
-  always prompt for a device when there is more than one (even
-  if instructed not to!), and if the device you select doesn't
-  match the window selection, subsequent scans will fail. Most
-  of my scanners are USB based and only appear when plugged in,
-  so that part is easy. The scanner on my Brother laser printer
-  always appears regardless of if the printer is switched on or
-  off. As I rarely use this scanner I disable it (but _not_ the
-  printer) in Device Manager to prevent it being seen by WIA
-* If (as you probably should) you always choose **Custom
+* ~~If you have multiple scanners, make sure you select the
+  device you want to use first before clicking **Scan**. WIA
+  will always prompt for a device when there is more than one
+  (even if instructed not to!), and if the device you select
+  doesn't match the window selection, subsequent scans will
+  fail. Most of my scanners are USB based and only appear when
+  plugged in, so that part is easy. The scanner on my Brother
+  laser printer always appears regardless of if the printer is
+  switched on or off. As I rarely use this scanner I disable it
+  (but _not_ the printer) in Device Manager to prevent it being
+  seen by WIA.~~ This is fixed in v1.4 I believe.
+* ~~If (as you probably should) you always choose **Custom
   Settings** from the **Scan** dialogue and you customise those
   settings so the chosen DPI no longer matches the DPI in the
   Quick Scan window, subsequent scans will be wrong. At the
   moment I haven't worked out how to retrieve the parameters
-  used for the scan in order to properly update
-* Related to the above, depending on the scanner, repeating a
+  used for the scan in order to properly update.~~ This is fixed
+  in 1.4.
+* ~~Related to the above, depending on the scanner, repeating a
   scan using the same settings may fail. For the CanoScan LiDE
   110 and 220, I haven't had any issues. With the Plustek
   OpticSlim 1180 I _always_ have to display the WIA Scan
-  dialogue and reselect all parameters
-* Rarely, reading WIA properties causes a crash
+  dialogue and reselect all parameters.~~ This should be fixed
+  in 1.4.
+* Rarely, reading WIA properties causes a crash.
 * Sometimes, an image is so large the program crashes trying to
   save the modified version. When this happens, Quick Scan will
   instead save the original image from the scanner. This keeps
   the scan, but means it is saved in the scanners native format
   (always BMP in my experience), and with no additional features
-  such as EXIF generation or rotation
+  such as EXIF generation or rotation.
 * Some scanners seem very badly behaved (again, rarely have an
   issue with the CanoScan, but the OpticSlim does this _every
   time_) and sometimes WIA can't connect to the devices when
@@ -152,14 +155,14 @@ has the following caveats
   the OS/scanner resumes from sleep. In this scenario restarting
   the _Windows Image Acquisition (WIA)_ service seems to be the
   solution - you can do this from within Quick Scan from the
-  **Tools** menu
+  **Tools** menu.
 * If you are scanning large images (above A4 size) at a high DPI
   (greater than 600) you may end up with "corrupt" images where,
   the bottom of the image is either missing, or is composed of
   bands from other parts of the image. Not sure if this is a
   problem with WIA or the scanner driver. As with most of my
   scanner issues, I get this with the OpticSlim 1180. To resolve
-  I gradually reduce the DPI until I get a "clean" image
+  I gradually reduce the DPI until I get a "clean" image.
 
 ## Requirements
 
@@ -188,7 +191,8 @@ doesn't (yet?) support using the TWAIN interface.
 
 * Brother MFC-L2710DW, Windows 10
 * Brother MFC-L2750DW, Windows 10
-* CanoScan LiDE 100, Windows 10 ([yes, this works perfectly well][scanblog])
+* CanoScan LiDE 100, Windows 10 ([yes, this works perfectly
+  well][scanblog])
 * CanoScan LiDE 100, Windows 11
 * CanoScan LiDE 220, Windows 10
 * CanoScan LiDE 220, Windows 11
@@ -197,7 +201,8 @@ doesn't (yet?) support using the TWAIN interface.
 
 ## Background, or why I created this tool
 
-![A older screenshot of the application in use on Windows 10][screenshot]
+![A older screenshot of the application in use on Windows
+10][screenshot]
 
 For the past few years, and in a somewhat adhoc fashion, I've
 been attempting to catalog the piles of DVDs, music CD's, books,

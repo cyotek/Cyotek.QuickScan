@@ -136,6 +136,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="..\CHANGELOG.md">
+      <Link>CHANGELOG.md</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\README.md">
       <Link>README.md</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

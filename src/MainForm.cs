@@ -16,7 +16,7 @@ using WiaProperties = WIA.Properties;
 // Cyotek Quick Scan
 // https://github.com/cyotek/Cyotek.QuickScan
 
-// Copyright © 2019-2023 Cyotek Ltd.
+// Copyright © 2019-2024 Cyotek Ltd.
 
 // This work is licensed under the MIT License.
 // See LICENSE.TXT for the full text
