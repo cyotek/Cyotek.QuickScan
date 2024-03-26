@@ -25,7 +25,7 @@ namespace restartservice
     [STAThread]
     private static void Main()
     {
-      if (MessageBox.Show("Are you sure you want to restart the \"Windows Image Aquisition (WIA)\" service?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+      if (MessageBox.Show("Are you sure you want to restart the \"Windows Image Acquisition (WIA)\" service?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
       {
         ServiceUtilities.RestartService(ServiceUtilities.WiaServiceName, ServiceUtilities.DefaultTimeOut);
       }
