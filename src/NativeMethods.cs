@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 // Cyotek Quick Scan
 // https://github.com/cyotek/Cyotek.QuickScan
 
-// Copyright © 2019-2022 Cyotek Ltd.
+// Copyright © 2019-2024 Cyotek Ltd.
 
 // This work is licensed under the MIT License.
 // See LICENSE.TXT for the full text
@@ -18,6 +18,8 @@ namespace Cyotek.QuickScan
   {
     #region Public Fields
 
+    public const int GW_OWNER = 4;
+
     public const int MAX_PATH = 260;
 
     public const int SHGSI_ICON = 0x000000100;
@@ -26,12 +28,25 @@ namespace Cyotek.QuickScan
 
     public const int SIID_SHIELD = 77;
 
+    public const int SWP_NOACTIVATE = 0X10;
+
+    public const int SWP_NOZORDER = 0X4;
+
     #endregion Public Fields
 
     #region Public Methods
 
     [DllImport("user32.dll")]
     public static extern int DestroyIcon(IntPtr hIcon);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr GetWindow(IntPtr hWnd, int wCmd);
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
+    public static extern IntPtr SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
 
     [DllImport("uxtheme.dll", CharSet = CharSet.Unicode)]
     public static extern int SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);

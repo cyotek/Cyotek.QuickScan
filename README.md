@@ -1,7 +1,10 @@
 # Cyotek QuickScan
 
 > A simple application that allows for scanning resources from
-> any WIA compatible scanner
+> any WIA compatible scanner and automatically saving images. It
+> shines at performing multiple scans without having to show a
+> UI, saving large amounts of time when scanning same-sized
+> items.
 
 ![A screenshot of the application in use on Windows 11, 200%
 display scaling][screenshot2]
@@ -90,27 +93,28 @@ the **Output Folder** field will need to be reset.
 
 I do most of my scanning on Windows 11, but recently when using
 Windows 10, I was irked to find focus kept getting stolen from
-the application I was entering data in back to Quick Scan (which
-is why I put in the inline feature to begin with!). Version 1.3
-introduces a new per-machine "Show Progress" option that
-controls if the progress dialog for _subsequent_ scans is
+the application I was entering data into back to Quick Scan
+(which is why I put in the inline feature to begin with!).
+Version 1.3 introduces a new per-machine "Show Progress" option
+that controls if the progress dialog whilst scanning is
 displayed. While this is useful for avoiding having Quick Scan
-take focus after while you're working in another application, it
-has the following caveats
+take focus when you're working in another application, it has
+the following caveats:
 
-1. It only applies to scans reusing previous parameters. If you
-   display the WIA GUI to configure the scan size etc, progress
-   will be shown for that first scan
-2. As far as I know it isn't possible to get the progress
+1. As far as I know it isn't possible to get the progress
    programmatically, so there isn't an inline progress bar
-3. In a similar fashion to the above, there isn't a way to
+2. In a similar fashion to the above, there isn't a way to
    cancel a scan either
 
 ## Other Features
 
-* Copy - copies the current image to the Windows Clipboard
+* Copy - copies the current image to the Windows Clipboard.
 * Paste - pastes an image from the Windows Clipboard which can
-  then be manipulated and saved as if it were any other scan
+  then be manipulated and saved as if it were any other scan.
+* Maximise Scan Window setting - this experimental setting
+  attempts to maximise the WIA scan dialogue, which may be
+  useful for selecting accurate scan regions as the default
+  preview is very small.
 
 ## Known Issues
 

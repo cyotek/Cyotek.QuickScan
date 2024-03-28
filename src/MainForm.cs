@@ -8,9 +8,11 @@ using System.Globalization;
 using System.IO;
 using System.Media;
 using System.Runtime.InteropServices;
+using System.Timers;
 using System.Windows.Forms;
 using WIA;
 using CommonDialog = WIA.CommonDialog;
+using Timer = System.Timers.Timer;
 using WiaProperties = WIA.Properties;
 
 // Cyotek Quick Scan
@@ -36,6 +38,12 @@ namespace Cyotek.QuickScan
 
     private IDeviceManager _deviceManager;
 
+    private Timer _dialogResizeTimer;
+
+    private int _findWindowRetryCount;
+
+    private IntPtr _handle;
+
     private Image _image;
 
     private ImageFile _imageFile;
@@ -51,6 +59,8 @@ namespace Cyotek.QuickScan
     private int _lastScanXPos;
 
     private int _lastScanYPos;
+
+    private string _selectedDeviceName;
 
     private Settings _settings;
 
@@ -203,6 +213,7 @@ namespace Cyotek.QuickScan
       playSoundsToolStripMenuItem.Checked = _settings.PlaySounds;
       inlinePromptToolStripMenuItem.Checked = _settings.InlineScanPrompt;
       showProgressToolStripMenuItem.Checked = _settings.ShowProgress;
+      maximizeScanWindowToolStripMenuItem.Checked = _settings.MaximizeScanDialog;
 
       continuationPanel.Visible = _settings.InlineScanPrompt;
 
@@ -298,6 +309,13 @@ namespace Cyotek.QuickScan
 
     private void CleanUp()
     {
+      if (_dialogResizeTimer != null)
+      {
+        _dialogResizeTimer.Stop();
+        _dialogResizeTimer.Dispose();
+        _dialogResizeTimer = null;
+      }
+
       previewImageBox.Image = null;
 
       if (_image != null)
@@ -368,6 +386,11 @@ namespace Cyotek.QuickScan
       {
         PropertiesDialog.ShowPropertiesDialog(device.Properties);
       });
+    }
+
+    private void DialogResizeTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+      this.ResizeWiaWindow();
     }
 
     private void DpiNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -644,6 +667,13 @@ namespace Cyotek.QuickScan
       return deviceInfo;
     }
 
+    private string GetSelectedDeviceName()
+    {
+      return deviceComboBox.SelectedItem is DeviceListBoxItem deviceListBoxItem
+        ? deviceListBoxItem.Name
+        : null;
+    }
+
     private void HideContinuationBar()
     {
       this.SetContinuationBarState(false);
@@ -726,6 +756,13 @@ namespace Cyotek.QuickScan
       typeComboBox.SelectedIndex = 0;
     }
 
+    private void MaximizeScanWindowToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      maximizeScanWindowToolStripMenuItem.Checked = !maximizeScanWindowToolStripMenuItem.Checked;
+
+      _settings.MaximizeScanDialog = maximizeScanWindowToolStripMenuItem.Checked;
+    }
+
     private void NextScanButton_Click(object sender, EventArgs e)
     {
       _continuationResult = DialogResult.Yes;
@@ -805,6 +842,8 @@ namespace Cyotek.QuickScan
     {
       Items items;
       ImageFile result;
+
+      this.PrepareResizeDialogTimer();
 
       // if you use ShowAcquireImage, the resulting device properties don't
       // reflect the original scan. For example, WIA_IPS_XPOS and WIA_IPS_YPOS
@@ -910,6 +949,33 @@ namespace Cyotek.QuickScan
       NativeMethods.DestroyIcon(info.hIcon);
     }
 
+    private void PrepareResizeDialogTimer()
+    {
+      if (_settings.MaximizeScanDialog)
+      {
+        // this is a bit hacky. Can't use a WinForms Timer as this is blocked
+        // until the WIA dialog is dismissed, which kind of defeats the purpose.
+        // I'm using a System.Timers.Timer instead as this fires on a different
+        // thread. The problem with _that_ is that means I can't access UI
+        // properties such as the window handle or the selected device name. Can't
+        // invoke or synchronise as that too is blocked. So I'm storing the values
+        // up front to work around this.
+
+        _handle = this.Handle;
+        _selectedDeviceName = string.Format(_settings.ScanDialogTitle, this.GetSelectedDeviceName());
+
+        _findWindowRetryCount = 0;
+
+        if (_dialogResizeTimer == null)
+        {
+          _dialogResizeTimer = new Timer { AutoReset = true, Interval = 100 };
+          _dialogResizeTimer.Elapsed += this.DialogResizeTimerElapsed;
+        }
+
+        _dialogResizeTimer.Start();
+      }
+    }
+
     private void PreviewImageBox_ShowPixelGridChanged(object sender, EventArgs e)
     {
       bool showGrid;
@@ -958,6 +1024,52 @@ namespace Cyotek.QuickScan
       return _settings.ShowProgress
         ? dialog.ShowTransfer(item, _settings.FormatString, false)
         : item.Transfer(_settings.FormatString);
+    }
+
+    [DebuggerStepThrough]
+    private void ResizeWiaWindow()
+    {
+      try
+      {
+        IntPtr handle;
+
+        // try and find a window with the right title
+        // if we find a match, see if it's owned by us
+        // and if so, resize it to fit the display space
+
+        // note: sticking a break point here doesn't go down well
+
+        handle = NativeMethods.FindWindow(null, _selectedDeviceName);
+
+        if (handle != IntPtr.Zero)
+        {
+          IntPtr ownerHandle;
+
+          ownerHandle = NativeMethods.GetWindow(handle, NativeMethods.GW_OWNER);
+
+          if (ownerHandle == _handle)
+          {
+            Rectangle area;
+
+            area = Screen.FromHandle(_handle).WorkingArea;
+
+            NativeMethods.SetWindowPos(handle, IntPtr.Zero, area.X, area.Y, area.Width, area.Height, NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+
+            _dialogResizeTimer.Stop();
+          }
+        }
+
+        // automatically abort if we don't find a match quickly
+        if (_findWindowRetryCount++ > 10)
+        {
+          _dialogResizeTimer.Stop();
+        }
+      }
+      catch
+      {
+        // no-op
+        _dialogResizeTimer.Stop();
+      }
     }
 
     private void RestartWIAServiceToolStripMenuItem_Click(object sender, EventArgs e)

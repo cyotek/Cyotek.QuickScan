@@ -9,7 +9,7 @@ using WIA;
 // Cyotek Quick Scan
 // https://github.com/cyotek/Cyotek.QuickScan
 
-// Copyright © 2019-2023 Cyotek Ltd.
+// Copyright © 2019-2024 Cyotek Ltd.
 
 // This work is licensed under the MIT License.
 // See LICENSE.TXT for the full text
@@ -24,6 +24,8 @@ namespace Cyotek.QuickScan
     #region Private Fields
 
     private const string _defaultNextScanSound = "sounds\\gmae.wav";
+
+    private const string _defaultScanDialogTitle = "Scan using {0}";
 
     private bool _addMetadata;
 
@@ -49,6 +51,8 @@ namespace Cyotek.QuickScan
 
     private Orientation _layoutOrientation;
 
+    private bool _maximizeScanDialog;
+
     private IDictionary<PropertyTag, Tuple<PropertyTagType, string>> _metadata;
 
     private string _nextScanSound;
@@ -64,6 +68,8 @@ namespace Cyotek.QuickScan
     private int _quality;
 
     private bool _saveSettingsOnExit;
+
+    private string _scanDialogTitle;
 
     private int _scanDpi;
 
@@ -99,6 +105,7 @@ namespace Cyotek.QuickScan
       _nextScanSound = _defaultNextScanSound;
       _inlineScanPrompt = true;
       _showProgress = true;
+      _scanDialogTitle = _defaultScanDialogTitle;
     }
 
     #endregion Public Constructors
@@ -181,6 +188,12 @@ namespace Cyotek.QuickScan
       set => this.UpdateValue(ref _layoutOrientation, value);
     }
 
+    public bool MaximizeScanDialog
+    {
+      get => _maximizeScanDialog;
+      set => this.UpdateValue(ref _maximizeScanDialog, value);
+    }
+
     public IDictionary<PropertyTag, Tuple<PropertyTagType, string>> Metadata => _metadata;
 
     public string NextScanSound
@@ -223,6 +236,12 @@ namespace Cyotek.QuickScan
     {
       get => _saveSettingsOnExit;
       set => this.UpdateValue(ref _saveSettingsOnExit, value);
+    }
+
+    public string ScanDialogTitle
+    {
+      get => _scanDialogTitle;
+      set => this.UpdateValue(ref _scanDialogTitle, value);
     }
 
     public int ScanDpi
@@ -326,6 +345,8 @@ namespace Cyotek.QuickScan
         this.ReadInt(ref _optionsSplitterSize, settings[nameof(this.OptionsSplitterSize)]);
         _windowPosition = settings[nameof(this.WindowPosition)];
         this.ReadBool(ref _inlineScanPrompt, settings[nameof(this.InlineScanPrompt)]);
+        this.ReadBool(ref _maximizeScanDialog, settings[nameof(this.MaximizeScanDialog)]);
+        _scanDialogTitle = settings.GetValue(nameof(this.ScanDialogTitle), _defaultScanDialogTitle);
 
         settings = (IniSectionToken)data.CreateSection("Sounds");
         this.ReadBool(ref _playSounds, settings[nameof(this.PlaySounds)]);
@@ -375,6 +396,8 @@ namespace Cyotek.QuickScan
       settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
       settings[nameof(this.WindowPosition)] = _windowPosition;
       settings[nameof(this.InlineScanPrompt)] = _inlineScanPrompt.ToString();
+      settings[nameof(this.MaximizeScanDialog)] = _maximizeScanDialog.ToString();
+      settings[nameof(this.ScanDialogTitle)] = _scanDialogTitle;
 
       settings = (IniSectionToken)data.CreateSection("Sounds");
       settings[nameof(this.PlaySounds)] = _playSounds.ToString();

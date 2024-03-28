@@ -1,22 +1,29 @@
 # Cyotek Quick Scan Change Log
 
-## 1.4 (26Mar2024)
+## 1.4 (28Mar2024)
+
+### Added
+
+* Added a new experimental per-machine "Maximise Scan Window"
+  option that will attempt to maximise the WIA scan dialogue so
+  that the preview area is the largest possible size, making it
+  easier to make exact selections.
+  
+  > Note: On non-English versions of Windows this setting
+  > probably won't work out of the box, you would also need to
+  > change the `ScanDialogTitle` value in `ctkqscan.ini` to
+  > match the dialogue title of your system.
 
 ### Fixed
 
 * Scan origin was being reset to 0, 0 for subsequent scans,
   causing them to be invalid if the original scan was offset.
-* The UI now updates DPI field based on the original scan,
+* The UI now updates the DPI field based on the original scan,
   preventing invalid or failed scans if the DPI was changed from
-  the WIA dialog.
+  within the WIA dialog.
 * If multiple devices are present, pressing Scan no longer
   prompts for a device first, but correctly honours the UI
   setting.
-
-### Known Issues
-
-* If "Grayscale" or "Black and white" is choosen in the WIA
-  dialog, subsequent scans may revert to colour.
 
 ## 1.3 (07Oct2023)
 
