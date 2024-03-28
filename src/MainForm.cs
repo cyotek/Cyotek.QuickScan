@@ -126,6 +126,44 @@ namespace Cyotek.QuickScan
 
     #region Private Methods
 
+    private static WiaImageIntent GetIntent(WiaProperties properties)
+    {
+      Property property;
+      WiaImageIntent intent;
+
+      property = properties.GetProperty(WiaPropertyId.WIA_IPA_DATATYPE);
+
+      if (property != null)
+      {
+        switch ((WiaDataType)property.get_Value())
+        {
+          case WiaDataType.WIA_DATA_COLOR:
+          case WiaDataType.WIA_DATA_COLOR_DITHER:
+            intent = WiaImageIntent.ColorIntent;
+            break;
+
+          case WiaDataType.WIA_DATA_GRAYSCALE:
+            intent = WiaImageIntent.GrayscaleIntent;
+            break;
+
+          case WiaDataType.WIA_DATA_THRESHOLD:
+          case WiaDataType.WIA_DATA_COLOR_THRESHOLD:
+            intent = WiaImageIntent.TextIntent;
+            break;
+
+          default:
+            intent = WiaImageIntent.ColorIntent;
+            break;
+        }
+      }
+      else
+      {
+        intent = (WiaImageIntent)properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_CUR_INTENT);
+      }
+
+      return intent;
+    }
+
     private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
     {
       AboutDialog.ShowAboutDialog();
@@ -778,6 +816,12 @@ namespace Cyotek.QuickScan
       // Happily, this also allows me to fix a previous bug where if the DPI of
       // the scan didn't match the UI DPI, subsequent scans would either be
       // invalid or fail.
+      //
+      // Intent seems to be wrong if user chooses Grayscale or Black
+      // and White in the GUI. This actually maps to WIA_IPA_DATATYPE (4103)
+      // with values including WIA_DATA_COLOR_DITHER, WIA_DATA_GRAYSCALE and
+      // WIA_DATA_THRESHOLD, so I'm now ignoring WIA_IPS_CUR_INTENT and instead
+      // looking at WIA_IPA_DATATYPE
 
       items = dialog.ShowSelectItems(device, Intent: _settings.ImageIntent, Bias: WiaImageBias.MaximizeQuality, SingleSelect: true, UseCommonUI: true, CancelError: false);
 
@@ -792,12 +836,7 @@ namespace Cyotek.QuickScan
         _lastScanWidth = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_XEXTENT);
         _lastScanHeight = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_YEXTENT);
 
-        // TODO: Intent is going to be wrong if user chooses Grayscale or Black
-        // and White in the GUI. This actually maps to WIA_IPA_DATATYPE (4103
-        // with values including WIA_DATA_COLOR_DITHER, WIA_DATA_GRAYSCALE and
-        // WIA_DATA_THRESHOLD which I only discovered while testing this new approach
-
-        this.SetIntent((WiaImageIntent)properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_CUR_INTENT));
+        this.SetIntent(GetIntent(properties));
         this.SetDpi(properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_XRES));
 
         result = this.RepeatLastScan(device, dialog);

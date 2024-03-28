@@ -23,6 +23,8 @@ namespace Cyotek.QuickScan
 
     WIA_IPA_ACCESS_RIGHTS = 4102,
 
+    WIA_IPA_DATATYPE = 4103,
+
     WIA_IPA_DEPTH = 4104,
 
     WIA_IPA_PREFERRED_FORMAT = 4105,
