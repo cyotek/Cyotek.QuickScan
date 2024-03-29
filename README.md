@@ -115,6 +115,11 @@ the following caveats:
   attempts to maximise the WIA scan dialogue, which may be
   useful for selecting accurate scan regions as the default
   preview is very small.
+* Auto Select Custom setting - this experimental setting
+  attempts to set the WIA dialogue to "Custom Settings" by
+  default, thus saving a click. I always have to click this
+  button as the other options use pre-defined DPIs that can't be
+  changed.
 
 ## Known Issues
 

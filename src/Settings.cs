@@ -23,6 +23,8 @@ namespace Cyotek.QuickScan
   {
     #region Private Fields
 
+    private const string _defaultAutoSelectCustomTitle = "&Custom Settings";
+
     private const string _defaultNextScanSound = "sounds\\gmae.wav";
 
     private const string _defaultScanDialogTitle = "Scan using {0}";
@@ -30,6 +32,10 @@ namespace Cyotek.QuickScan
     private bool _addMetadata;
 
     private bool _autoSave;
+
+    private bool _autoSelectCustom;
+
+    private string _autoSelectCustomTitle;
 
     private string _baseFileName;
 
@@ -108,6 +114,7 @@ namespace Cyotek.QuickScan
       _inlineScanPrompt = true;
       _showProgress = true;
       _scanDialogTitle = _defaultScanDialogTitle;
+      _autoSelectCustomTitle = _defaultAutoSelectCustomTitle;
     }
 
     #endregion Public Constructors
@@ -124,6 +131,18 @@ namespace Cyotek.QuickScan
     {
       get => _autoSave;
       set => this.UpdateValue(ref _autoSave, value);
+    }
+
+    public bool AutoSelectCustom
+    {
+      get => _autoSelectCustom;
+      set => this.UpdateValue(ref _autoSelectCustom, value);
+    }
+
+    public string AutoSelectCustomTitle
+    {
+      get => _autoSelectCustomTitle;
+      set => this.UpdateValue(ref _autoSelectCustomTitle, value);
     }
 
     public string BaseFileName
@@ -349,6 +368,8 @@ namespace Cyotek.QuickScan
         this.ReadBool(ref _inlineScanPrompt, settings[nameof(this.InlineScanPrompt)]);
         this.ReadBool(ref _maximizeScanDialog, settings[nameof(this.MaximizeScanDialog)]);
         _scanDialogTitle = settings.GetValue(nameof(this.ScanDialogTitle), _defaultScanDialogTitle);
+        this.ReadBool(ref _autoSelectCustom, settings[nameof(this.AutoSelectCustom)]);
+        _autoSelectCustomTitle = settings.GetValue(nameof(this.AutoSelectCustomTitle), _defaultAutoSelectCustomTitle);
 
         settings = (IniSectionToken)data.CreateSection("Sounds");
         this.ReadBool(ref _playSounds, settings[nameof(this.PlaySounds)]);
@@ -402,6 +423,8 @@ namespace Cyotek.QuickScan
         settings[nameof(this.InlineScanPrompt)] = _inlineScanPrompt.ToString();
         settings[nameof(this.MaximizeScanDialog)] = _maximizeScanDialog.ToString();
         settings[nameof(this.ScanDialogTitle)] = _scanDialogTitle;
+        settings[nameof(this.AutoSelectCustom)] = _autoSelectCustom.ToString();
+        settings[nameof(this.AutoSelectCustomTitle)] = _autoSelectCustomTitle;
 
         settings = (IniSectionToken)data.CreateSection("Sounds");
         settings[nameof(this.PlaySounds)] = _playSounds.ToString();

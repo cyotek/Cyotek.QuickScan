@@ -70,7 +70,9 @@
       this.playSoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
       this.inlinePromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
       this.showProgressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.maximizeScanWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
       this.saveSettingsOnExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.saveSettingsNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -143,8 +145,7 @@
       this.continueScanningLabel = new System.Windows.Forms.Label();
       this.fileSizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-      this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
-      this.maximizeScanWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.automaticallySelectCustomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip.SuspendLayout();
       this.toolStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
@@ -456,6 +457,7 @@
             this.toolStripMenuItem13,
             this.showProgressToolStripMenuItem,
             this.maximizeScanWindowToolStripMenuItem,
+            this.automaticallySelectCustomToolStripMenuItem,
             this.toolStripMenuItem10,
             this.saveSettingsOnExitToolStripMenuItem,
             this.saveSettingsNowToolStripMenuItem});
@@ -468,59 +470,72 @@
       this.estimateFileSizesToolStripMenuItem.Checked = true;
       this.estimateFileSizesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
       this.estimateFileSizesToolStripMenuItem.Name = "estimateFileSizesToolStripMenuItem";
-      this.estimateFileSizesToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-      this.estimateFileSizesToolStripMenuItem.Text = "&Estimate File Sizes";
+      this.estimateFileSizesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+      this.estimateFileSizesToolStripMenuItem.Text = "Estimate File Si&zes";
       this.estimateFileSizesToolStripMenuItem.Click += new System.EventHandler(this.EstimateFileSizesToolStripMenuItem_Click);
       // 
       // toolStripMenuItem6
       // 
       this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-      this.toolStripMenuItem6.Size = new System.Drawing.Size(197, 6);
+      this.toolStripMenuItem6.Size = new System.Drawing.Size(224, 6);
       // 
       // playSoundsToolStripMenuItem
       // 
       this.playSoundsToolStripMenuItem.Name = "playSoundsToolStripMenuItem";
-      this.playSoundsToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+      this.playSoundsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
       this.playSoundsToolStripMenuItem.Text = "&Play Sounds";
       this.playSoundsToolStripMenuItem.Click += new System.EventHandler(this.PlaySoundsToolStripMenuItem_Click);
       // 
       // toolStripMenuItem12
       // 
       this.toolStripMenuItem12.Name = "toolStripMenuItem12";
-      this.toolStripMenuItem12.Size = new System.Drawing.Size(197, 6);
+      this.toolStripMenuItem12.Size = new System.Drawing.Size(224, 6);
       // 
       // inlinePromptToolStripMenuItem
       // 
       this.inlinePromptToolStripMenuItem.Name = "inlinePromptToolStripMenuItem";
-      this.inlinePromptToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+      this.inlinePromptToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
       this.inlinePromptToolStripMenuItem.Text = "&Inline Prompt";
       this.inlinePromptToolStripMenuItem.Click += new System.EventHandler(this.InlinePromptToolStripMenuItem_Click);
+      // 
+      // toolStripMenuItem13
+      // 
+      this.toolStripMenuItem13.Name = "toolStripMenuItem13";
+      this.toolStripMenuItem13.Size = new System.Drawing.Size(224, 6);
       // 
       // showProgressToolStripMenuItem
       // 
       this.showProgressToolStripMenuItem.Name = "showProgressToolStripMenuItem";
-      this.showProgressToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+      this.showProgressToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
       this.showProgressToolStripMenuItem.Text = "Show Scan Pro&gress";
       this.showProgressToolStripMenuItem.Click += new System.EventHandler(this.ShowProgressToolStripMenuItem_Click);
+      // 
+      // maximizeScanWindowToolStripMenuItem
+      // 
+      this.maximizeScanWindowToolStripMenuItem.Name = "maximizeScanWindowToolStripMenuItem";
+      this.maximizeScanWindowToolStripMenuItem.ShortcutKeyDisplayString = "";
+      this.maximizeScanWindowToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+      this.maximizeScanWindowToolStripMenuItem.Text = "&Maximise Scan Window";
+      this.maximizeScanWindowToolStripMenuItem.Click += new System.EventHandler(this.MaximizeScanWindowToolStripMenuItem_Click);
       // 
       // toolStripMenuItem10
       // 
       this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-      this.toolStripMenuItem10.Size = new System.Drawing.Size(197, 6);
+      this.toolStripMenuItem10.Size = new System.Drawing.Size(224, 6);
       // 
       // saveSettingsOnExitToolStripMenuItem
       // 
       this.saveSettingsOnExitToolStripMenuItem.Checked = true;
       this.saveSettingsOnExitToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
       this.saveSettingsOnExitToolStripMenuItem.Name = "saveSettingsOnExitToolStripMenuItem";
-      this.saveSettingsOnExitToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+      this.saveSettingsOnExitToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
       this.saveSettingsOnExitToolStripMenuItem.Text = "Save Settings on &Exit";
       this.saveSettingsOnExitToolStripMenuItem.Click += new System.EventHandler(this.SaveSettingsOnExitToolStripMenuItem_Click);
       // 
       // saveSettingsNowToolStripMenuItem
       // 
       this.saveSettingsNowToolStripMenuItem.Name = "saveSettingsNowToolStripMenuItem";
-      this.saveSettingsNowToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+      this.saveSettingsNowToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
       this.saveSettingsNowToolStripMenuItem.Text = "Save Settings &Now";
       this.saveSettingsNowToolStripMenuItem.Click += new System.EventHandler(this.SaveSettingsNowToolStripMenuItem_Click);
       // 
@@ -1229,17 +1244,12 @@
       this.fileSizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.FileSizeBackgroundWorker_DoWork);
       this.fileSizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FileSizeBackgroundWorker_RunWorkerCompleted);
       // 
-      // toolStripMenuItem13
+      // automaticallySelectCustomToolStripMenuItem
       // 
-      this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-      this.toolStripMenuItem13.Size = new System.Drawing.Size(197, 6);
-      // 
-      // maximiseScanWindowToolStripMenuItem
-      // 
-      this.maximizeScanWindowToolStripMenuItem.Name = "maximizeScanWindowToolStripMenuItem";
-      this.maximizeScanWindowToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-      this.maximizeScanWindowToolStripMenuItem.Text = "&Maximise Scan Window";
-      this.maximizeScanWindowToolStripMenuItem.Click += new System.EventHandler(this.MaximizeScanWindowToolStripMenuItem_Click);
+      this.automaticallySelectCustomToolStripMenuItem.Name = "automaticallySelectCustomToolStripMenuItem";
+      this.automaticallySelectCustomToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+      this.automaticallySelectCustomToolStripMenuItem.Text = "Automatically Select &Custom";
+      this.automaticallySelectCustomToolStripMenuItem.Click += new System.EventHandler(this.AutomaticallySelectCustomToolStripMenuItem_Click);
       // 
       // MainForm
       // 
@@ -1401,6 +1411,7 @@
     private System.Windows.Forms.ToolStripMenuItem showProgressToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
     private System.Windows.Forms.ToolStripMenuItem maximizeScanWindowToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem automaticallySelectCustomToolStripMenuItem;
   }
 }
 

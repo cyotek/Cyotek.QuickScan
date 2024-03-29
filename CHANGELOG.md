@@ -8,11 +8,15 @@
   option that will attempt to maximise the WIA scan dialogue so
   that the preview area is the largest possible size, making it
   easier to make exact selections.
+* Added a new experimental per-machine "Automatically Select
+  Custom" option that will attempt to select the "Custom
+  Settings" radio.
   
-  > Note: On non-English versions of Windows this setting
+  > Note: On non-English versions of Windows these settings
   > probably won't work out of the box, you would also need to
-  > change the `ScanDialogTitle` value in `ctkqscan.ini` to
-  > match the dialogue title of your system.
+  > change the `ScanDialogTitle` and `AutoSelectCustomTitle`
+  > values in `ctkqscan.ini` to match the text displayed in your
+  > system.
 
 ### Fixed
 

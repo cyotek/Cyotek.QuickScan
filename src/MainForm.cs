@@ -214,6 +214,7 @@ namespace Cyotek.QuickScan
       inlinePromptToolStripMenuItem.Checked = _settings.InlineScanPrompt;
       showProgressToolStripMenuItem.Checked = _settings.ShowProgress;
       maximizeScanWindowToolStripMenuItem.Checked = _settings.MaximizeScanDialog;
+      automaticallySelectCustomToolStripMenuItem.Checked = _settings.AutoSelectCustom;
 
       continuationPanel.Visible = _settings.InlineScanPrompt;
 
@@ -233,6 +234,13 @@ namespace Cyotek.QuickScan
       UiHelpers.SetSplitterSize(splitContainer, _settings.OptionsSplitterSize);
 
       _acceptSplitterChanges = true;
+    }
+
+    private void AutomaticallySelectCustomToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      automaticallySelectCustomToolStripMenuItem.Checked = !automaticallySelectCustomToolStripMenuItem.Checked;
+
+      _settings.AutoSelectCustom = automaticallySelectCustomToolStripMenuItem.Checked;
     }
 
     private void AutoSaveCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1055,6 +1063,11 @@ namespace Cyotek.QuickScan
 
             NativeMethods.SetWindowPos(handle, IntPtr.Zero, area.X, area.Y, area.Width, area.Height, NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
 
+            if (_settings.AutoSelectCustom)
+            {
+              this.SelectCustomScanOption(handle);
+            }
+
             _dialogResizeTimer.Stop();
           }
         }
@@ -1334,6 +1347,18 @@ namespace Cyotek.QuickScan
     private void ScanToolStripMenuItem_Click(object sender, EventArgs e)
     {
       this.RunScanLoop();
+    }
+
+    private void SelectCustomScanOption(IntPtr parentHandle)
+    {
+      IntPtr handle;
+
+      handle = NativeMethods.FindWindowEx(parentHandle, IntPtr.Zero, "Button", _settings.AutoSelectCustomTitle);
+
+      if (handle != IntPtr.Zero)
+      {
+        NativeMethods.SendMessage(handle, NativeMethods.BM_CLICK, IntPtr.Zero, IntPtr.Zero);
+      }
     }
 
     private void SetContinuationBarState(bool enabled)
