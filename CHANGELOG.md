@@ -30,6 +30,9 @@
   setting.
 * Settings file is now only saved when settings have actually
   changed.
+* Selected scanner could change to wrong device after scanning
+  if multiple devices were plugged in and they had previously
+  used other USB ports between sessions.
 
 ## 1.3 (07Oct2023)
 

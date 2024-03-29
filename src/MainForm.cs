@@ -883,6 +883,8 @@ namespace Cyotek.QuickScan
         _lastScanWidth = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_XEXTENT);
         _lastScanHeight = properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_YEXTENT);
 
+        _settings.DeviceId = device.DeviceID;
+        this.SetDevice(device.DeviceID);
         this.SetIntent(GetIntent(properties));
         this.SetDpi(properties.GetPropertyInt32Value(WiaPropertyId.WIA_IPS_XRES));
 
@@ -1249,8 +1251,6 @@ namespace Cyotek.QuickScan
 
           result = fileName;
         }
-
-        this.ApplySettings();
       }
 
       return result;
