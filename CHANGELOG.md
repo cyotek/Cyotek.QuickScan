@@ -24,6 +24,8 @@
 * If multiple devices are present, pressing Scan no longer
   prompts for a device first, but correctly honours the UI
   setting.
+* Settings file is now only saved when settings have actually
+  changed.
 
 ## 1.3 (07Oct2023)
 

@@ -33,6 +33,8 @@ namespace Cyotek.QuickScan
 
     private string _baseFileName;
 
+    private bool _changed;
+
     private bool _continuousScan;
 
     private int _counter;
@@ -358,51 +360,56 @@ namespace Cyotek.QuickScan
 
     public void Save()
     {
-      IniDocument data;
-      IniSectionToken settings;
+      if (_changed)
+      {
+        IniDocument data;
+        IniSectionToken settings;
 
-      data = new IniDocument(this.GetLoadFileName());
+        data = new IniDocument(this.GetLoadFileName());
 
-      settings = (IniSectionToken)data.CreateSection("Settings");
-      settings["EstimateFileSizes"] = _estimateFileSizes.ToString(CultureInfo.InvariantCulture);
-      settings[nameof(this.SaveSettingsOnExit)] = _saveSettingsOnExit.ToString(CultureInfo.InvariantCulture);
+        settings = (IniSectionToken)data.CreateSection("Settings");
+        settings["EstimateFileSizes"] = _estimateFileSizes.ToString(CultureInfo.InvariantCulture);
+        settings[nameof(this.SaveSettingsOnExit)] = _saveSettingsOnExit.ToString(CultureInfo.InvariantCulture);
 
-      settings = (IniSectionToken)data.CreateSection("Device");
-      settings["DeviceId"] = _deviceId;
-      settings["Prompt"] = _promptForDevice.ToString(CultureInfo.InvariantCulture);
-      settings["Continuous"] = _continuousScan.ToString(CultureInfo.InvariantCulture);
+        settings = (IniSectionToken)data.CreateSection("Device");
+        settings["DeviceId"] = _deviceId;
+        settings["Prompt"] = _promptForDevice.ToString(CultureInfo.InvariantCulture);
+        settings["Continuous"] = _continuousScan.ToString(CultureInfo.InvariantCulture);
 
-      settings = (IniSectionToken)data.CreateSection("Scan");
-      settings["Intent"] = _imageIntent.ToString();
-      settings["Dpi"] = _scanDpi.ToString(CultureInfo.InvariantCulture);
+        settings = (IniSectionToken)data.CreateSection("Scan");
+        settings["Intent"] = _imageIntent.ToString();
+        settings["Dpi"] = _scanDpi.ToString(CultureInfo.InvariantCulture);
 
-      settings = (IniSectionToken)data.CreateSection("Output");
-      settings["Format"] = _format.ToString();
-      settings["Quality"] = _quality.ToString(CultureInfo.InvariantCulture);
-      settings["Folder"] = _outputFolder;
-      settings["FileName"] = _baseFileName;
-      settings["Counter"] = _counter.ToString(CultureInfo.InvariantCulture);
-      settings["UseCounter"] = _useCounter.ToString(CultureInfo.InvariantCulture);
-      settings["AutoSave"] = _autoSave.ToString(CultureInfo.InvariantCulture);
+        settings = (IniSectionToken)data.CreateSection("Output");
+        settings["Format"] = _format.ToString();
+        settings["Quality"] = _quality.ToString(CultureInfo.InvariantCulture);
+        settings["Folder"] = _outputFolder;
+        settings["FileName"] = _baseFileName;
+        settings["Counter"] = _counter.ToString(CultureInfo.InvariantCulture);
+        settings["UseCounter"] = _useCounter.ToString(CultureInfo.InvariantCulture);
+        settings["AutoSave"] = _autoSave.ToString(CultureInfo.InvariantCulture);
 
-      settings = (IniSectionToken)data.CreateSection("UI");
-      settings["Unit"] = _unit.ToString();
-      settings["Preview"] = _showPreview.ToString(CultureInfo.InvariantCulture);
-      settings["PixelGrid"] = _showPixelGrid.ToString(CultureInfo.InvariantCulture);
-      settings["Orientation"] = _layoutOrientation.ToString();
+        settings = (IniSectionToken)data.CreateSection("UI");
+        settings["Unit"] = _unit.ToString();
+        settings["Preview"] = _showPreview.ToString(CultureInfo.InvariantCulture);
+        settings["PixelGrid"] = _showPixelGrid.ToString(CultureInfo.InvariantCulture);
+        settings["Orientation"] = _layoutOrientation.ToString();
 
-      settings = this.CreateMachineSection(data, "UI");
-      settings[nameof(this.ShowProgress)] = _showProgress.ToString(CultureInfo.InvariantCulture);
-      settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
-      settings[nameof(this.WindowPosition)] = _windowPosition;
-      settings[nameof(this.InlineScanPrompt)] = _inlineScanPrompt.ToString();
-      settings[nameof(this.MaximizeScanDialog)] = _maximizeScanDialog.ToString();
-      settings[nameof(this.ScanDialogTitle)] = _scanDialogTitle;
+        settings = this.CreateMachineSection(data, "UI");
+        settings[nameof(this.ShowProgress)] = _showProgress.ToString(CultureInfo.InvariantCulture);
+        settings[nameof(this.OptionsSplitterSize)] = _optionsSplitterSize.ToString(CultureInfo.InvariantCulture);
+        settings[nameof(this.WindowPosition)] = _windowPosition;
+        settings[nameof(this.InlineScanPrompt)] = _inlineScanPrompt.ToString();
+        settings[nameof(this.MaximizeScanDialog)] = _maximizeScanDialog.ToString();
+        settings[nameof(this.ScanDialogTitle)] = _scanDialogTitle;
 
-      settings = (IniSectionToken)data.CreateSection("Sounds");
-      settings[nameof(this.PlaySounds)] = _playSounds.ToString();
+        settings = (IniSectionToken)data.CreateSection("Sounds");
+        settings[nameof(this.PlaySounds)] = _playSounds.ToString();
 
-      data.Save(this.IniFileName);
+        data.Save(this.IniFileName);
+
+        _changed = false;
+      }
     }
 
     #endregion Public Methods
@@ -496,6 +503,8 @@ namespace Cyotek.QuickScan
       if (!_ignoreUpdates && !EqualityComparer<T>.Default.Equals(field, value))
       {
         field = value;
+
+        _changed = true;
       }
     }
 
