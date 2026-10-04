@@ -4,13 +4,14 @@ SETLOCAL
 
 SET SCRIPTPATH=%~dp0
 SET SCRIPTPATH=%SCRIPTPATH:~0,-1%
+SET RELDIR=%SCRIPTPATH%\src\bin\release\net48
 
 CD %SCRIPTPATH%
 
 CALL %CTKBLDROOT%\SetupEnv.cmd
 
 REM Build and sign the file
-%msbuildexe% Cyotek.QuickScan.sln /p:Configuration=Release /verbosity:minimal /nologo /t:Clean,Build
+%msbuildexe% Cyotek.QuickScan.slnx /p:Configuration=Release /verbosity:minimal /nologo /t:Clean,Build
 
 IF EXIST dist         DEL dist\*.* /q
 IF EXIST dist\sounds  DEL dist\sounds\*.* /q
@@ -20,17 +21,17 @@ IF NOT EXIST dist\sounds MKDIR dist\sounds
 
 PUSHD .\dist
 
-copy /y ..\src\bin\release\ctkqscan.exe
-copy /y ..\src\bin\release\ctkqscan.exe.config
-copy /y ..\src\bin\release\ctkqscan.pdb
-copy /y ..\src\bin\release\ctkqscan.default.ini
-copy /y ..\src\bin\release\Cyotek.Windows.Forms.ImageBox.dll
-copy /y ..\src\bin\release\Cyotek.Data.Ini.dll
+copy /y %RELDIR%\ctkqscan.exe
+copy /y %RELDIR%\ctkqscan.exe.config
+copy /y %RELDIR%\ctkqscan.pdb
+copy /y %RELDIR%\ctkqscan.default.ini
+copy /y %RELDIR%\Cyotek.Windows.Forms.ImageBox.dll
+copy /y %RELDIR%\Cyotek.Data.Ini.dll
 copy /y ..\LICENSE.txt
 copy /y ..\README.md
 copy /y ..\CHANGELOG.md
 copy /y ..\res\gmae.wav sounds\
-copy /y ..\restartservice\bin\release\rstrtwia.exe
+copy /y ..\restartservice\bin\release\net48\rstrtwia.exe
 
 CALL sign-program ctkqscan.exe
 CALL sign-program rstrtwia.exe

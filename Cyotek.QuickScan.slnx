@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src/Cyotek.QuickScan.csproj" Id="6802c96f-97bd-4ac1-b399-d0f97a1d4be4" />
+  <Project Path="restartservice/Cyotek.QuickScan.RestartService.csproj" Id="40035a0e-03cc-4c17-9b32-bafd10a30f8d" />
+</Solution>
