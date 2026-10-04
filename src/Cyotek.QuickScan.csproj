@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -50,7 +50,6 @@
     <None Update="ctkqscan.default.ini" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\CHANGELOG.md;..\LICENSE.txt;..\README.md" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\res\gmae.wav" Link="sounds\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\res\copy.png;..\res\drawing-size.png;..\res\file-save.png;..\res\file-size.png;..\res\flip-horizontal.png;..\res\flip-vertical.png;..\res\folder-open.png;..\res\grid.png;..\res\horizonta-split.png;..\res\image-format.png;..\res\image-preview.png;..\res\paste.png;..\res\preview.png;..\res\rotate-left.png;..\res\rotate-right.png;..\res\scan.png;..\res\vertical-split.png;..\res\zoom-actual.png;..\res\zoom-fit.png" Link="Resources\%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>
