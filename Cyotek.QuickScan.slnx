@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="restartservice/Cyotek.QuickScan.RestartService.csproj" />
+  <Project Path="src/Cyotek.QuickScan.csproj" />
+</Solution>
